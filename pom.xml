@@ -1,0 +1,208 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mdsol</groupId>
+	<artifactId>skyfire</artifactId>
+	<version>2015.1.0</version>
+	<name>Model-Based Test Generator</name>
+
+	<repositories>
+		<repository>
+			<id>Eclipse - Acceleo Snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/acceleo-snapshots</url>
+		</repository>
+		<repository>
+			<id>Eclipse - Acceleo Release</id>
+			<url>https://repo.eclipse.org/content/repositories/acceleo-releases</url>
+		</repository>
+
+		<repository>
+			<id>central</id>
+			<name>all-repos-release</name>
+			<url>https://etlhydra-artifactory-sandbox.imedidata.net/artifactory/all-repos-release</url>
+		</repository>
+		<repository>
+			<id>snapshot</id>
+			<name>snapshot</name>
+			<url>https://etlhydra-artifactory-sandbox.imedidata.net/artifactory/snapshot</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.2</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymockclassextension</artifactId>
+			<version>3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.common</artifactId>
+			<version>2.11.0-v20150123-0347</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.uml2</groupId>
+			<artifactId>org.eclipse.uml2.uml</artifactId>
+			<version>4.1.2.v20140202-2055</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.uml2</groupId>
+			<artifactId>types</artifactId>
+			<version>1.0.0.v20120913-1441</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.uml2</groupId>
+			<artifactId>common</artifactId>
+			<version>1.7.0.v20120913-1441</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.ecore</artifactId>
+			<version>2.11.0-v20150123-0347</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+			<version>2.11.0-v20150123-0347</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.core</groupId>
+			<artifactId>runtime</artifactId>
+			<version>3.10.0-v20140318-2214</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.acceleo.model</artifactId>
+			<version>3.5.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.acceleo</groupId>
+			<artifactId>org.eclipse.acceleo.common</artifactId>
+			<version>3.5.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.ocl</groupId>
+			<artifactId>org.eclipse.ocl.ecore</artifactId>
+			<version>3.3.0.v20130520-1222</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.ocl</groupId>
+			<artifactId>org.eclipse.ocl</artifactId>
+			<version>3.3.0.v20130909-1552</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.ocl</groupId>
+			<artifactId>org.eclipse.ocl.common</artifactId>
+			<version>1.1.0.v20130531-0544</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>6.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>edu.gmu.swe</groupId>
+			<artifactId>coverage</artifactId>
+			<version>0.9</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>skyfire</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<description>This project generates abstract tests from a UML behavioral model</description>
+	<organization>
+		<name>Medidata Solutions, Inc</name>
+		<url>www.mdsol.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>nli</id>
+			<name>Nan Li</name>
+			<email>nli@mdsol.com</email>
+			<organization>Medidata Solutions</organization>
+			<organizationUrl>http://www.mdsol.com</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+				<role>Test Automation Engineer</role>
+			</roles>
+			<timezone>+5</timezone>
+		</developer>
+	</developers>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+</project>
