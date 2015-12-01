@@ -3,14 +3,10 @@ package com.mdsol.skyfire.util;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,22 +265,6 @@ public class JavaSupporter {
 			}
 		}	
 		return "";
-	}
-	
-	/**
-	 * A hack method to add classes dynamically.
-	 * @param url
-	 * @throws Exception
-	 */
-	public static final void addURL(URL url) throws Exception {
-		  URLClassLoader classLoader
-		         = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		  Class clazz= URLClassLoader.class;
-
-		  // Use reflection
-		  Method method= clazz.getDeclaredMethod("addURL", new Class[] { URL.class });
-		  method.setAccessible(true);
-		  method.invoke(classLoader, new Object[] { url });
 	}
 	
 	/**

@@ -3,41 +3,25 @@
  */
 package com.mdsol.skyfire;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Transition;
 import org.eclipse.uml2.uml.Vertex;
-import org.w3c.dom.NodeList;
 
-import coverage.graph.Edge;
 import coverage.graph.Graph;
 import coverage.graph.GraphUtil;
 import coverage.graph.InvalidGraphException;
 import coverage.graph.Node;
 import coverage.graph.Path;
 import coverage.web.InvalidInputException;
-import com.mdsol.skyfire.util.JavaSupporter;
 
 /**
  * A class that generates abstract tests (that is, test paths) based on UML models
@@ -149,7 +133,6 @@ public class AbstractTestGenerator {
 	 * @return	a list of {@link org.eclipse.uml2.uml.Transition}s
 	 */
 	public static List<Transition> convertVerticesToTransitions(List<Vertex> vertices, StateMachineAccessor stateMachine){
-		List<Mapping> mappings = new ArrayList<Mapping>();
 		List<Transition> transitions = new ArrayList<Transition>();
 		
 		for(int i = 0; i < vertices.size();){
