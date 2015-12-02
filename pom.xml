@@ -5,7 +5,7 @@
 	<artifactId>skyfire</artifactId>
 	<version>2015.1.0</version>
 	<name>Model-Based Test Generator</name>
-
+	
 	<repositories>
 		<repository>
 			<id>Eclipse - Acceleo Snapshots</id>
@@ -53,18 +53,6 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.2</version>
 			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sourceforge.htmlunit</groupId>
-			<artifactId>htmlunit</artifactId>
-			<version>2.17</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymockclassextension</artifactId>
-			<version>3.2</version>
 		</dependency>
 
 		<dependency>
@@ -136,12 +124,6 @@
 			<groupId>org.eclipse.ocl</groupId>
 			<artifactId>org.eclipse.ocl.common</artifactId>
 			<version>1.1.0.v20130531-0544</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<version>6.0.0</version>
 		</dependency>
 
 		<dependency>

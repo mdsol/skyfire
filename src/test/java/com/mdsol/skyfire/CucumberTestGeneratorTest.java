@@ -43,12 +43,12 @@ public class CucumberTestGeneratorTest {
      */
     @Before
     public void setUp() throws Exception {
-	tests = new ArrayList<com.mdsol.skyfire.Test>();
-	generator = new CucumberTestGenerator(tests);
+        tests = new ArrayList<com.mdsol.skyfire.Test>();
+        generator = new CucumberTestGenerator(tests);
 
-	testResourceDir = System.getProperty("user.dir") + "/src/test/resources/";
-	rocPath = testResourceDir + "testData/roc/model/rocBasicModel.uml";
-	rocDirectory = testResourceDir + "testData/roc/";
+        testResourceDir = System.getProperty("user.dir") + "/src/test/resources/";
+        rocPath = testResourceDir + "testData/roc/model/rocBasicModel.uml";
+        rocDirectory = testResourceDir + "testData/roc/";
     }
 
     /**
@@ -60,69 +60,70 @@ public class CucumberTestGeneratorTest {
 
     @Test
     public void testConstructorAndGettersAndSetters() {
-	FsmTest test = new FsmTest();
-	test.setTestName("first test");
-	tests.add(test);
+        FsmTest test = new FsmTest();
+        test.setTestName("first test");
+        tests.add(test);
 
-	assertEquals("first test", generator.getTests().get(0).getTestName());
+        assertEquals("first test", generator.getTests().get(0).getTestName());
     }
 
     @Test
     public void testGenerateScenarios() {
-	FsmTest test = new FsmTest();
-	test.setTestName("first test");
-	tests.add(test);
-	String featureDescription = "first feature";
+        FsmTest test = new FsmTest();
+        test.setTestName("first test");
+        tests.add(test);
+        String featureDescription = "first feature";
 
-	StringBuffer sb = generator.generateScenarios(featureDescription);
-	assertNotNull(sb);
-	System.out.println(sb);
+        StringBuffer sb = generator.generateScenarios(featureDescription);
+        assertNotNull(sb);
+        System.out.println(sb);
     }
 
     @Test
     public void testGenerateScenariosRoc() throws IOException, InvalidInputException, InvalidGraphException {
-	EObject object = StateMachineAccessor.getModelObject(rocPath);
-	List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
-	List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(), stateMachine.getInitialStates(), stateMachine.getFinalStates(),
-		TestCoverageCriteria.EDGECOVERAGE);
-		// System.out.println(stateMachine.getStateMappings());
+        EObject object = StateMachineAccessor.getModelObject(rocPath);
+        List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
+        List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(), stateMachine.getInitialStates(), stateMachine.getFinalStates(),
+                TestCoverageCriteria.EDGECOVERAGE);
+                // System.out.println(stateMachine.getStateMappings());
 
-	// get the vertices from a path and return a list of transitions based on the vertices
-	// List<edu.gmu.swe.taf.Test> tests = new ArrayList<edu.gmu.swe.taf.Test>();
-	for (int i = 0; i < paths.size(); i++) {
-	    System.out.println("path: " + paths.get(i));
-	    List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
+        // get the vertices from a path and return a list of transitions based on the vertices
+        // List<edu.gmu.swe.taf.Test> tests = new ArrayList<edu.gmu.swe.taf.Test>();
+        for (int i = 0; i < paths.size(); i++) {
+            System.out.println("path: " + paths.get(i));
+            List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(AbstractTestGenerator.getPathByState(paths.get(i), stateMachine),
+                    stateMachine);
 
-	    String pathName = "";
-	    for (Transition transition : transitions) {
-		// System.out.println(transition);
-		pathName += (transition.getName() != null ? transition.getName() : "") + " ";
-	    }
-	    com.mdsol.skyfire.Test test = new com.mdsol.skyfire.FsmTest(String.valueOf(i), pathName, transitions);
-	    tests.add(test);
-	    System.out.println(test.getTestComment());
-	}
+            String pathName = "";
+            for (Transition transition : transitions) {
+                // System.out.println(transition);
+                pathName += (transition.getName() != null ? transition.getName() : "") + " ";
+            }
+            com.mdsol.skyfire.Test test = new com.mdsol.skyfire.FsmTest(String.valueOf(i), pathName, transitions);
+            tests.add(test);
+            System.out.println(test.getTestComment());
+        }
 
-	String featureDescription = "Roc feature file generated from a state machine diagram";
+        String featureDescription = "Roc feature file generated from a state machine diagram";
 
-	StringBuffer sb = generator.generateScenarios(featureDescription);
-	assertNotNull(sb);
-	System.out.println(sb);
+        StringBuffer sb = generator.generateScenarios(featureDescription);
+        assertNotNull(sb);
+        System.out.println(sb);
 
-	CucumberTestGenerator.writeFeatureFile(sb, rocDirectory + "Roc.feature");
-	File file = new File(rocDirectory + "Roc.feature");
-	assertTrue(file.exists());
+        CucumberTestGenerator.writeFeatureFile(sb, rocDirectory + "Roc.feature");
+        File file = new File(rocDirectory + "Roc.feature");
+        assertTrue(file.exists());
     }
 
     @Test
     public void testGenerateScenariosRocUsingExternalAPI() throws IOException, InvalidInputException, InvalidGraphException {
-	String featureDescription = "Roc feature file generated from a state machine diagram";
-	boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath), TestCoverageCriteria.EDGECOVERAGE, featureDescription,
-		Paths.get(rocDirectory + "Roc.feature"));
-	assertTrue(generated);
-	File file = new File(rocDirectory + "Roc.feature");
-	assertTrue(file.exists());
+        String featureDescription = "Roc feature file generated from a state machine diagram";
+        boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath), TestCoverageCriteria.EDGECOVERAGE, featureDescription,
+                Paths.get(rocDirectory + "Roc.feature"));
+        assertTrue(generated);
+        File file = new File(rocDirectory + "Roc.feature");
+        assertTrue(file.exists());
     }
 }
