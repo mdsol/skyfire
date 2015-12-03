@@ -34,7 +34,6 @@ tmp/
 *.nib
 *.pydevproject
 *.class
-*.jar
 *.war
 *.ear
 *.db
