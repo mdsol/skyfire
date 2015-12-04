@@ -15,17 +15,6 @@
 			<id>Eclipse - Acceleo Release</id>
 			<url>https://repo.eclipse.org/content/repositories/acceleo-releases</url>
 		</repository>
-
-		<repository>
-			<id>central</id>
-			<name>all-repos-release</name>
-			<url>https://etlhydra-artifactory-sandbox.imedidata.net/artifactory/all-repos-release</url>
-		</repository>
-		<repository>
-			<id>snapshot</id>
-			<name>snapshot</name>
-			<url>https://etlhydra-artifactory-sandbox.imedidata.net/artifactory/snapshot</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
