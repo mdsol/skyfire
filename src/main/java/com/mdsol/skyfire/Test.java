@@ -1,11 +1,10 @@
-
 package com.mdsol.skyfire;
 
 import java.util.List;
 
 /**
  * A class that represents an object of a test.
- * 
+ *
  * @author Nan Li
  * @version 1.0 Feb 10, 2013
  *
@@ -25,11 +24,12 @@ public class Test {
     }
 
     /**
-     * Constructs a Test with the test name, test comment, and abstract test path from a state machine diagram
+     * Constructs a Test with the test name, test comment, and abstract test path from a state
+     * machine diagram
      */
-    public Test(String testName, String testComment) {
-	this.testName = testName;
-	this.testComment = testComment;
+    public Test(final String testName, final String testComment) {
+        this.testName = testName;
+        this.testComment = testComment;
     }
 
     /**
@@ -37,8 +37,8 @@ public class Test {
      * 
      * @return the concrete test code in a String format
      */
-    public String getTestCode() {
-	return testCode;
+    public final String getTestCode() {
+        return testCode;
     }
 
     /**
@@ -47,8 +47,8 @@ public class Test {
      * @param testCode
      *            the test code in a String format
      */
-    public void setTestCode(String testCode) {
-	this.testCode = testCode;
+    public final void setTestCode(final String testCode) {
+        this.testCode = testCode;
     }
 
     /**
@@ -56,8 +56,8 @@ public class Test {
      * 
      * @return the test comment in a String format
      */
-    public String getTestComment() {
-	return testComment;
+    public final String getTestComment() {
+        return testComment;
     }
 
     /**
@@ -66,8 +66,8 @@ public class Test {
      * @param testComment
      *            the test comment in a String format
      */
-    public void setTestComment(String testComment) {
-	this.testComment = testComment;
+    public final void setTestComment(final String testComment) {
+        this.testComment = testComment;
     }
 
     /**
@@ -75,8 +75,8 @@ public class Test {
      * 
      * @return the test name in a String format
      */
-    public String getTestName() {
-	return testName;
+    public final String getTestName() {
+        return testName;
     }
 
     /**
@@ -85,8 +85,8 @@ public class Test {
      * @param testName
      *            the test name in a String format
      */
-    public void setTestName(String testName) {
-	this.testName = testName;
+    public final void setTestName(final String testName) {
+        this.testName = testName;
     }
 
     /**
@@ -94,8 +94,8 @@ public class Test {
      * 
      * @return a list of {@link edu.gmu.swe.taf.Mapping}s
      */
-    public List<Mapping> getMappings() {
-	return mappings;
+    public final List<Mapping> getMappings() {
+        return mappings;
     }
 
     /**
@@ -104,8 +104,8 @@ public class Test {
      * @param mappings
      *            a list of {@link edu.gmu.swe.taf.Mapping}s
      */
-    public void setMappings(List<Mapping> mappings) {
-	this.mappings = mappings;
+    public final void setMappings(final List<Mapping> mappings) {
+        this.mappings = mappings;
     }
 
 }
