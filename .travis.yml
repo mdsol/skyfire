@@ -1,2 +1,5 @@
 language: java
 
+## install jars locally
+sh jars-installation.sh
+
