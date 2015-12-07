@@ -38,10 +38,34 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.13</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.2</version>
 			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymockclassextension</artifactId>
+			<version>3.2</version>
 		</dependency>
 
 		<dependency>
@@ -55,6 +79,12 @@
 			<artifactId>org.eclipse.uml2.uml</artifactId>
 			<version>4.1.2.v20140202-2055</version>
 		</dependency>
+
+		<!-- <dependency> <groupId>org.eclipse.uml2</groupId> <artifactId>types</artifactId> 
+			<version>2.0.0-v20140602-0749</version> </dependency> <dependency> <groupId>org.eclipse.uml2</groupId> 
+			<artifactId>common</artifactId> <version>2.0.0-v20140602-0749</version> </dependency> 
+			<dependency> <groupId>org.eclipse.emf</groupId> <artifactId>ecore</artifactId> 
+			<version>2.3.0-v200706262000</version> </dependency> -->
 
 		<dependency>
 			<groupId>org.eclipse.uml2</groupId>
@@ -120,7 +150,6 @@
 			<artifactId>coverage</artifactId>
 			<version>0.9</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -148,46 +177,8 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<phase>validate</phase>
-						<configuration>
-							<configLocation>google_checks.xml</configLocation>
-							<encoding>UTF-8</encoding>
-							<consoleOutput>true</consoleOutput>
-							<failsOnError>true</failsOnError>
-							<linkXRef>false</linkXRef>
-						</configuration>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>checkstyle</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
 
 	<description>This project generates abstract tests from a UML behavioral model</description>
 	<organization>
@@ -203,9 +194,20 @@
 			<organization>Medidata Solutions</organization>
 			<organizationUrl>http://www.mdsol.com</organizationUrl>
 			<roles>
-				<role>architect</role>
-				<role>developer</role>
+				<role>Architect</role>
+				<role>Developer</role>
 				<role>Test Automation Engineer</role>
+			</roles>
+			<timezone>+5</timezone>
+		</developer>
+		<developer>
+			<id>aescalona</id>
+			<name>Anthony Escalona</name>
+			<email>aescalona@mdsol.com</email>
+			<organization>Medidata Solutions</organization>
+			<organizationUrl>http://www.mdsol.com</organizationUrl>
+			<roles>
+				<role>Test Automation Manager</role>
 			</roles>
 			<timezone>+5</timezone>
 		</developer>
