@@ -80,12 +80,14 @@ public class CucumberTestGeneratorTest {
     }
 
     @Test
-    public void testGenerateScenariosRoc() throws IOException, InvalidInputException, InvalidGraphException {
+    public void testGenerateScenariosRoc()
+            throws IOException, InvalidInputException, InvalidGraphException {
         EObject object = StateMachineAccessor.getModelObject(rocPath);
         List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
         List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
         StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
-        List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(), stateMachine.getInitialStates(), stateMachine.getFinalStates(),
+        List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
+                stateMachine.getInitialStates(), stateMachine.getFinalStates(),
                 TestCoverageCriteria.EDGECOVERAGE);
                 // System.out.println(stateMachine.getStateMappings());
 
@@ -93,15 +95,16 @@ public class CucumberTestGeneratorTest {
         // List<edu.gmu.swe.taf.Test> tests = new ArrayList<edu.gmu.swe.taf.Test>();
         for (int i = 0; i < paths.size(); i++) {
             System.out.println("path: " + paths.get(i));
-            List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(AbstractTestGenerator.getPathByState(paths.get(i), stateMachine),
-                    stateMachine);
+            List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
+                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
 
             String pathName = "";
             for (Transition transition : transitions) {
                 // System.out.println(transition);
                 pathName += (transition.getName() != null ? transition.getName() : "") + " ";
             }
-            com.mdsol.skyfire.Test test = new com.mdsol.skyfire.FsmTest(String.valueOf(i), pathName, transitions);
+            com.mdsol.skyfire.Test test = new com.mdsol.skyfire.FsmTest(String.valueOf(i), pathName,
+                    transitions);
             tests.add(test);
             System.out.println(test.getTestComment());
         }
@@ -118,9 +121,11 @@ public class CucumberTestGeneratorTest {
     }
 
     @Test
-    public void testGenerateScenariosRocUsingExternalAPI() throws IOException, InvalidInputException, InvalidGraphException {
+    public void testGenerateScenariosRocUsingExternalAPI()
+            throws IOException, InvalidInputException, InvalidGraphException {
         String featureDescription = "Roc feature file generated from a state machine diagram";
-        boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath), TestCoverageCriteria.EDGECOVERAGE, featureDescription,
+        boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath),
+                TestCoverageCriteria.EDGECOVERAGE, featureDescription,
                 Paths.get(rocDirectory + "Roc.feature"));
         assertTrue(generated);
         File file = new File(rocDirectory + "Roc.feature");

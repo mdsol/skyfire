@@ -44,6 +44,7 @@ public class AbstractTestGenerator {
 
     /**
      * Constructs an AbstractTestGenerator with the global directory
+     * @param globalDirectory the global directory
      */
     public AbstractTestGenerator(String globalDirectory) {
         this.globalDirectory = globalDirectory;
@@ -62,11 +63,11 @@ public class AbstractTestGenerator {
      * @param criterion
      *            an enumeration type of {@link TestCoverageCriteria}
      * @return a list of {@link coverage.graph.Path} objects that satisfy edge coverage
-     * @throws InvalidInputException
-     * @throws InvalidGraphException
+     * @throws InvalidInputException when any of edges, initialNodes, and finalNodes is in a wrong format
+     * @throws InvalidGraphException when the graph cannot be correctly constructed from the specified inputs
      */
-    public static List<Path> getTestPaths(String edges, String initialNodes, String finalNodes, TestCoverageCriteria criterion)
-            throws InvalidInputException, InvalidGraphException {
+    public static List<Path> getTestPaths(String edges, String initialNodes, String finalNodes,
+            TestCoverageCriteria criterion) throws InvalidInputException, InvalidGraphException {
         logger.info("Generate abstract test paths from a flat graph");
 
         Graph g = GraphUtil.readGraph(edges, initialNodes, finalNodes);
@@ -86,7 +87,8 @@ public class AbstractTestGenerator {
             List<Path> edgeCoverage = g.findEdges();
             Graph prefix = GraphUtil.getPrefixGraph(edgeCoverage);
             Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgeCoverage).get(0),
+            List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite
+                    .findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgeCoverage).get(0),
                     g.findTestPath());
 
             return splittedPaths;
@@ -94,14 +96,16 @@ public class AbstractTestGenerator {
             List<Path> edgePairs = g.findEdgePairs();
             Graph prefix = GraphUtil.getPrefixGraph(edgePairs);
             Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgePairs).get(0),
+            List<Path> splittedPaths = g.splittedPathsFromSuperString(
+                    bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgePairs).get(0),
                     g.findTestPath());
             return splittedPaths;
         } else {
             List<Path> primePaths = g.findPrimePaths();
             Graph prefix = GraphUtil.getPrefixGraph(primePaths);
             Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(g.findPrimePaths()).get(0),
+            List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite
+                    .findMinimumPrimePathCoverageViaPrefixGraphOptimized(g.findPrimePaths()).get(0),
                     g.findTestPath());
             // System.out.println(edges);
             // System.out.println("splitted paths: " + splittedPaths.size());
@@ -110,7 +114,8 @@ public class AbstractTestGenerator {
     }
 
     /**
-     * Transforms a {@link coverage.graph.Path} to a list of {@link org.eclipse.uml2.uml.Vertex} in a UML state machine
+     * Transforms a {@link coverage.graph.Path} to a list of {@link org.eclipse.uml2.uml.Vertex} in
+     * a UML state machine
      * 
      * @param path
      *            a path of a control flow graph in a String format "1, 2, 3, ... etc."
@@ -130,7 +135,8 @@ public class AbstractTestGenerator {
     }
 
     /**
-     * Transforms a list of {@link org.eclipse.uml2.uml.Vertex} to a list of {@link org.eclipse.uml2.uml.Transition}s in a UML state machine
+     * Transforms a list of {@link org.eclipse.uml2.uml.Vertex} to a list of
+     * {@link org.eclipse.uml2.uml.Transition}s in a UML state machine
      * 
      * @param vertices
      *            a list of {@link org.eclipse.uml2.uml.Vertex}
@@ -138,7 +144,8 @@ public class AbstractTestGenerator {
      *            a {@link StateMachineAccessor} object
      * @return a list of {@link org.eclipse.uml2.uml.Transition}s
      */
-    public static List<Transition> convertVerticesToTransitions(List<Vertex> vertices, StateMachineAccessor stateMachine) {
+    public static List<Transition> convertVerticesToTransitions(List<Vertex> vertices,
+            StateMachineAccessor stateMachine) {
         List<Transition> transitions = new ArrayList<Transition>();
 
         for (int i = 0; i < vertices.size();) {
@@ -185,7 +192,8 @@ public class AbstractTestGenerator {
             Test test = null;
 
             if (modelAccessor instanceof StateMachineAccessor) {
-                List<Transition> transitions = convertVerticesToTransitions(getPathByState(paths.get(i), (StateMachineAccessor) modelAccessor),
+                List<Transition> transitions = convertVerticesToTransitions(
+                        getPathByState(paths.get(i), (StateMachineAccessor) modelAccessor),
                         (StateMachineAccessor) modelAccessor);
                 String testComment = "/** The test path is: " + paths.get(i).toString() + "**/";
                 test = new Test("test" + i, testComment);
@@ -203,10 +211,12 @@ public class AbstractTestGenerator {
      * @param finalMappings
      *            a list of {@link Mapping} objects that represents the path of the abstract test
      * @param constraints
-     *            a list of {@link Mapping} objects that represents preconditions, state invariants, and postconditions
+     *            a list of {@link Mapping} objects that represents preconditions, state invariants,
+     *            and postconditions
      * @return a list of {@link Element} objects
      */
-    public List<Mapping> addPreconditionStateInvariantMappings(Element element, List<Mapping> finalMappings, List<Mapping> constraints) {
+    public List<Mapping> addPreconditionStateInvariantMappings(Element element,
+            List<Mapping> finalMappings, List<Mapping> constraints) {
 
         if (element instanceof Vertex) {
             for (Mapping precondition : constraints) {
@@ -216,7 +226,8 @@ public class AbstractTestGenerator {
             }
 
             for (Mapping stateinvariant : constraints) {
-                // System.out.println(((Vertex) element).getName() + " " + stateinvariant.getIdentifiableElementName());
+                // System.out.println(((Vertex) element).getName() + " " +
+                // stateinvariant.getIdentifiableElementName());
                 if (stateinvariant.getIdentifiableElementName().equals(((Vertex) element).getName())
                         && stateinvariant.getType() == IdentifiableElementType.STATEINVARIANT)
                     finalMappings.add(stateinvariant);
@@ -225,13 +236,15 @@ public class AbstractTestGenerator {
 
         if (element instanceof Transition) {
             for (Mapping precondition : constraints) {
-                if (precondition.getIdentifiableElementName().equals(((Transition) element).getName())
+                if (precondition.getIdentifiableElementName()
+                        .equals(((Transition) element).getName())
                         && precondition.getType() == IdentifiableElementType.PRECONDITION)
                     finalMappings.add(precondition);
             }
 
             for (Mapping stateinvariant : constraints) {
-                if (stateinvariant.getIdentifiableElementName().equals(((Transition) element).getName())
+                if (stateinvariant.getIdentifiableElementName()
+                        .equals(((Transition) element).getName())
                         && stateinvariant.getType() == IdentifiableElementType.STATEINVARIANT)
                     finalMappings.add(stateinvariant);
             }
@@ -250,7 +263,8 @@ public class AbstractTestGenerator {
      *            a list of {@link Mapping} objects that represents postconditions
      * @return a list of {@link Element} objects
      */
-    public List<Mapping> addPostconditionMappings(Element element, List<Mapping> finalMappings, List<Mapping> constraints) {
+    public List<Mapping> addPostconditionMappings(Element element, List<Mapping> finalMappings,
+            List<Mapping> constraints) {
         if (element instanceof Vertex) {
             for (Mapping postcondition : constraints) {
                 if (postcondition.getIdentifiableElementName().equals(((Vertex) element).getName())
@@ -261,7 +275,8 @@ public class AbstractTestGenerator {
 
         if (element instanceof Transition) {
             for (Mapping postcondition : constraints) {
-                if (postcondition.getIdentifiableElementName().equals(((Transition) element).getName())
+                if (postcondition.getIdentifiableElementName()
+                        .equals(((Transition) element).getName())
                         && postcondition.getType() == IdentifiableElementType.POSTCONDITION)
                     finalMappings.add(postcondition);
             }
@@ -270,7 +285,8 @@ public class AbstractTestGenerator {
     }
 
     /**
-     * Gets all constraints from the XML file and creates precondition, stateinvariant, postcondition mappings.
+     * Gets all constraints from the XML file and creates precondition, stateinvariant,
+     * postcondition mappings.
      * 
      * @param constraints
      *            a list of {@link ConstraintMapping} objects
@@ -286,8 +302,11 @@ public class AbstractTestGenerator {
                 if (constraint.getPreconditions() != null) {
                     if (constraint.getPreconditions().size() > 0) {
                         for (String precondition : constraint.getPreconditions()) {
-                            mappings.add(new Mapping(constraint.getName(), IdentifiableElementType.PRECONDITION, precondition, constraint.getTestCode(),
-                                    constraint.getRequiredMappings(), constraint.getParameters(), constraint.getCallers(), constraint.getReturnObjects()));
+                            mappings.add(new Mapping(constraint.getName(),
+                                    IdentifiableElementType.PRECONDITION, precondition,
+                                    constraint.getTestCode(), constraint.getRequiredMappings(),
+                                    constraint.getParameters(), constraint.getCallers(),
+                                    constraint.getReturnObjects()));
                         }
                     }
                 }
@@ -295,8 +314,11 @@ public class AbstractTestGenerator {
                 if (constraint.getStateinvariants() != null) {
                     if (constraint.getStateinvariants().size() > 0) {
                         for (String stateinvariant : constraint.getStateinvariants()) {
-                            mappings.add(new Mapping(constraint.getName(), IdentifiableElementType.STATEINVARIANT, stateinvariant, constraint.getTestCode(),
-                                    constraint.getRequiredMappings(), constraint.getParameters(), constraint.getCallers(), constraint.getReturnObjects()));
+                            mappings.add(new Mapping(constraint.getName(),
+                                    IdentifiableElementType.STATEINVARIANT, stateinvariant,
+                                    constraint.getTestCode(), constraint.getRequiredMappings(),
+                                    constraint.getParameters(), constraint.getCallers(),
+                                    constraint.getReturnObjects()));
                         }
                     }
                 }
@@ -304,8 +326,11 @@ public class AbstractTestGenerator {
                 if (constraint.getPostconditions() != null) {
                     if (constraint.getPostconditions().size() > 0) {
                         for (String postcondition : constraint.getPostconditions()) {
-                            mappings.add(new Mapping(constraint.getName(), IdentifiableElementType.POSTCONDITION, postcondition, constraint.getTestCode(),
-                                    constraint.getRequiredMappings(), constraint.getParameters(), constraint.getCallers(), constraint.getReturnObjects()));
+                            mappings.add(new Mapping(constraint.getName(),
+                                    IdentifiableElementType.POSTCONDITION, postcondition,
+                                    constraint.getTestCode(), constraint.getRequiredMappings(),
+                                    constraint.getParameters(), constraint.getCallers(),
+                                    constraint.getReturnObjects()));
                         }
                     }
                 }

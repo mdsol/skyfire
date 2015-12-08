@@ -40,21 +40,22 @@ public class MappingTest {
 
     @Test
     public void testConstructorAndGettersAndSetters() {
-	String mappingName = "vMachineInit";
-	String identifiedElementName = "vm";
-	IdentifiableElementType type = IdentifiableElementType.CLASS;
-	String testCode = "vendingMachine vm = new vendingMachine();";
-	List<String> mappings = new ArrayList<String>();
-	List<String> parameters = new ArrayList<String>();
+        String mappingName = "vMachineInit";
+        String identifiedElementName = "vm";
+        IdentifiableElementType type = IdentifiableElementType.CLASS;
+        String testCode = "vendingMachine vm = new vendingMachine();";
+        List<String> mappings = new ArrayList<String>();
+        List<String> parameters = new ArrayList<String>();
 
-	Mapping mapping = new Mapping(mappingName, type, identifiedElementName, testCode, mappings, parameters, null, null);
+        Mapping mapping = new Mapping(mappingName, type, identifiedElementName, testCode, mappings,
+                parameters, null, null);
 
-	assertEquals(mapping.getName(), "vMachineInit");
-	assertEquals(mapping.getIdentifiableElementName(), "vm");
-	assertEquals(mapping.getType(), IdentifiableElementType.CLASS);
-	assertEquals(mapping.getTestCode(), "vendingMachine vm = new vendingMachine();");
-	assertEquals(mapping.getRequiredMappings().size(), 0);
-	assertEquals(mapping.getParameters().size(), 0);
+        assertEquals(mapping.getName(), "vMachineInit");
+        assertEquals(mapping.getIdentifiableElementName(), "vm");
+        assertEquals(mapping.getType(), IdentifiableElementType.CLASS);
+        assertEquals(mapping.getTestCode(), "vendingMachine vm = new vendingMachine();");
+        assertEquals(mapping.getRequiredMappings().size(), 0);
+        assertEquals(mapping.getParameters().size(), 0);
     }
 
 }

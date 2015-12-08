@@ -31,7 +31,8 @@ import com.mdsol.skyfire.ModelAccessor;
  */
 public class StateMachineAccessorTest {
 
-    private String vendingMachineXmlPath = System.getProperty("user.dir") + "/src/test/resources/testData/VendingMachine/model/VendingMachineFSM.uml";
+    private String vendingMachineXmlPath = System.getProperty("user.dir")
+            + "/src/test/resources/testData/VendingMachine/model/VendingMachineFSM.uml";
 
     /**
      * @throws java.lang.Exception
@@ -49,61 +50,61 @@ public class StateMachineAccessorTest {
 
     @Test
     public void testGetStateMachines() throws IOException {
-	EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
-	List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
-	assertEquals(1, statemachines.size());
+        EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
+        List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
+        assertEquals(1, statemachines.size());
     }
 
     @Test
     public void testGetRegions() throws IOException {
-	EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
-	List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	assertEquals(1, regions.size());
+        EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
+        List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        assertEquals(1, regions.size());
     }
 
     @Test
     public void testGetInitialStates() throws IOException {
-	EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
-	List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	List<Pseudostate> initialStates = StateMachineAccessor.getInitialStates(regions.get(0));
-	assertEquals(1, initialStates.size());
+        EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
+        List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        List<Pseudostate> initialStates = StateMachineAccessor.getInitialStates(regions.get(0));
+        assertEquals(1, initialStates.size());
     }
 
     @Test
     public void testGetFinalStates() throws IOException {
-	EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
-	List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	List<FinalState> finalStates = StateMachineAccessor.getFinalStates(regions.get(0));
-	assertEquals(1, finalStates.size());
+        EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
+        List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        List<FinalState> finalStates = StateMachineAccessor.getFinalStates(regions.get(0));
+        assertEquals(1, finalStates.size());
     }
 
     @Test
     public void testGetStates() throws IOException {
-	EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
-	List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	List<State> states = StateMachineAccessor.getStates(regions.get(0));
-	assertEquals(9, states.size());
+        EObject object = ModelAccessor.getModelObject(vendingMachineXmlPath);
+        List<StateMachine> statemachines = ModelAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        List<State> states = StateMachineAccessor.getStates(regions.get(0));
+        assertEquals(9, states.size());
     }
 
     @Test
     public void testCreateStateMappings() throws IOException {
-	EObject object = StateMachineAccessor.getModelObject(vendingMachineXmlPath);
-	List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
-	HashMap<Vertex, String> stateMappings = stateMachine.getStateMappings();
-	HashMap<String, Vertex> reversedStateMappings = stateMachine.getReversedStateMappings();
-	assertNotNull(stateMappings);
-	assertEquals(11, stateMappings.size());
-	assertEquals(11, reversedStateMappings.size());
-	// System.out.println(reversedStateMappings);
-	assertNotNull(stateMachine.getInitialStates());
-	assertNotNull(stateMachine.getFinalStates());
-	assertNotNull(stateMachine.getEdges());
-	System.out.println(stateMachine.getEdges());
+        EObject object = StateMachineAccessor.getModelObject(vendingMachineXmlPath);
+        List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
+        HashMap<Vertex, String> stateMappings = stateMachine.getStateMappings();
+        HashMap<String, Vertex> reversedStateMappings = stateMachine.getReversedStateMappings();
+        assertNotNull(stateMappings);
+        assertEquals(11, stateMappings.size());
+        assertEquals(11, reversedStateMappings.size());
+        // System.out.println(reversedStateMappings);
+        assertNotNull(stateMachine.getInitialStates());
+        assertNotNull(stateMachine.getFinalStates());
+        assertNotNull(stateMachine.getEdges());
+        System.out.println(stateMachine.getEdges());
     }
 }

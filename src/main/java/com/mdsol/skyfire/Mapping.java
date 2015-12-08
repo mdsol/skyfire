@@ -31,8 +31,7 @@ public class Mapping {
     private List<String> returnObjects;
 
     /**
-     * Allocates a {@link Mapping} object and initialize it to represent the the
-     * mapping
+     * Allocates a {@link Mapping} object and initialize it to represent the the mapping
      * 
      * @param mappingName
      *            the name of the mapping
@@ -45,23 +44,23 @@ public class Mapping {
      * @param requiredMappings
      *            the required mappings for this mapping
      * @param parameters
-     *            the names of object mappings that are used to be method
-     *            parameters
+     *            the names of object mappings that are used to be method parameters
      * @param callers
      *            the names of object mappings that are used to call methods
      * @param returnObjects
      *            the names of object mappings that are returned by methods
      */
-    public Mapping(String mappingName, IdentifiableElementType type, String identifiableElementName, String testCode,
-	    List<String> requiredMappings, List<String> parameters, List<String> callers, List<String> returnObjects) {
-	this.name = mappingName;
-	this.type = type;
-	this.identifiableElementName = identifiableElementName;
-	this.testCode = testCode;
-	this.requiredMappings = requiredMappings;
-	this.parameters = parameters;
-	this.setCallers(callers);
-	this.setReturnObjects(returnObjects);
+    public Mapping(String mappingName, IdentifiableElementType type, String identifiableElementName,
+            String testCode, List<String> requiredMappings, List<String> parameters,
+            List<String> callers, List<String> returnObjects) {
+        this.name = mappingName;
+        this.type = type;
+        this.identifiableElementName = identifiableElementName;
+        this.testCode = testCode;
+        this.requiredMappings = requiredMappings;
+        this.parameters = parameters;
+        this.setCallers(callers);
+        this.setReturnObjects(returnObjects);
     }
 
     /**
@@ -77,7 +76,7 @@ public class Mapping {
      * @return the mapping name
      */
     public String getName() {
-	return name;
+        return name;
     }
 
     /**
@@ -87,7 +86,7 @@ public class Mapping {
      *            the name of the mapping
      */
     public void setName(String mappingName) {
-	this.name = mappingName;
+        this.name = mappingName;
     }
 
     /**
@@ -96,7 +95,7 @@ public class Mapping {
      * @return the type of the identifiable element
      */
     public IdentifiableElementType getType() {
-	return type;
+        return type;
     }
 
     /**
@@ -106,7 +105,7 @@ public class Mapping {
      *            the type of the identifiable element
      */
     public void setType(IdentifiableElementType type) {
-	this.type = type;
+        this.type = type;
     }
 
     /**
@@ -115,7 +114,7 @@ public class Mapping {
      * @return the name of the identifiable element
      */
     public String getIdentifiableElementName() {
-	return identifiableElementName;
+        return identifiableElementName;
     }
 
     /**
@@ -125,7 +124,7 @@ public class Mapping {
      *            the name of the identifiable element
      */
     public void setIdentifiableElementName(String identifiableElementName) {
-	this.identifiableElementName = identifiableElementName;
+        this.identifiableElementName = identifiableElementName;
     }
 
     /**
@@ -134,7 +133,7 @@ public class Mapping {
      * @return the mapped test code
      */
     public String getTestCode() {
-	return testCode;
+        return testCode;
     }
 
     /**
@@ -144,7 +143,7 @@ public class Mapping {
      *            the mapped test code
      */
     public void setTestCode(String testCode) {
-	this.testCode = testCode;
+        this.testCode = testCode;
     }
 
     /**
@@ -153,7 +152,7 @@ public class Mapping {
      * @return a list of names of required mappings
      */
     public List<String> getRequiredMappings() {
-	return requiredMappings;
+        return requiredMappings;
     }
 
     /**
@@ -163,7 +162,7 @@ public class Mapping {
      *            the required mappings for this mapping
      */
     public void setRequiredMappings(List<String> requiredMappings) {
-	this.requiredMappings = requiredMappings;
+        this.requiredMappings = requiredMappings;
     }
 
     /**
@@ -172,7 +171,7 @@ public class Mapping {
      * @return a list of {@link String}s
      */
     public List<String> getParameters() {
-	return parameters;
+        return parameters;
     }
 
     /**
@@ -182,27 +181,25 @@ public class Mapping {
      *            the parameters used in this mapping
      */
     public void setParameters(List<String> parameters) {
-	this.parameters = parameters;
+        this.parameters = parameters;
     }
 
     /**
      * Gets the objects that call methods
      * 
-     * @return a list of names of the objects that call methods in a String
-     *         format
+     * @return a list of names of the objects that call methods in a String format
      */
     public List<String> getCallers() {
-	return callers;
+        return callers;
     }
 
     /**
      * Gets the objects that are returned by methods
      * 
-     * @return a list of names of the objects that call methods in a String
-     *         format
+     * @return a list of names of the objects that call methods in a String format
      */
     public List<String> getReturnObjects() {
-	return returnObjects;
+        return returnObjects;
     }
 
     /**
@@ -212,7 +209,7 @@ public class Mapping {
      *            a list of names of callers
      */
     public void setCallers(List<String> callers) {
-	this.callers = callers;
+        this.callers = callers;
     }
 
     /**
@@ -222,7 +219,7 @@ public class Mapping {
      *            a list of return objects
      */
     public void setReturnObjects(List<String> returnObjects) {
-	this.returnObjects = returnObjects;
+        this.returnObjects = returnObjects;
     }
 
 }

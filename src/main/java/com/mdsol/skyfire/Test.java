@@ -26,6 +26,11 @@ public class Test {
     /**
      * Constructs a Test with the test name, test comment, and abstract test path from a state
      * machine diagram
+     * 
+     * @param testName
+     *            the name of the test
+     * @param testComment
+     *            the comment for the test
      */
     public Test(final String testName, final String testComment) {
         this.testName = testName;

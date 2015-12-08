@@ -28,53 +28,74 @@ public class CucumberTestGenerator {
 
     /**
      * Constructs a test with no parameters
+     * 
+     * @param tests
+     *            a list of tests
      */
     public CucumberTestGenerator(List<? extends Test> tests) {
-	this.tests = tests;
+        this.tests = tests;
     }
 
+    /**
+     * Gets the tests
+     * 
+     * @return a list of tests
+     */
     public List<? extends Test> getTests() {
-	return tests;
+        return tests;
     }
 
+    /**
+     * Sets the tests
+     * 
+     * @param tests
+     *            a list of tests
+     */
     public void setTests(List<? extends Test> tests) {
-	this.tests = tests;
+        this.tests = tests;
     }
 
     /**
      * Parses the test and extract identifiable elements from the model Each test is a scenario
+     * 
+     * @param featureDescription
+     *            the description of a feature
+     * @return a StringBuffer object that represents the feature scenarios
      */
     StringBuffer generateScenarios(String featureDescription) {
-	StringBuffer sb = new StringBuffer();
-	sb.append("Feature: ");
-	sb.append(featureDescription + "\n");
-	sb.append("\n");
+        StringBuffer sb = new StringBuffer();
+        sb.append("Feature: ");
+        sb.append(featureDescription + "\n");
+        sb.append("\n");
 
-	for (Test test : tests) {
-	    if (test instanceof FsmTest) {
-		sb.append("Scenario: " + test.getTestComment() + "\n");
-		boolean firstWhen = true;
-		if (((FsmTest) test).getPath() != null) {
-		    for (Transition transition : ((FsmTest) test).getPath()) {
-			if (transition != null && transition.getName() != null && transition.getName().indexOf("initialize") >= 0) {
-			    sb.append("Given " + transition.getName() + "\n");
-			} else if (transition != null && transition.getName() != null && firstWhen) {
-			    sb.append("When " + transition.getName() + "\n");
-			    firstWhen = false;
-			} else if (transition != null && transition.getName() != null && !firstWhen) {
-			    sb.append("And " + transition.getName() + "\n");
-			} else {
-			    continue;
-			}
-		    }
-		} else {
-		    logger.debug(test.getTestName() + " does not have paths");
-		}
-		sb.append("\n\n");
-	    }
-	}
+        for (Test test : tests) {
+            if (test instanceof FsmTest) {
+                sb.append("Scenario: " + test.getTestComment() + "\n");
+                boolean firstWhen = true;
+                if (((FsmTest) test).getPath() != null) {
+                    for (Transition transition : ((FsmTest) test).getPath()) {
+                        if (transition != null && transition.getName() != null
+                                && transition.getName().indexOf("initialize") >= 0) {
+                            sb.append("Given " + transition.getName() + "\n");
+                        } else if (transition != null && transition.getName() != null
+                                && firstWhen) {
+                            sb.append("When " + transition.getName() + "\n");
+                            firstWhen = false;
+                        } else if (transition != null && transition.getName() != null
+                                && !firstWhen) {
+                            sb.append("And " + transition.getName() + "\n");
+                        } else {
+                            continue;
+                        }
+                    }
+                } else {
+                    logger.debug(test.getTestName() + " does not have paths");
+                }
+                sb.append("\n\n");
+            }
+        }
 
-	return sb;
+        return sb;
     }
 
     /**
@@ -85,37 +106,41 @@ public class CucumberTestGenerator {
      * @param tests
      *            a list of tests
      */
-    private static StringBuffer generateScenarios(String featureDescription, List<? extends Test> tests) {
-	StringBuffer sb = new StringBuffer();
-	sb.append("Feature: ");
-	sb.append(featureDescription + "\n");
-	sb.append("\n");
+    private static StringBuffer generateScenarios(String featureDescription,
+            List<? extends Test> tests) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Feature: ");
+        sb.append(featureDescription + "\n");
+        sb.append("\n");
 
-	for (Test test : tests) {
-	    if (test instanceof FsmTest) {
-		sb.append("Scenario: " + test.getTestComment() + "\n");
-		boolean firstWhen = true;
-		if (((FsmTest) test).getPath() != null) {
-		    for (Transition transition : ((FsmTest) test).getPath()) {
-			if (transition != null && transition.getName() != null && transition.getName().indexOf("initialize") >= 0) {
-			    sb.append("Given " + transition.getName() + "\n");
-			} else if (transition != null && transition.getName() != null && firstWhen) {
-			    sb.append("When " + transition.getName() + "\n");
-			    firstWhen = false;
-			} else if (transition != null && transition.getName() != null && !firstWhen) {
-			    sb.append("And " + transition.getName() + "\n");
-			} else {
-			    continue;
-			}
-		    }
-		} else {
-		    logger.debug(test.getTestName() + " does not have paths");
-		}
-		sb.append("\n\n");
-	    }
-	}
+        for (Test test : tests) {
+            if (test instanceof FsmTest) {
+                sb.append("Scenario: " + test.getTestComment() + "\n");
+                boolean firstWhen = true;
+                if (((FsmTest) test).getPath() != null) {
+                    for (Transition transition : ((FsmTest) test).getPath()) {
+                        if (transition != null && transition.getName() != null
+                                && transition.getName().indexOf("initialize") >= 0) {
+                            sb.append("Given " + transition.getName() + "\n");
+                        } else if (transition != null && transition.getName() != null
+                                && firstWhen) {
+                            sb.append("When " + transition.getName() + "\n");
+                            firstWhen = false;
+                        } else if (transition != null && transition.getName() != null
+                                && !firstWhen) {
+                            sb.append("And " + transition.getName() + "\n");
+                        } else {
+                            continue;
+                        }
+                    }
+                } else {
+                    logger.debug(test.getTestName() + " does not have paths");
+                }
+                sb.append("\n\n");
+            }
+        }
 
-	return sb;
+        return sb;
     }
 
     /**
@@ -126,13 +151,16 @@ public class CucumberTestGenerator {
      * @param path
      *            the path of the Feature file
      * @throws IOException
+     *             throws an IOException when the specified path to the file is not found
+     * 
      */
     public static void writeFeatureFile(StringBuffer sb, String path) throws IOException {
-	String result = sb.toString();
+        String result = sb.toString();
 
-	BufferedWriter bufferWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
-	bufferWriter.write(result);
-	bufferWriter.close();
+        BufferedWriter bufferWriter = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
+        bufferWriter.write(result);
+        bufferWriter.close();
     }
 
     /**
@@ -151,61 +179,66 @@ public class CucumberTestGenerator {
      * @throws InvalidGraphException
      * @throws InvalidInputException
      */
-    public static boolean generateCucumberScenario(Path umlPath, TestCoverageCriteria coverage, String featureDescription, Path featureFilePath) {
-	boolean isGenerated = true;
+    public static boolean generateCucumberScenario(Path umlPath, TestCoverageCriteria coverage,
+            String featureDescription, Path featureFilePath) {
+        boolean isGenerated = true;
 
-	// read the UML model
-	EObject object = null;
-	try {
-	    object = StateMachineAccessor.getModelObject(umlPath.toString());
-	} catch (IOException e) {
-	    logger.debug("Have difficulty in finding the specified UML model");
-	    e.printStackTrace();
-	}
-	List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
-	List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
-	StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
-	logger.info("Read the specified UML model from " + umlPath.toString());
+        // read the UML model
+        EObject object = null;
+        try {
+            object = StateMachineAccessor.getModelObject(umlPath.toString());
+        } catch (IOException e) {
+            logger.debug("Have difficulty in finding the specified UML model");
+            e.printStackTrace();
+        }
+        List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
+        List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
+        logger.info("Read the specified UML model from " + umlPath.toString());
 
-	// generate the abstract test paths on the flattened graph
-	List<coverage.graph.Path> paths = null;
-	try {
-	    paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(), stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
-	} catch (InvalidInputException | InvalidGraphException e) {
-	    logger.debug("The flattened graph is not valid");
-	    e.printStackTrace();
-	}
-	logger.info("Generate abstract test paths on the flattened graph");
+        // generate the abstract test paths on the flattened graph
+        List<coverage.graph.Path> paths = null;
+        try {
+            paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
+                    stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
+        } catch (InvalidInputException | InvalidGraphException e) {
+            logger.debug("The flattened graph is not valid");
+            e.printStackTrace();
+        }
+        logger.info("Generate abstract test paths on the flattened graph");
 
-	// find the matched transitions on the original UML model and construct
-	// tests
-	List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
+        // find the matched transitions on the original UML model and construct
+        // tests
+        List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
 
-	for (int i = 0; i < paths.size(); i++) {
-	    System.out.println("path: " + paths.get(i));
-	    List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
+        for (int i = 0; i < paths.size(); i++) {
+            System.out.println("path: " + paths.get(i));
+            List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
+                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
 
-	    String pathName = "";
-	    for (Transition transition : transitions) {
-		pathName += (transition.getName() != null ? transition.getName() : "") + " ";
-	    }
-	    com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(String.valueOf(i), pathName, transitions);
-	    tests.add(test);
-	    System.out.println(test.getTestComment());
-	}
-	logger.info("Generate abstract tests");
+            String pathName = "";
+            for (Transition transition : transitions) {
+                pathName += (transition.getName() != null ? transition.getName() : "") + " ";
+            }
+            com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(String.valueOf(i),
+                    pathName, transitions);
+            tests.add(test);
+            System.out.println(test.getTestComment());
+        }
+        logger.info("Generate abstract tests");
 
-	// write the scenarios into the feature file
-	StringBuffer sb = generateScenarios(featureDescription, tests);
+        // write the scenarios into the feature file
+        StringBuffer sb = generateScenarios(featureDescription, tests);
 
-	try {
-	    writeFeatureFile(sb, featureFilePath.toString());
-	} catch (IOException e) {
-	    logger.debug("Cannot write scenarios into the feature file");
-	    e.printStackTrace();
-	}
-	logger.info("Create Cucumber feature file which is located at " + featureFilePath.toString());
+        try {
+            writeFeatureFile(sb, featureFilePath.toString());
+        } catch (IOException e) {
+            logger.debug("Cannot write scenarios into the feature file");
+            e.printStackTrace();
+        }
+        logger.info(
+                "Create Cucumber feature file which is located at " + featureFilePath.toString());
 
-	return isGenerated;
+        return isGenerated;
     }
 }

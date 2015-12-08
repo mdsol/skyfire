@@ -21,15 +21,21 @@ public class FsmTest extends Test {
      * 
      */
     public FsmTest() {
-	super();
+        super();
     }
 
     /**
      * 
+     * @param testName
+     *            the name of the test
+     * @param testComment
+     *            the comment for the test
+     * @param path
+     *            the path that includes a list of transitions
      */
     public FsmTest(String testName, String testComment, List<Transition> path) {
-	super(testName, testComment);
-	this.path = path;
+        super(testName, testComment);
+        this.path = path;
     }
 
     /**
@@ -38,7 +44,7 @@ public class FsmTest extends Test {
      * @return a list of {@link org.eclipse.uml2.uml.Transition}s
      */
     public List<Transition> getPath() {
-	return path;
+        return path;
     }
 
     /**
@@ -48,7 +54,7 @@ public class FsmTest extends Test {
      *            a list of {@link org.eclipse.uml2.uml.Transition}s
      */
     public void setPath(List<Transition> path) {
-	this.path = path;
+        this.path = path;
     }
 
 }

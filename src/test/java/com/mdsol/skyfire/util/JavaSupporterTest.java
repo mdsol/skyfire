@@ -18,23 +18,17 @@ public class JavaSupporterTest {
 
     @Test
     public void testRemoveSemiColon() {
-	String string = "vm.getCredit() == 0;;;;";
-	assertEquals("vm.getCredit() == 0", JavaSupporter.removeSemiColon(string));
-    }
-
-    @Test
-    public void testCreateTestDirectories() {
-	String directory = "tempData/DynamicParser/test/";
-	JavaSupporter.createTestDirectory(directory, "edu.gmu");
+        String string = "vm.getCredit() == 0;;;;";
+        assertEquals("vm.getCredit() == 0", JavaSupporter.removeSemiColon(string));
     }
 
     @Test
     public void testReturnPakcages() {
-	assertEquals("edu/gmu/", JavaSupporter.returnPackages("package    edu.gmu;"));
+        assertEquals("edu/gmu/", JavaSupporter.returnPackages("package    edu.gmu;"));
     }
 
     @Test
     public void testCleanUpPackageName() {
-	assertEquals("edu.gmu", JavaSupporter.cleanUpPackageName("package    edu.gmu;;"));
+        assertEquals("edu.gmu", JavaSupporter.cleanUpPackageName("package    edu.gmu;;"));
     }
 }
