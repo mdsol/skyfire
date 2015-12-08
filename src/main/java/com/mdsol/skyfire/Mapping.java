@@ -4,9 +4,10 @@ import java.util.List;
 
 /**
  * A class that represents an object of a mapping.
- * 
+ *
  * @author Nan Li
  * @version 1.0 Nov 12, 2012
+ * @version 2015.1.0
  *
  */
 public class Mapping {
@@ -32,7 +33,7 @@ public class Mapping {
 
     /**
      * Allocates a {@link Mapping} object and initialize it to represent the the mapping
-     * 
+     *
      * @param mappingName
      *            the name of the mapping
      * @param type
@@ -50,9 +51,10 @@ public class Mapping {
      * @param returnObjects
      *            the names of object mappings that are returned by methods
      */
-    public Mapping(String mappingName, IdentifiableElementType type, String identifiableElementName,
-            String testCode, List<String> requiredMappings, List<String> parameters,
-            List<String> callers, List<String> returnObjects) {
+    public Mapping(final String mappingName, final IdentifiableElementType type,
+            final String identifiableElementName, final String testCode,
+            final List<String> requiredMappings, final List<String> parameters,
+            final List<String> callers, final List<String> returnObjects) {
         this.name = mappingName;
         this.type = type;
         this.identifiableElementName = identifiableElementName;
@@ -72,153 +74,153 @@ public class Mapping {
 
     /**
      * Gets the mapping name
-     * 
+     *
      * @return the mapping name
      */
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
     /**
      * Sets the mapping name
-     * 
+     *
      * @param mappingName
      *            the name of the mapping
      */
-    public void setName(String mappingName) {
+    public final void setName(final String mappingName) {
         this.name = mappingName;
     }
 
     /**
      * Gets the identifiable element type
-     * 
+     *
      * @return the type of the identifiable element
      */
-    public IdentifiableElementType getType() {
+    public final IdentifiableElementType getType() {
         return type;
     }
 
     /**
      * Sets the identifiable element type
-     * 
+     *
      * @param type
      *            the type of the identifiable element
      */
-    public void setType(IdentifiableElementType type) {
+    public final void setType(final IdentifiableElementType type) {
         this.type = type;
     }
 
     /**
      * Gets the name of the identifiable element
-     * 
+     *
      * @return the name of the identifiable element
      */
-    public String getIdentifiableElementName() {
+    public final String getIdentifiableElementName() {
         return identifiableElementName;
     }
 
     /**
      * Sets the name of the identifiable element
-     * 
+     *
      * @param identifiableElementName
      *            the name of the identifiable element
      */
-    public void setIdentifiableElementName(String identifiableElementName) {
+    public final void setIdentifiableElementName(final String identifiableElementName) {
         this.identifiableElementName = identifiableElementName;
     }
 
     /**
      * Gets the test code
-     * 
+     *
      * @return the mapped test code
      */
-    public String getTestCode() {
+    public final String getTestCode() {
         return testCode;
     }
 
     /**
      * Sets the test code
-     * 
+     *
      * @param testCode
      *            the mapped test code
      */
-    public void setTestCode(String testCode) {
+    public final void setTestCode(final String testCode) {
         this.testCode = testCode;
     }
 
     /**
      * Gets the required mappings for this mapping
-     * 
+     *
      * @return a list of names of required mappings
      */
-    public List<String> getRequiredMappings() {
+    public final List<String> getRequiredMappings() {
         return requiredMappings;
     }
 
     /**
      * Sets the required mappings
-     * 
+     *
      * @param requiredMappings
      *            the required mappings for this mapping
      */
-    public void setRequiredMappings(List<String> requiredMappings) {
+    public final void setRequiredMappings(final List<String> requiredMappings) {
         this.requiredMappings = requiredMappings;
     }
 
     /**
      * Returns the parameters used in this mapping
-     * 
+     *
      * @return a list of {@link String}s
      */
-    public List<String> getParameters() {
+    public final List<String> getParameters() {
         return parameters;
     }
 
     /**
      * Sets the parameters
-     * 
+     *
      * @param parameters
      *            the parameters used in this mapping
      */
-    public void setParameters(List<String> parameters) {
+    public final void setParameters(final List<String> parameters) {
         this.parameters = parameters;
     }
 
     /**
      * Gets the objects that call methods
-     * 
+     *
      * @return a list of names of the objects that call methods in a String format
      */
-    public List<String> getCallers() {
+    public final List<String> getCallers() {
         return callers;
     }
 
     /**
      * Gets the objects that are returned by methods
-     * 
+     *
      * @return a list of names of the objects that call methods in a String format
      */
-    public List<String> getReturnObjects() {
+    public final List<String> getReturnObjects() {
         return returnObjects;
     }
 
     /**
      * Sets the names of the callers
-     * 
+     *
      * @param callers
      *            a list of names of callers
      */
-    public void setCallers(List<String> callers) {
+    public final void setCallers(final List<String> callers) {
         this.callers = callers;
     }
 
     /**
      * Sets the names of return objects
-     * 
+     *
      * @param returnObjects
      *            a list of return objects
      */
-    public void setReturnObjects(List<String> returnObjects) {
+    public final void setReturnObjects(final List<String> returnObjects) {
         this.returnObjects = returnObjects;
     }
 

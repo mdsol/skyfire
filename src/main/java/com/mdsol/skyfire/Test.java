@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright 2015, Medidata Solutions, Inc., All Rights Reserved. The program
+ * and the accompanying materials are made under the terms of the MIT license.
+ * Author: Nan Li, nli@mdsol.com
+ ******************************************************************************/
 package com.mdsol.skyfire;
 
 import java.util.List;
@@ -26,7 +31,7 @@ public class Test {
     /**
      * Constructs a Test with the test name, test comment, and abstract test path from a state
      * machine diagram
-     * 
+     *
      * @param testName
      *            the name of the test
      * @param testComment
@@ -39,7 +44,7 @@ public class Test {
 
     /**
      * Gets the concrete test code
-     * 
+     *
      * @return the concrete test code in a String format
      */
     public final String getTestCode() {
@@ -48,7 +53,7 @@ public class Test {
 
     /**
      * Sets the test code
-     * 
+     *
      * @param testCode
      *            the test code in a String format
      */
@@ -58,7 +63,7 @@ public class Test {
 
     /**
      * Gets the comment for the test
-     * 
+     *
      * @return the test comment in a String format
      */
     public final String getTestComment() {
@@ -67,7 +72,7 @@ public class Test {
 
     /**
      * Sets the test comment
-     * 
+     *
      * @param testComment
      *            the test comment in a String format
      */
@@ -77,7 +82,7 @@ public class Test {
 
     /**
      * Gets the test name
-     * 
+     *
      * @return the test name in a String format
      */
     public final String getTestName() {
@@ -86,7 +91,7 @@ public class Test {
 
     /**
      * Sets the test name
-     * 
+     *
      * @param testName
      *            the test name in a String format
      */
@@ -96,7 +101,7 @@ public class Test {
 
     /**
      * Gets the mappings for the abstract test path
-     * 
+     *
      * @return a list of {@link edu.gmu.swe.taf.Mapping}s
      */
     public final List<Mapping> getMappings() {
@@ -105,7 +110,7 @@ public class Test {
 
     /**
      * Sets the mappings
-     * 
+     *
      * @param mappings
      *            a list of {@link edu.gmu.swe.taf.Mapping}s
      */

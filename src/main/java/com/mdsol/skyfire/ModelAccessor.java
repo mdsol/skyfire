@@ -37,15 +37,15 @@ import org.eclipse.uml2.uml.StateMachine;
 /**
  * A class that provides functions to access UML models. Classes in Acceleo are used to be helpers
  * to access the models.
- * 
+ *
  * @author Nan Li
  * @version 1.0 Nov 14, 2012
- *
+ * @version 2015.1.0
  */
 public class ModelAccessor {
 
     /**
-     * 
+     * Default Constructor
      */
     public ModelAccessor() {
 
@@ -53,22 +53,23 @@ public class ModelAccessor {
 
     /**
      * Gets the {@link org.eclipse.emf.ecore.EObject} object of a UML model specified by path
-     * 
+     *
      * @param path
      *            a String representation of the path of a UML model
      * @return an {@link org.eclipse.emf.ecore.EObject} object
      * @throws IOException
      *             when the path to the model is not found
      */
-    public static EObject getModelObject(String path) throws IOException {
+    public static EObject getModelObject(final String path) throws IOException {
 
-        URI modelURI = URI.createFileURI(path);
+        final URI modelURI = URI.createFileURI(path);
 
-        URIConverter uriConverter = createURIConverter();
+        final URIConverter uriConverter = createURIConverter();
 
-        Map<URI, URI> uriMap = EcorePlugin.computePlatformURIMap();
+        @SuppressWarnings("deprecation")
+        final Map<URI, URI> uriMap = EcorePlugin.computePlatformURIMap();
 
-        ResourceSet modelResourceSet = new AcceleoResourceSetImpl();
+        final ResourceSet modelResourceSet = new AcceleoResourceSetImpl();
         modelResourceSet.setPackageRegistry(AcceleoPackageRegistry.INSTANCE);
 
         if (uriConverter != null) {
@@ -82,27 +83,27 @@ public class ModelAccessor {
         registerResourceFactories(modelResourceSet);
         registerPackages(modelResourceSet);
 
-        URI newModelURI = URI.createURI(modelURI.toString(), true);
-        EObject model = ModelUtils.load(newModelURI, modelResourceSet);
+        final URI newModelURI = URI.createURI(modelURI.toString(), true);
+        final EObject model = ModelUtils.load(newModelURI, modelResourceSet);
         return model;
     }
 
     /**
      * Gets all objects of {@link org.eclipse.uml2.uml.StateMachine} in the model
-     * 
+     *
      * @param model
      *            a UML model to parse
      * @return a list of {@link org.eclipse.uml2.uml.StateMachine} in the model
      */
-    public static List<StateMachine> getStateMachines(EObject model) {
+    public static List<StateMachine> getStateMachines(final EObject model) {
 
-        List<StateMachine> result = new ArrayList<StateMachine>();
-        EList<Element> elements = ((Model) model).getOwnedElements();
+        final List<StateMachine> result = new ArrayList<StateMachine>();
+        final EList<Element> elements = ((Model) model).getOwnedElements();
 
-        for (Element elementObject : elements) {
+        for (final Element elementObject : elements) {
             // System.out.println(elementObject.toString());
             if (elementObject instanceof StateMachine) {
-                result.add(((StateMachine) elementObject));
+                result.add((StateMachine) elementObject);
             }
         }
 
@@ -116,7 +117,7 @@ public class ModelAccessor {
     /**
      * Creates the URI Converter we'll use to load our modules. Take note that this should never be
      * used out of Eclipse.
-     * 
+     *
      * @return The created URI Converter.
      * @since 3.0
      */
@@ -128,14 +129,13 @@ public class ModelAccessor {
         return new ExtensibleURIConverterImpl() {
             /**
              * {@inheritDoc}
-             * 
-             * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#normalize(org.eclipse.emf.common.util.URI)
+             *
              */
             @Override
-            public URI normalize(URI uri) {
+            public URI normalize(final URI uri) {
                 URI normalized = getURIMap().get(uri);
                 if (normalized == null) {
-                    BundleURLConverter conv = new BundleURLConverter(uri.toString());
+                    final BundleURLConverter conv = new BundleURLConverter(uri.toString());
                     if (conv.resolveBundle() != null) {
                         normalized = URI.createURI(conv.resolveAsPlatformPlugin());
                         getURIMap().put(uri, normalized);
@@ -151,11 +151,11 @@ public class ModelAccessor {
 
     /**
      * This will update the resource set's package registry with all usual EPackages.
-     * 
+     *
      * @param resourceSet
      *            The resource set which registry has to be updated.
      */
-    public static void registerPackages(ResourceSet resourceSet) {
+    public static void registerPackages(final ResourceSet resourceSet) {
         resourceSet.getPackageRegistry().put(EcorePackage.eINSTANCE.getNsURI(),
                 EcorePackage.eINSTANCE);
 
@@ -167,7 +167,7 @@ public class ModelAccessor {
 
         resourceSet.getPackageRegistry().put(MtlPackage.eINSTANCE.getNsURI(), MtlPackage.eINSTANCE);
 
-        resourceSet.getPackageRegistry().put("http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore", //$NON-NLS-1$
+        resourceSet.getPackageRegistry().put("http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore",
                 getOCLStdLibPackage());
 
         if (!isInWorkspace(org.eclipse.uml2.uml.UMLPackage.class)) {
@@ -179,12 +179,12 @@ public class ModelAccessor {
 
     /**
      * This will update the resource set's resource factory registry with all usual factories.
-     * 
+     *
      * @param resourceSet
      *            The resource set which registry has to be updated.
      */
-    public static void registerResourceFactories(ResourceSet resourceSet) {
-        resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", //$NON-NLS-1$
+    public static void registerResourceFactories(final ResourceSet resourceSet) {
+        resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
                 new EcoreResourceFactoryImpl());
         resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap()
                 .put(IAcceleoConstants.BINARY_CONTENT_TYPE, new EMtlBinaryResourceFactoryImpl());
@@ -194,13 +194,13 @@ public class ModelAccessor {
 
     /**
      * Returns the package containing the OCL standard library.
-     * 
+     *
      * @return The package containing the OCL standard library.
      */
     protected static EPackage getOCLStdLibPackage() {
-        EcoreEnvironmentFactory factory = new EcoreEnvironmentFactory();
-        EcoreEnvironment environment = (EcoreEnvironment) factory.createEnvironment();
-        EPackage oclStdLibPackage = (EPackage) EcoreUtil
+        final EcoreEnvironmentFactory factory = new EcoreEnvironmentFactory();
+        final EcoreEnvironment environment = (EcoreEnvironment) factory.createEnvironment();
+        final EPackage oclStdLibPackage = (EPackage) EcoreUtil
                 .getRootContainer(environment.getOCLStandardLibrary().getBag());
         environment.dispose();
         return oclStdLibPackage;
@@ -208,18 +208,18 @@ public class ModelAccessor {
 
     /**
      * Clients can override this if the default behavior doesn't properly find the emtl module URL.
-     * 
+     *
      * @param moduleName
      *            Name of the module we're searching for.
      * @return The template's URL. This will use Eclipse-specific behavior if possible, and use the
      *         class loader otherwise.
      */
-    protected URL findModuleURL(String moduleName) {
+    protected final URL findModuleURL(final String moduleName) {
         URL moduleURL = null;
         if (EMFPlugin.IS_ECLIPSE_RUNNING) {
             try {
                 moduleURL = AcceleoWorkspaceUtil.getResourceURL(getClass(), moduleName);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 // Swallow this, we'll try and locate the module through the
                 // class loader
             }
@@ -232,13 +232,13 @@ public class ModelAccessor {
 
     /**
      * Creates the URI that will be used to resolve the template that is to be launched.
-     * 
+     *
      * @param entry
      *            The path towards the template file. Could be a jar or file scheme URI, or we'll
      *            assume it represents a relative path.
      * @return The actual URI from which the template file can be resolved.
      */
-    protected URI createTemplateURI(String entry) {
+    protected final URI createTemplateURI(final String entry) {
         if (entry.startsWith("file:") || entry.startsWith("jar:")) { //$NON-NLS-1$ //$NON-NLS-2$
             return URI.createURI(URI.decode(entry));
         }
@@ -247,14 +247,14 @@ public class ModelAccessor {
 
     /**
      * Checks whether the given EPackage class is located in the workspace.
-     * 
+     *
      * @param ePackageClass
      *            The EPackage class we need to take into account.
      * @return <code>true</code> if the given class has been loaded from a dynamically installed
      *         bundle, <code>false</code> otherwise.
      * @since 3.1
      */
-    public static boolean isInWorkspace(Class<? extends EPackage> ePackageClass) {
+    public static boolean isInWorkspace(final Class<? extends EPackage> ePackageClass) {
         return EMFPlugin.IS_ECLIPSE_RUNNING
                 && AcceleoWorkspaceUtil.INSTANCE.isInDynamicBundle(ePackageClass);
     }

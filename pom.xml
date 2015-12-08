@@ -38,18 +38,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.13</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.13</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.2</version>
@@ -79,12 +67,6 @@
 			<artifactId>org.eclipse.uml2.uml</artifactId>
 			<version>4.1.2.v20140202-2055</version>
 		</dependency>
-
-		<!-- <dependency> <groupId>org.eclipse.uml2</groupId> <artifactId>types</artifactId> 
-			<version>2.0.0-v20140602-0749</version> </dependency> <dependency> <groupId>org.eclipse.uml2</groupId> 
-			<artifactId>common</artifactId> <version>2.0.0-v20140602-0749</version> </dependency> 
-			<dependency> <groupId>org.eclipse.emf</groupId> <artifactId>ecore</artifactId> 
-			<version>2.3.0-v200706262000</version> </dependency> -->
 
 		<dependency>
 			<groupId>org.eclipse.uml2</groupId>
@@ -207,6 +189,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
+				<configuration>
+					<configLocation>mdsol-checkstyle.xml</configLocation>
+				</configuration>
 				<reportSets>
 					<reportSet>
 						<reports>

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.mdsol.skyfire;
 
@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * A {@link ConstraintMapping} class that maps test code to a constraint.
- * 
+ *
  * @author Nan Li
  * @version 1.0 Feb 19, 2013
- *
+ * @version 2015.1.0
  */
 public class ConstraintMapping extends Mapping {
 
@@ -25,7 +25,7 @@ public class ConstraintMapping extends Mapping {
 
     /**
      * Allocates a {@link ConstraintMapping} object and initialize it to represent the the mapping
-     * 
+     *
      * @param mappingName
      *            the name of the mapping
      * @param type
@@ -51,11 +51,12 @@ public class ConstraintMapping extends Mapping {
      * @param stateinvariants
      *            the state-invariants that use this constraint
      */
-    public ConstraintMapping(String mappingName, IdentifiableElementType type,
-            String identifiableElementName, String testCode, List<String> requiredMappings,
-            List<String> parameters, List<String> callers, List<String> returnObjects,
-            List<String> constSolvingMappings, List<String> preconditions,
-            List<String> postconditions, List<String> stateinvariants) {
+    public ConstraintMapping(final String mappingName, final IdentifiableElementType type,
+            final String identifiableElementName, final String testCode,
+            final List<String> requiredMappings, final List<String> parameters,
+            final List<String> callers, final List<String> returnObjects,
+            final List<String> constSolvingMappings, final List<String> preconditions,
+            final List<String> postconditions, final List<String> stateinvariants) {
         super(mappingName, type, identifiableElementName, testCode, requiredMappings, parameters,
                 callers, returnObjects);
         this.constSolvingMappings = constSolvingMappings;
@@ -65,7 +66,7 @@ public class ConstraintMapping extends Mapping {
     }
 
     /**
-     * 
+     *
      */
     public ConstraintMapping() {
         // TODO Auto-generated constructor stub
@@ -73,77 +74,77 @@ public class ConstraintMapping extends Mapping {
 
     /**
      * Gets the names of mappings that used to solve the constraints.
-     * 
+     *
      * @return a list of names of the mappings in a String format
      */
-    public List<String> getConstSolvingMappings() {
+    public final List<String> getConstSolvingMappings() {
         return constSolvingMappings;
     }
 
     /**
      * Sets the mappings specified by the parameter.
-     * 
+     *
      * @param constSolvingMappings
      *            a list of names of the mappings that solve the constraint
      */
-    public void setConstSolvingMappings(List<String> constSolvingMappings) {
+    public final void setConstSolvingMappings(final List<String> constSolvingMappings) {
         this.constSolvingMappings = constSolvingMappings;
     }
 
     /**
      * Gets the names of mappings that use this constraint as postconditions
-     * 
+     *
      * @return a list of names of the mappings in a String format
      */
-    public List<String> getPostconditions() {
+    public final List<String> getPostconditions() {
         return postconditions;
     }
 
     /**
      * Sets the mappings specified by the parameter
-     * 
+     *
      * @param postconditions
      *            a list of names of the mappings that use this constraint as postconditions
      */
-    public void setPostconditions(List<String> postconditions) {
+    public final void setPostconditions(final List<String> postconditions) {
         this.postconditions = postconditions;
     }
 
     /**
      * Gets the names of mappings that use this constraint as preconditions
-     * 
+     *
      * @return a list of names of the mappings in a String format
      */
-    public List<String> getPreconditions() {
+    public final List<String> getPreconditions() {
         return preconditions;
     }
 
     /**
      * Sets the mappings specified by the parameter
-     * 
+     *
      * @param preconditions
      *            a list of names of the mappings that use this constraint as preconditions
      */
-    public void setPreconditions(List<String> preconditions) {
+    public final void setPreconditions(final List<String> preconditions) {
         this.preconditions = preconditions;
     }
 
     /**
      * Gets the names of mappings that use this constraint as state invariants
-     * 
+     *
      * @return a list of names of the mappings in a String format
      */
-    public List<String> getStateinvariants() {
+    public final List<String> getStateinvariants() {
         return stateinvariants;
     }
 
     /**
      * Sets the mappings specified by the parameter
-     * 
+     *
      * @param stateinvariants
      *            a list of names of the mappings that use this constraint as state invariants
      */
-    public void setStateinvariants(List<String> stateinvariants) {
+    public final void setStateinvariants(final List<String> stateinvariants) {
         this.stateinvariants = stateinvariants;
     }
 
