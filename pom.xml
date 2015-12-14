@@ -3,8 +3,55 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mdsol</groupId>
 	<artifactId>skyfire</artifactId>
-	<version>2015.1.0</version>
-	<name>Model-Based Test Generator</name>
+	<version>1.0.0</version>
+	<name>com.mdsol.skyfire</name>
+	<description>A application that generates Cucumber-compatible abstract tests from a UML behavioral model</description>
+	<url>https://github.com/mdsol/skyfire/</url>
+
+	<organization>
+		<name>Medidata Solutions, Inc</name>
+		<url>www.mdsol.com</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>nli</id>
+			<name>Nan Li</name>
+			<email>nli@mdsol.com</email>
+			<organization>Medidata Solutions</organization>
+			<organizationUrl>http://www.mdsol.com</organizationUrl>
+			<roles>
+				<role>Architect</role>
+				<role>Developer</role>
+				<role>Test Automation Engineer</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>aescalona</id>
+			<name>Anthony Escalona</name>
+			<email>aescalona@mdsol.com</email>
+			<organization>Medidata Solutions</organization>
+			<organizationUrl>http://www.mdsol.com</organizationUrl>
+			<roles>
+				<role>Test Automation Manager</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:mdsol/skyfire.git</connection>
+		<developerConnection>scm:git:git@github.com:mdsol/skyfire.git</developerConnection>
+		<url>git@github.com:mdsol/skyfire.git</url>
+	</scm>
 
 	<repositories>
 		<repository>
@@ -203,38 +250,6 @@
 		</plugins>
 	</reporting>
 
-	<description>This project generates abstract tests from a UML behavioral model</description>
-	<organization>
-		<name>Medidata Solutions, Inc</name>
-		<url>www.mdsol.com</url>
-	</organization>
-
-	<developers>
-		<developer>
-			<id>nli</id>
-			<name>Nan Li</name>
-			<email>nli@mdsol.com</email>
-			<organization>Medidata Solutions</organization>
-			<organizationUrl>http://www.mdsol.com</organizationUrl>
-			<roles>
-				<role>Architect</role>
-				<role>Developer</role>
-				<role>Test Automation Engineer</role>
-			</roles>
-			<timezone>+5</timezone>
-		</developer>
-		<developer>
-			<id>aescalona</id>
-			<name>Anthony Escalona</name>
-			<email>aescalona@mdsol.com</email>
-			<organization>Medidata Solutions</organization>
-			<organizationUrl>http://www.mdsol.com</organizationUrl>
-			<roles>
-				<role>Test Automation Manager</role>
-			</roles>
-			<timezone>+5</timezone>
-		</developer>
-	</developers>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
