@@ -13,5 +13,8 @@ mvn clean compile
 ### Check Checkstyle Report
 mvn site
 
-## Running unit tests
+## Run unit tests
 mvn clean test
+
+## Generate source and JavaDoc Jars
+mvn package
