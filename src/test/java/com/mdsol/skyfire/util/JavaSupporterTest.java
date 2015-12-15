@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright 2015, Medidata Solutions, Inc., All Rights Reserved. The program
+ * and the accompanying materials are made under the terms of MIT license.
+ * Author: Nan Li, nli@mdsol.com
+ ******************************************************************************/
 package com.mdsol.skyfire.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;

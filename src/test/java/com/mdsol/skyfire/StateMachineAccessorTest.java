@@ -1,9 +1,12 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright 2015, Medidata Solutions, Inc., All Rights Reserved. The program
+ * and the accompanying materials are made under the terms of MIT license.
+ * Author: Nan Li, nli@mdsol.com
+ ******************************************************************************/
 package com.mdsol.skyfire;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,18 +23,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mdsol.skyfire.ModelAccessor;
-
 /**
  * A JUnit test case for class {@link StateMachineAccessor}
- * 
+ *
  * @author Nan Li
  * @version 1.0 Nov 28, 2012
  *
  */
 public class StateMachineAccessorTest {
 
-    private String vendingMachineXmlPath = System.getProperty("user.dir")
+    private final String vendingMachineXmlPath = System.getProperty("user.dir")
             + "/src/test/resources/testData/VendingMachine/model/VendingMachineFSM.uml";
 
     /**

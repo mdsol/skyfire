@@ -18,3 +18,9 @@ mvn clean test
 
 ## Generate source and JavaDoc Jars
 mvn package
+
+## Deploy to a staging repository
+mvn deploy
+
+## Deploy to a public repository
+mvn deploy -P release

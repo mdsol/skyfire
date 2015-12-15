@@ -1,6 +1,9 @@
+/*******************************************************************************
+ * Copyright 2015, Medidata Solutions, Inc., All Rights Reserved. The program
+ * and the accompanying materials are made under the terms of MIT license.
+ * Author: Nan Li, nli@mdsol.com
+ ******************************************************************************/
 package com.mdsol.skyfire;
-
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,9 +23,6 @@ import org.eclipse.acceleo.model.mtl.resource.EMtlResourceFactoryImpl;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -44,6 +44,9 @@ import org.eclipse.uml2.uml.Region;
 import org.eclipse.uml2.uml.StateMachine;
 import org.eclipse.uml2.uml.Transition;
 import org.eclipse.uml2.uml.Vertex;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import coverage.graph.Graph;
 import coverage.graph.GraphUtil;
@@ -168,14 +171,14 @@ public class AccessingModelsTest {
          * final TreeIterator<EObject> targetElements = model.eAllContents(); while
          * (targetElements.hasNext()) { final EObject potentialTarget = targetElements.next();
          * System.out.println(potentialTarget.toString());
-         * 
+         *
          * }
          */
 
     }
 
-    public List<Path> getTestPaths(String edges, String initialNodes, String finalNodes)
-            throws InvalidInputException, InvalidGraphException {
+    public List<Path> getTestPaths(final String edges, final String initialNodes,
+            final String finalNodes) throws InvalidInputException, InvalidGraphException {
         Graph g = GraphUtil.readGraph(edges, initialNodes, finalNodes);
         try {
             g.validate();
@@ -190,7 +193,7 @@ public class AccessingModelsTest {
     /**
      * Creates the URI Converter we'll use to load our modules. Take note that this should never be
      * used out of Eclipse.
-     * 
+     *
      * @return The created URI Converter.
      * @since 3.0
      */
@@ -202,11 +205,11 @@ public class AccessingModelsTest {
         return new ExtensibleURIConverterImpl() {
             /**
              * {@inheritDoc}
-             * 
+             *
              * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#normalize(org.eclipse.emf.common.util.URI)
              */
             @Override
-            public URI normalize(URI uri) {
+            public URI normalize(final URI uri) {
                 URI normalized = getURIMap().get(uri);
                 if (normalized == null) {
                     BundleURLConverter conv = new BundleURLConverter(uri.toString());
@@ -225,11 +228,11 @@ public class AccessingModelsTest {
 
     /**
      * This will update the resource set's package registry with all usual EPackages.
-     * 
+     *
      * @param resourceSet
      *            The resource set which registry has to be updated.
      */
-    public void registerPackages(ResourceSet resourceSet) {
+    public void registerPackages(final ResourceSet resourceSet) {
         resourceSet.getPackageRegistry().put(EcorePackage.eINSTANCE.getNsURI(),
                 EcorePackage.eINSTANCE);
 
@@ -253,11 +256,11 @@ public class AccessingModelsTest {
 
     /**
      * This will update the resource set's resource factory registry with all usual factories.
-     * 
+     *
      * @param resourceSet
      *            The resource set which registry has to be updated.
      */
-    public void registerResourceFactories(ResourceSet resourceSet) {
+    public void registerResourceFactories(final ResourceSet resourceSet) {
         resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", //$NON-NLS-1$
                 new EcoreResourceFactoryImpl());
         resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap()
@@ -268,7 +271,7 @@ public class AccessingModelsTest {
 
     /**
      * Returns the package containing the OCL standard library.
-     * 
+     *
      * @return The package containing the OCL standard library.
      */
     protected EPackage getOCLStdLibPackage() {
@@ -282,13 +285,13 @@ public class AccessingModelsTest {
 
     /**
      * Clients can override this if the default behavior doesn't properly find the emtl module URL.
-     * 
+     *
      * @param moduleName
      *            Name of the module we're searching for.
      * @return The template's URL. This will use Eclipse-specific behavior if possible, and use the
      *         class loader otherwise.
      */
-    protected URL findModuleURL(String moduleName) {
+    protected URL findModuleURL(final String moduleName) {
         URL moduleURL = null;
         if (EMFPlugin.IS_ECLIPSE_RUNNING) {
             try {
@@ -305,13 +308,13 @@ public class AccessingModelsTest {
 
     /**
      * Creates the URI that will be used to resolve the template that is to be launched.
-     * 
+     *
      * @param entry
      *            The path towards the template file. Could be a jar or file scheme URI, or we'll
      *            assume it represents a relative path.
      * @return The actual URI from which the template file can be resolved.
      */
-    protected URI createTemplateURI(String entry) {
+    protected URI createTemplateURI(final String entry) {
         if (entry.startsWith("file:") || entry.startsWith("jar:")) { //$NON-NLS-1$ //$NON-NLS-2$
             return URI.createURI(URI.decode(entry));
         }
@@ -320,14 +323,14 @@ public class AccessingModelsTest {
 
     /**
      * Checks whether the given EPackage class is located in the workspace.
-     * 
+     *
      * @param ePackageClass
      *            The EPackage class we need to take into account.
      * @return <code>true</code> if the given class has been loaded from a dynamically installed
      *         bundle, <code>false</code> otherwise.
      * @since 3.1
      */
-    public boolean isInWorkspace(Class<? extends EPackage> ePackageClass) {
+    public boolean isInWorkspace(final Class<? extends EPackage> ePackageClass) {
         return EMFPlugin.IS_ECLIPSE_RUNNING
                 && AcceleoWorkspaceUtil.INSTANCE.isInDynamicBundle(ePackageClass);
     }

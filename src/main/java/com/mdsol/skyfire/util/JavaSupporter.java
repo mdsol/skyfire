@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright 2015, Medidata Solutions, Inc., All Rights Reserved. The program
+ * and the accompanying materials are made under the terms of MIT license.
+ * Author: Nan Li, nli@mdsol.com
+ ******************************************************************************/
 package com.mdsol.skyfire.util;
 
 import java.io.BufferedInputStream;
@@ -30,6 +35,7 @@ public class JavaSupporter {
     protected JavaSupporter() {
         throw new UnsupportedOperationException();
     }
+
     /**
      * Returns all Java files in a directory specified by path
      *

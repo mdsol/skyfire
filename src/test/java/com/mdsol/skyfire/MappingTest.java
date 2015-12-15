@@ -1,9 +1,11 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright 2015, Medidata Solutions, Inc., All Rights Reserved. The program
+ * and the accompanying materials are made under the terms of MIT license.
+ * Author: Nan Li, nli@mdsol.com
+ ******************************************************************************/
 package com.mdsol.skyfire;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +14,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mdsol.skyfire.IdentifiableElementType;
-import com.mdsol.skyfire.Mapping;
-
 /**
  * A JUnit test case for class {@link Mapping}
- * 
+ *
  * @author Nan Li
  * @version 1.0 Nov 12, 2012
  *
