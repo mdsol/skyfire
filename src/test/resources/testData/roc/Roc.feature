@@ -3,102 +3,142 @@ Feature: Roc feature file generated from a state machine diagram
 Scenario: initializeWithValidKeys  startEmr addValidSteps addInvalidSteps checkUntilGettingErrors  
 Given initializeWithValidKeys
 When startEmr
-And addValidSteps
+Then createSuccess
+When addValidSteps
 And addInvalidSteps
 And checkUntilGettingErrors
+Then invalidStepError
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning addValidSteps checkStepsUntilComplete addValidSteps checkUntilRunning runUntilWaiting addInvalidSteps checkUntilGettingErrors  
 Given initializeWithValidKeys
 When startEmr
-And startUntilRunning
-And addValidSteps
+Then createSuccess
+When startUntilRunning
+Then runningStatus
+When addValidSteps
 And checkStepsUntilComplete
-And addValidSteps
+Then completeWaitingStatus
+When addValidSteps
 And checkUntilRunning
-And runUntilWaiting
-And addInvalidSteps
+Then runningStatus
+When runUntilWaiting
+Then completeWaitingStatus
+When addInvalidSteps
 And checkUntilGettingErrors
+Then invalidStepError
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning addInvalidSteps checkUntilGettingErrors  
 Given initializeWithValidKeys
 When startEmr
-And startUntilRunning
-And addInvalidSteps
+Then createSuccess
+When startUntilRunning
+Then runningStatus
+When addInvalidSteps
 And checkUntilGettingErrors
+Then invalidStepError
 
 
 Scenario: initializeWithValidKeys  startEmr checkInvalidStepId terminate  
 Given initializeWithValidKeys
 When startEmr
-And checkInvalidStepId
-And terminate
+Then createSuccess
+When checkInvalidStepId
+Then invalidStepIdError
+When terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithInvalidKeys startEmrWithErrorStatus  
 Given initializeWithInvalidKeys
 When startEmrWithErrorStatus
+Then invalidKeyError
 
 
 Scenario: initializeWithValidKeys  startEmr addInvalidSteps addValidSteps checkUntilGettingErrors  
 Given initializeWithValidKeys
 When startEmr
-And addInvalidSteps
+Then createSuccess
+When addInvalidSteps
 And addValidSteps
 And checkUntilGettingErrors
+Then invalidStepError
 
 
 Scenario: initializeWithValidKeys  startEmr terminate  
 Given initializeWithValidKeys
 When startEmr
-And terminate
+Then createSuccess
+When terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning terminate  
 Given initializeWithValidKeys
 When startEmr
-And startUntilRunning
-And terminate
+Then createSuccess
+When startUntilRunning
+Then runningStatus
+When terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning runUntilWaiting terminate  
 Given initializeWithValidKeys
 When startEmr
-And startUntilRunning
-And runUntilWaiting
-And terminate
+Then createSuccess
+When startUntilRunning
+Then runningStatus
+When runUntilWaiting
+Then completeWaitingStatus
+When terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr addValidSteps terminate  
 Given initializeWithValidKeys
 When startEmr
-And addValidSteps
+Then createSuccess
+When addValidSteps
 And terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning checkInvalidStepId terminate  
 Given initializeWithValidKeys
 When startEmr
-And startUntilRunning
-And checkInvalidStepId
-And terminate
+Then createSuccess
+When startUntilRunning
+Then runningStatus
+When checkInvalidStepId
+Then invalidStepIdError
+When terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning runUntilWaiting checkInvalidStepId terminate  
 Given initializeWithValidKeys
 When startEmr
-And startUntilRunning
-And runUntilWaiting
-And checkInvalidStepId
-And terminate
+Then createSuccess
+When startUntilRunning
+Then runningStatus
+When runUntilWaiting
+Then completeWaitingStatus
+When checkInvalidStepId
+Then invalidStepIdError
+When terminate
+Then terminateSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr addValidSteps checkInvalidStepId terminate  
 Given initializeWithValidKeys
 When startEmr
-And addValidSteps
+Then createSuccess
+When addValidSteps
 And checkInvalidStepId
-And terminate
+Then invalidStepIdError
+When terminate
+Then terminateSuccess
 
 

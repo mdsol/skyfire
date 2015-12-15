@@ -16,7 +16,9 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Region;
+import org.eclipse.uml2.uml.State;
 import org.eclipse.uml2.uml.StateMachine;
 import org.eclipse.uml2.uml.Transition;
 
@@ -72,7 +74,7 @@ public class CucumberTestGenerator {
      * @return a StringBuffer object that represents the feature scenarios
      */
     final StringBuffer generateScenarios(final String featureDescription) {
-        final StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         sb.append("Feature: ");
         sb.append(featureDescription + "\n");
         sb.append("\n");
@@ -89,10 +91,22 @@ public class CucumberTestGenerator {
                         } else if (transition != null && transition.getName() != null
                                 && firstWhen) {
                             sb.append("When " + transition.getName() + "\n");
-                            firstWhen = false;
+                            sb = addConstriants(sb, transition);
+
+                            if (transition.getTarget() instanceof State
+                                    && ((State) transition.getTarget()).getStateInvariant() != null)
+                                firstWhen = true;
+                            else
+                                firstWhen = false;
+
                         } else if (transition != null && transition.getName() != null
                                 && !firstWhen) {
                             sb.append("And " + transition.getName() + "\n");
+                            sb = addConstriants(sb, transition);
+
+                            if (transition.getTarget() instanceof State
+                                    && ((State) transition.getTarget()).getStateInvariant() != null)
+                                firstWhen = true;
                         } else {
                             continue;
                         }
@@ -108,6 +122,29 @@ public class CucumberTestGenerator {
     }
 
     /**
+     * Analyze the constraints and convert them into Cucumber steps with Then
+     *
+     * @param sb
+     *            a StringBuffer object
+     * @param transition
+     *            a transition from a path
+     * @return a new StringBuffer object that has constraints
+     */
+    private static StringBuffer addConstriants(final StringBuffer sb, final Transition transition) {
+        StringBuffer newStrBuf = sb;
+
+        if (transition.getTarget() instanceof State) {
+            Constraint invariant = ((State) transition.getTarget()).getStateInvariant();
+            if (invariant != null) {
+                sb.append("Then ");
+                sb.append(invariant.getName() + "\n");
+            }
+        }
+
+        return newStrBuf;
+    }
+
+    /**
      * Parses the test and extract identifiable elements from the model Each test is a scenario
      *
      * @param featureDescription
@@ -117,7 +154,7 @@ public class CucumberTestGenerator {
      */
     private static final StringBuffer generateScenarios(final String featureDescription,
             final List<? extends Test> tests) {
-        final StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         sb.append("Feature: ");
         sb.append(featureDescription + "\n");
         sb.append("\n");
@@ -134,10 +171,21 @@ public class CucumberTestGenerator {
                         } else if (transition != null && transition.getName() != null
                                 && firstWhen) {
                             sb.append("When " + transition.getName() + "\n");
-                            firstWhen = false;
+                            sb = addConstriants(sb, transition);
+
+                            if (transition.getTarget() instanceof State
+                                    && ((State) transition.getTarget()).getStateInvariant() != null)
+                                firstWhen = true;
+                            else
+                                firstWhen = false;
                         } else if (transition != null && transition.getName() != null
                                 && !firstWhen) {
                             sb.append("And " + transition.getName() + "\n");
+                            sb = addConstriants(sb, transition);
+
+                            if (transition.getTarget() instanceof State
+                                    && ((State) transition.getTarget()).getStateInvariant() != null)
+                                firstWhen = true;
                         } else {
                             continue;
                         }
