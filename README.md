@@ -18,3 +18,12 @@ mvn clean test
 
 ## Generate source and JavaDoc Jars
 mvn package
+
+##Staging Maven Plugin for Deployment and Release (project owners only)
+mvn clean deploy
+
+##Performing a Release Deployment (project owners only)
+mvn clean deploy -P release
+
+
+
