@@ -17,7 +17,7 @@
       <transition xmi:type="uml:Transition" xmi:id="_jgq2wIT8EeWJwMyJR6--lQ" name="terminate" source="_bsODAIT8EeWJwMyJR6--lQ" target="_7Xg2sHgwEeWNk5HYn9T5TA"/>
       <subvertex xmi:type="uml:Pseudostate" xmi:id="_wwSGMHgYEeW2q4Wrgq9shw" name="Initial"/>
       <subvertex xmi:type="uml:State" xmi:id="_7Xg2sHgwEeWNk5HYn9T5TA" name="Terminated" stateInvariant="_i1UDYKNKEeWJEY1TjdIZQw">
-        <ownedRule xmi:type="uml:Constraint" xmi:id="_i1UDYKNKEeWJEY1TjdIZQw" name="terminateSuccess"/>
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_i1UDYKNKEeWJEY1TjdIZQw" name="terminationIsSuccess"/>
       </subvertex>
       <subvertex xmi:type="uml:FinalState" xmi:id="_EBljgHg0EeWNk5HYn9T5TA" name="FinalState"/>
       <subvertex xmi:type="uml:State" xmi:id="_HLCnwHg0EeWNk5HYn9T5TA" name="initialized"/>
@@ -32,28 +32,28 @@
           <transition xmi:type="uml:Transition" xmi:id="_NEi8EHjUEeWwiLqkST-Ejw" name="addValidSteps" source="_FA6aoHjFEeWwiLqkST-Ejw" target="_4l_8oHjFEeWwiLqkST-Ejw"/>
           <transition xmi:type="uml:Transition" xmi:id="_3wrtwITEEeW1GrJlId1BAA" name="checkStepsUntilComplete" source="_4l_8oHjFEeWwiLqkST-Ejw" target="_KuWekHjFEeWwiLqkST-Ejw"/>
           <subvertex xmi:type="uml:State" xmi:id="_5_91sHjEEeWwiLqkST-Ejw" name="EmrBeingStarted" stateInvariant="_49SSAKNIEeWJEY1TjdIZQw">
-            <ownedRule xmi:type="uml:Constraint" xmi:id="_49SSAKNIEeWJEY1TjdIZQw" name="createSuccess"/>
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_49SSAKNIEeWJEY1TjdIZQw" name="emrCreationIsSuccess"/>
           </subvertex>
           <subvertex xmi:type="uml:Pseudostate" xmi:id="_8P1mkHjEEeWwiLqkST-Ejw" name="Initial1"/>
           <subvertex xmi:type="uml:State" xmi:id="_FA6aoHjFEeWwiLqkST-Ejw" name="RunningWithValidSteps" stateInvariant="_ooaf4KNJEeWJEY1TjdIZQw">
-            <ownedRule xmi:type="uml:Constraint" xmi:id="_ooaf4KNJEeWJEY1TjdIZQw" name="runningStatus"/>
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_ooaf4KNJEeWJEY1TjdIZQw" name="emrIsRunning"/>
           </subvertex>
           <subvertex xmi:type="uml:State" xmi:id="_KuWekHjFEeWwiLqkST-Ejw" name="Waiting" stateInvariant="_09owIKNJEeWJEY1TjdIZQw">
-            <ownedRule xmi:type="uml:Constraint" xmi:id="_09owIKNJEeWJEY1TjdIZQw" name="completeWaitingStatus" constrainedElement="_KuWekHjFEeWwiLqkST-Ejw"/>
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_09owIKNJEeWJEY1TjdIZQw" name="stepsAreCompleteWaiting" constrainedElement="_KuWekHjFEeWwiLqkST-Ejw"/>
           </subvertex>
           <subvertex xmi:type="uml:State" xmi:id="_4l_8oHjFEeWwiLqkST-Ejw" name="ValidStepsAdded"/>
         </region>
       </subvertex>
       <subvertex xmi:type="uml:State" xmi:id="_atp-cHjGEeWwiLqkST-Ejw" name="InvalidStepsAdded"/>
       <subvertex xmi:type="uml:State" xmi:id="_YjGycHjGEeWwiLqkST-Ejw" name="Errors" stateInvariant="_ZlTGAKNJEeWJEY1TjdIZQw">
-        <ownedRule xmi:type="uml:Constraint" xmi:id="_ZlTGAKNJEeWJEY1TjdIZQw" name="invalidStepError"/>
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_ZlTGAKNJEeWJEY1TjdIZQw" name="invalidStepErrorOccur"/>
       </subvertex>
       <subvertex xmi:type="uml:State" xmi:id="_5TVE4ITHEeW1GrJlId1BAA" name="ErrorWithInvalidKeys" stateInvariant="_7e6PUKNKEeWJEY1TjdIZQw">
-        <ownedRule xmi:type="uml:Constraint" xmi:id="_7e6PUKNKEeWJEY1TjdIZQw" name="invalidKeyError"/>
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_7e6PUKNKEeWJEY1TjdIZQw" name="invalidKeyErrorOccur"/>
       </subvertex>
       <subvertex xmi:type="uml:State" xmi:id="_g5tZMITIEeW1GrJlId1BAA" name="initializedWithInvalidKeys"/>
       <subvertex xmi:type="uml:State" xmi:id="_bsODAIT8EeWJwMyJR6--lQ" name="ErrorWithInvalidStepId" stateInvariant="_RZVUsKNKEeWJEY1TjdIZQw">
-        <ownedRule xmi:type="uml:Constraint" xmi:id="_RZVUsKNKEeWJEY1TjdIZQw" name="invalidStepIdError"/>
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_RZVUsKNKEeWJEY1TjdIZQw" name="invalidStepIdErrorOccur"/>
       </subvertex>
     </region>
   </packagedElement>

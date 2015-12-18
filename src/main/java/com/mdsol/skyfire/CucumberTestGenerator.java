@@ -234,8 +234,6 @@ public class CucumberTestGenerator {
      *            the path of the feature file
      * @return true if the feature file is successfully generated; otherwise return false
      * @throws IOException
-     * @throws InvalidGraphException
-     * @throws InvalidInputException
      */
     public static final boolean generateCucumberScenario(final Path umlPath,
             final TestCoverageCriteria coverage, final String featureDescription,

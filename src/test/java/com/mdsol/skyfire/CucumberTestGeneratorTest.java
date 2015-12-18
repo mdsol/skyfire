@@ -5,7 +5,9 @@
  ******************************************************************************/
 package com.mdsol.skyfire;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +29,7 @@ import coverage.web.InvalidInputException;
 
 /**
  * A JUnit test case for class {@link CucumberTestGenerator}
- * 
+ *
  * @author Nan Li
  * @version 1.0 Nov 19, 2015
  *
@@ -78,20 +80,22 @@ public class CucumberTestGeneratorTest {
 
         StringBuffer sb = generator.generateScenarios(featureDescription);
         assertNotNull(sb);
-        System.out.println(sb);
     }
 
     @Test
-    public void testGenerateScenariosRoc()
-            throws IOException, InvalidInputException, InvalidGraphException {
+    public void testGenerateScenariosRoc() throws IOException, InvalidInputException {
         EObject object = StateMachineAccessor.getModelObject(rocPath);
         List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
         List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
         StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
-        List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
-                stateMachine.getInitialStates(), stateMachine.getFinalStates(),
-                TestCoverageCriteria.EDGECOVERAGE);
-                // System.out.println(stateMachine.getStateMappings());
+        List<Path> paths = null;
+        try {
+            paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
+                    stateMachine.getInitialStates(), stateMachine.getFinalStates(),
+                    TestCoverageCriteria.EDGECOVERAGE);
+        } catch (InvalidGraphException e) {
+            e.printStackTrace();
+        }
 
         // get the vertices from a path and return a list of transitions based on the vertices
         // List<edu.gmu.swe.taf.Test> tests = new ArrayList<edu.gmu.swe.taf.Test>();
@@ -122,9 +126,14 @@ public class CucumberTestGeneratorTest {
         assertTrue(file.exists());
     }
 
+    /**
+     * This tests show how a user should use skyfire to generate Cucumber features
+     *
+     * @throws IOException
+     *             when the model does not exist
+     */
     @Test
-    public void testGenerateScenariosRocUsingExternalAPI()
-            throws IOException, InvalidInputException, InvalidGraphException {
+    public void testGenerateScenariosRocUsingExternalAPI() throws IOException {
         String featureDescription = "Roc feature file generated from a state machine diagram";
         boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath),
                 TestCoverageCriteria.EDGECOVERAGE, featureDescription,
