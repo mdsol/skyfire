@@ -7,7 +7,7 @@ install:
     - mvn install:install-file -Dfile=org.eclipse.uml2.common_1.7.0.v20120913-1441.jar -DgroupId=org.eclipse.uml2 -DartifactId=common -Dversion=1.7.0.v20120913-1441 -Dpackaging=jar
 
 ## Run integration tests
-script: "mvn verify"
+script: "mvn verify -Dgpg.skip=true"
 
 notifications:
     email:
