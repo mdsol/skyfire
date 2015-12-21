@@ -54,7 +54,7 @@ import coverage.graph.InvalidGraphException;
 import coverage.graph.Path;
 import coverage.web.InvalidInputException;
 
-public class AccessingModelsTest {
+public class AccessingModelsIT {
 
     @Before
     public void setUp() throws Exception {

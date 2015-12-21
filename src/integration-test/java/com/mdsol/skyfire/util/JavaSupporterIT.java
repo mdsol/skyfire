@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JavaSupporterTest {
+public class JavaSupporterIT {
 
     @Before
     public void setUp() throws Exception {

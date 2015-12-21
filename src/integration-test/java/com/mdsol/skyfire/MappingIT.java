@@ -21,7 +21,7 @@ import org.junit.Test;
  * @version 1.0 Nov 12, 2012
  *
  */
-public class MappingTest {
+public class MappingIT {
 
     /**
      * @throws java.lang.Exception

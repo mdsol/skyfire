@@ -30,7 +30,7 @@ import org.junit.Test;
  * @version 1.0 Nov 28, 2012
  *
  */
-public class StateMachineAccessorTest {
+public class StateMachineAccessorIT {
 
     private final String vendingMachineXmlPath = System.getProperty("user.dir")
             + "/src/test/resources/testData/VendingMachine/model/VendingMachineFSM.uml";

@@ -34,7 +34,7 @@ import coverage.web.InvalidInputException;
  * @version 1.0 Nov 19, 2015
  *
  */
-public class CucumberTestGeneratorTest {
+public class CucumberTestGeneratorIT {
     private CucumberTestGenerator generator;
     private List<com.mdsol.skyfire.Test> tests;
 

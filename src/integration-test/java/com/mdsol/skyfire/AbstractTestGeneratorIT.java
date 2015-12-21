@@ -30,7 +30,7 @@ import coverage.web.InvalidInputException;
  * @version 1.0 Nov 28, 2012
  *
  */
-public class AbstractTestGeneratorTest {
+public class AbstractTestGeneratorIT {
 
     private String testResourceDir;
     String vendingMachinePath;
