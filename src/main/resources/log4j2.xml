@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration monitorInterval="5" strict="false" packages="com.mdsol.skyfire">
+    <properties>
+        <property name="servicename">Model-Based Test Generator</property>
+        <property name="filename">${servicename}.log</property>
+        <property name="errfilename">${servicename}.err</property>
+        <property name="patternTime">%d{UTF-8} | %-5.5p | %-15.30logger | %C{1}:%M:%L | %m%n</property>
+        <property name="patternNoTime">%-5.5p | %-15.30logger | %C{1}:%M:%L | %m%n</property>
+    </properties>
+    <CustomLevels>
+        <CustomLevel name="STACK" intLevel="99" />
+    </CustomLevels>
+    
+    <appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${patternNoTime}" />
+        </Console>
+        <Console name="econsole" target="SYSTEM_ERR">
+            <PatternLayout pattern="${patternNoTime}" />
+        </Console>
+        <RollingFile name="file" fileName="logs/${filename}"
+                             filePattern="logs/${date:yyyy-MM}/${filename}-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${patternTime}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+                <SizeBasedTriggeringPolicy size="10 MB" /> <!-- Or every 10 MB -->
+            </Policies>
+            <ThresholdFilter level="STACK" onMatch="DENY" onMismatch="ACCEPT"/>
+        </RollingFile>
+        <File name="errfile" fileName="logs/${errfilename}">
+            <PatternLayout pattern="${patternTime}" />
+        </File>
+        <Syslog name="bsd" host="localhost" port="514" protocol="UDP" />
+    </appenders>
+    <loggers>
+        <root level="trace">
+			<appender-ref ref="console" level="trace" />
+            <appender-ref ref="file" level="info" />
+            <appender-ref ref="errfile" level="STACK" />
+        </root>
+    </loggers>
+</configuration>

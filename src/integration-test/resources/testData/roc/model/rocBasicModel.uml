@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_SPaQwHgLEeW2q4Wrgq9shw" name="RootElement">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_SQICcHgLEeW2q4Wrgq9shw" name="StateMachine1">
+    <region xmi:type="uml:Region" xmi:id="_SR91gHgLEeW2q4Wrgq9shw" name="Region1">
+      <transition xmi:type="uml:Transition" xmi:id="_EpGPcHg0EeWNk5HYn9T5TA" source="_7Xg2sHgwEeWNk5HYn9T5TA" target="_EBljgHg0EeWNk5HYn9T5TA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_M8clsHg0EeWNk5HYn9T5TA" name="initializeWithValidKeys" source="_wwSGMHgYEeW2q4Wrgq9shw" target="_HLCnwHg0EeWNk5HYn9T5TA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_7NrTEHjREeWwiLqkST-Ejw" name="checkUntilGettingErrors" source="_atp-cHjGEeWwiLqkST-Ejw" target="_YjGycHjGEeWwiLqkST-Ejw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_ipW90HjTEeWwiLqkST-Ejw" name="addInvalidSteps" source="_j4XFYHjEEeWwiLqkST-Ejw" target="_atp-cHjGEeWwiLqkST-Ejw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_ZIvtwHjUEeWwiLqkST-Ejw" name="terminate" source="_j4XFYHjEEeWwiLqkST-Ejw" target="_7Xg2sHgwEeWNk5HYn9T5TA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_delsoHjUEeWwiLqkST-Ejw" source="_YjGycHjGEeWwiLqkST-Ejw" target="_EBljgHg0EeWNk5HYn9T5TA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_h4Aj8HjUEeWwiLqkST-Ejw" source="_HLCnwHg0EeWNk5HYn9T5TA" target="_j4XFYHjEEeWwiLqkST-Ejw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_BelJEHjVEeWwiLqkST-Ejw" name="addValidSteps" source="_atp-cHjGEeWwiLqkST-Ejw" target="_atp-cHjGEeWwiLqkST-Ejw"/>
+      <transition xmi:type="uml:Transition" xmi:id="_sL9Q4ITFEeW1GrJlId1BAA" name="checkInvalidStepId" source="_j4XFYHjEEeWwiLqkST-Ejw" target="_bsODAIT8EeWJwMyJR6--lQ"/>
+      <transition xmi:type="uml:Transition" xmi:id="_9KhY4ITHEeW1GrJlId1BAA" source="_5TVE4ITHEeW1GrJlId1BAA" target="_EBljgHg0EeWNk5HYn9T5TA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_-EJIgITHEeW1GrJlId1BAA" name="initializeWithInvalidKeys" source="_wwSGMHgYEeW2q4Wrgq9shw" target="_g5tZMITIEeW1GrJlId1BAA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_2KqOUITIEeW1GrJlId1BAA" name="startEmrWithErrorStatus" source="_g5tZMITIEeW1GrJlId1BAA" target="_5TVE4ITHEeW1GrJlId1BAA"/>
+      <transition xmi:type="uml:Transition" xmi:id="_jgq2wIT8EeWJwMyJR6--lQ" name="terminate" source="_bsODAIT8EeWJwMyJR6--lQ" target="_7Xg2sHgwEeWNk5HYn9T5TA"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_wwSGMHgYEeW2q4Wrgq9shw" name="Initial"/>
+      <subvertex xmi:type="uml:State" xmi:id="_7Xg2sHgwEeWNk5HYn9T5TA" name="Terminated" stateInvariant="_i1UDYKNKEeWJEY1TjdIZQw">
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_i1UDYKNKEeWJEY1TjdIZQw" name="terminationIsSuccess"/>
+      </subvertex>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_EBljgHg0EeWNk5HYn9T5TA" name="FinalState"/>
+      <subvertex xmi:type="uml:State" xmi:id="_HLCnwHg0EeWNk5HYn9T5TA" name="Initialized"/>
+      <subvertex xmi:type="uml:State" xmi:id="_j4XFYHjEEeWwiLqkST-Ejw" name="WorkingStatus">
+        <region xmi:type="uml:Region" xmi:id="_5_5kQHjEEeWwiLqkST-Ejw" name="Region1">
+          <transition xmi:type="uml:Transition" xmi:id="_AiRsIHjFEeWwiLqkST-Ejw" name="startEmr" source="_8P1mkHjEEeWwiLqkST-Ejw" target="_5_91sHjEEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_IxQfwHjFEeWwiLqkST-Ejw" name="startUntilRunning" source="_5_91sHjEEeWwiLqkST-Ejw" target="_FA6aoHjFEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_MdEqMHjFEeWwiLqkST-Ejw" name="runUntilWaiting" source="_FA6aoHjFEeWwiLqkST-Ejw" target="_KuWekHjFEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_8iF-wHjFEeWwiLqkST-Ejw" name="addValidSteps" source="_5_91sHjEEeWwiLqkST-Ejw" target="_4l_8oHjFEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_DzYbEHjGEeWwiLqkST-Ejw" name="checkUntilRunning" source="_4l_8oHjFEeWwiLqkST-Ejw" target="_FA6aoHjFEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_gTX94HjTEeWwiLqkST-Ejw" name="addValidSteps" source="_KuWekHjFEeWwiLqkST-Ejw" target="_4l_8oHjFEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_NEi8EHjUEeWwiLqkST-Ejw" name="addValidSteps" source="_FA6aoHjFEeWwiLqkST-Ejw" target="_4l_8oHjFEeWwiLqkST-Ejw"/>
+          <transition xmi:type="uml:Transition" xmi:id="_3wrtwITEEeW1GrJlId1BAA" name="checkStepsUntilComplete" source="_4l_8oHjFEeWwiLqkST-Ejw" target="_KuWekHjFEeWwiLqkST-Ejw"/>
+          <subvertex xmi:type="uml:State" xmi:id="_5_91sHjEEeWwiLqkST-Ejw" name="EmrBeingStarted" stateInvariant="_49SSAKNIEeWJEY1TjdIZQw">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_49SSAKNIEeWJEY1TjdIZQw" name="emrCreationIsSuccess"/>
+          </subvertex>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_8P1mkHjEEeWwiLqkST-Ejw" name="Initial1"/>
+          <subvertex xmi:type="uml:State" xmi:id="_FA6aoHjFEeWwiLqkST-Ejw" name="RunningWithValidSteps" stateInvariant="_ooaf4KNJEeWJEY1TjdIZQw">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_ooaf4KNJEeWJEY1TjdIZQw" name="emrIsRunning"/>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_KuWekHjFEeWwiLqkST-Ejw" name="Waiting" stateInvariant="_09owIKNJEeWJEY1TjdIZQw">
+            <ownedRule xmi:type="uml:Constraint" xmi:id="_09owIKNJEeWJEY1TjdIZQw" name="stepsAreCompleteWaiting" constrainedElement="_KuWekHjFEeWwiLqkST-Ejw"/>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_4l_8oHjFEeWwiLqkST-Ejw" name="ValidStepsAdded"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_atp-cHjGEeWwiLqkST-Ejw" name="InvalidStepsAdded"/>
+      <subvertex xmi:type="uml:State" xmi:id="_YjGycHjGEeWwiLqkST-Ejw" name="Errors" stateInvariant="_ZlTGAKNJEeWJEY1TjdIZQw">
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_ZlTGAKNJEeWJEY1TjdIZQw" name="invalidStepErrorOccur"/>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_5TVE4ITHEeW1GrJlId1BAA" name="ErrorWithInvalidKeys" stateInvariant="_7e6PUKNKEeWJEY1TjdIZQw">
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_7e6PUKNKEeWJEY1TjdIZQw" name="invalidKeyErrorOccur"/>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_g5tZMITIEeW1GrJlId1BAA" name="InitializedWithInvalidKeys"/>
+      <subvertex xmi:type="uml:State" xmi:id="_bsODAIT8EeWJwMyJR6--lQ" name="ErrorWithInvalidStepId" stateInvariant="_RZVUsKNKEeWJEY1TjdIZQw">
+        <ownedRule xmi:type="uml:Constraint" xmi:id="_RZVUsKNKEeWJEY1TjdIZQw" name="invalidStepIdErrorOccur"/>
+      </subvertex>
+    </region>
+  </packagedElement>
+  <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_KbaMUHg0EeWNk5HYn9T5TA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_KbcBgHg0EeWNk5HYn9T5TA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
+    </eAnnotations>
+    <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
+  </profileApplication>
+</uml:Model>

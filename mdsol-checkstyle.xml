@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!--
+	This configuration file was written by the eclipse-cs plugin configuration editor
+-->
+<!--
+	Checkstyle-Configuration: Roc Checkstyle Config
+	Description: 
+ 	Derived from checkstyle's Sun Checks (Eclipse) settings.
+-->
+<module name="Checker">
+	<property name="severity" value="warning"/>
+	<module name="TreeWalker">
+		<property name="tabWidth" value="4"/>
+		<module name="JavadocMethod"><!--//TODO:  Do not allow anything to go to production unless every public method and public attribute is documented!-->
+			<property name="scope" value="package"/>
+			<property name="excludeScope" value="private"/>
+			<property name="suppressLoadErrors" value="true"/>
+			<property name="severity" value="error"/>
+		</module>
+		<module name="JavadocType">
+			<property name="scope" value="package"/>
+			<property name="excludeScope" value="private"/>
+			<property name="severity" value="error"/>
+		</module>
+		<module name="JavadocVariable">
+			<property name="scope" value="package"/>
+			<property name="excludeScope" value="private"/>
+			<property name="severity" value="error"/>
+		</module>
+		<module name="JavadocStyle">
+			<property name="scope" value="package"/>
+			<property name="excludeScope" value="private"/>
+			<property name="severity" value="warning"/>
+		</module>
+		<module name="ConstantName"/>
+		<module name="LocalFinalVariableName"/>
+		<module name="LocalVariableName"/>
+		<module name="MemberName"/>
+		<module name="MethodName"/>
+		<module name="PackageName"/>
+		<module name="ParameterName"/>
+		<module name="StaticVariableName"/>
+		<module name="TypeName"/>
+		<module name="AvoidStarImport"/>
+		<module name="IllegalImport"/>
+		<module name="RedundantImport"/>
+		<module name="UnusedImports">
+			<property name="severity" value="warning"/>
+		</module>
+		<module name="LineLength">
+			<property name="severity" value="warning"/>
+			<property name="max" value="100"/>
+		</module>
+		<module name="MethodLength"/>
+		<module name="ParameterNumber"/>
+		<module name="EmptyForIteratorPad"/>
+		<module name="MethodParamPad"/>
+		<module name="NoWhitespaceAfter">
+			<property name="tokens" value="BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS"/>
+		</module>
+		<module name="NoWhitespaceBefore"/>
+		<module name="OperatorWrap"/>
+		<module name="ParenPad"/>
+		<module name="TypecastParenPad"/>
+		<module name="WhitespaceAfter"/>
+		<module name="WhitespaceAround"/>
+		<module name="ModifierOrder"/>
+		<module name="RedundantModifier"/>
+		<module name="AvoidNestedBlocks"/>
+		<module name="EmptyBlock"/>
+		<module name="LeftCurly"/>
+		<module name="NeedBraces"/>
+		<module name="RightCurly"/>
+		<module name="AvoidInlineConditionals"/>
+		<module name="EmptyStatement"/>
+		<module name="EqualsHashCode"/>
+		<module name="IllegalInstantiation"/>
+		<module name="InnerAssignment"/>
+		<module name="MissingSwitchDefault"/>
+		<module name="SimplifyBooleanExpression"/>
+		<module name="SimplifyBooleanReturn"/>
+		<module name="DesignForExtension"/>
+		<module name="FinalClass"/>
+		<module name="HideUtilityClassConstructor"/>
+		<module name="InterfaceIsType"/>
+		<module name="VisibilityModifier"/>
+		<module name="ArrayTypeStyle"/>
+		<module name="FinalParameters"/>
+		<module name="TodoComment"/>
+		<module name="UpperEll"/>
+		<module name="AbstractClassName"/>
+		<module name="ClassTypeParameterName"/>
+		<module name="MethodTypeParameterName"/>
+		<module name="ImportOrder"/>
+		<module name="GenericWhitespace"/>
+		<module name="EmptyForInitializerPad"/>
+		<module name="DefaultComesLast"/>
+		<module name="ExplicitInitialization"/>
+		<module name="FallThrough"/>
+		<module name="FinalLocalVariable"/>
+		<module name="IllegalCatch">
+			<property name="severity" value="info"/>
+		</module>
+		<module name="MissingCtor"/>
+		<module name="MultipleVariableDeclarations"/>
+		<module name="NestedForDepth">
+			<property name="max" value="3"/>
+		</module>
+		<module name="NestedIfDepth">
+			<property name="max" value="3"/>
+		</module>
+		<module name="NestedTryDepth">
+			<property name="max" value="2"/>
+		</module>
+		<module name="NoClone"/>
+		<module name="NoFinalizer"/>
+		<module name="PackageDeclaration"/>
+		<module name="ReturnCount">
+			<property name="max" value="3"/>
+		</module>
+		<module name="StringLiteralEquality">
+			<property name="severity" value="error"/>
+		</module>
+		<module name="SuperClone"/>
+		<module name="SuperFinalize"/>
+		<module name="ArrayTrailingComma"/>
+		<module name="UnnecessaryParentheses"/>
+		<module name="OneStatementPerLine"/>
+		<module name="InnerTypeLast"/>
+		<module name="MutableException"/>
+		<module name="ThrowsCount">
+			<property name="max" value="3"/>
+		</module>
+		<module name="BooleanExpressionComplexity">
+			<property name="severity" value="info"/>
+			<message key="booleanExpressionComplexity" value="Boolean expression complexity is {0,number,integer} (max recommended is {1,number,integer})."/>
+		</module>
+		<module name="ClassDataAbstractionCoupling">
+			<property name="severity" value="info"/>
+			<message key="classDataAbstractionCoupling" value="Class Data Abstraction Coupling is {0,number,integer} (max recommended is {1,number,integer}) classes {2}."/>
+		</module>
+		<module name="ClassFanOutComplexity">
+			<property name="severity" value="info"/>
+			<message key="classFanOutComplexity" value="Class Fan-Out Complexity is {0,number,integer} (max recommended is {1,number,integer})."/>
+		</module>
+		<module name="CyclomaticComplexity">
+			<property name="severity" value="info"/>
+			<message key="cyclomaticComplexity" value="Cyclomatic Complexity is {0,number,integer} (max recommended is {1,number,integer})."/>
+		</module>
+		<module name="JavaNCSS">
+			<property name="severity" value="info"/>
+			<message key="ncss.method" value="NCSS for this method is {0,number,integer} (max recommended is {1,number,integer})."/>
+			<message key="ncss.class" value="NCSS for this class is {0,number,integer} (max recommended is {1,number,integer})."/>
+			<message key="ncss.file" value="NCSS for this file is {0,number,integer} (max recommended is {1,number,integer})."/>
+		</module>
+		<module name="NPathComplexity">
+			<property name="severity" value="info"/>
+			<message key="npathComplexity" value="NPath Complexity is {0,number,integer} (max recommended is {1,number,integer})."/>
+		</module>
+		<module name="Indentation"/>
+	</module>
+	<module name="Translation"/>
+	<module name="FileLength"/>
+	<module name="FileTabCharacter"/>
+	<module name="RegexpSingleline">
+		<property name="severity" value="info"/>
+		<property name="format" value="\s+$"/>
+		<property name="message" value="Line has trailing spaces."/>
+		<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+	</module>
+</module>

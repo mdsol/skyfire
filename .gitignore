@@ -1,0 +1,48 @@
+/target/
+
+######################
+# OSX
+######################
+
+.DS_Store
+.svn
+ 
+# Thumbnails
+._*
+ 
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+######################
+# Eclipse / NetBeans
+######################
+/.apt_generated
+.settings/
+.externalToolBuilders/
+build/
+bin/
+target/
+log/
+logs/
+tmp/
+
+*.launch
+*.tmp
+*.bak
+*.swp
+*.nib
+*.pydevproject
+*.class
+*.war
+*.ear
+*.db
+*.buildpath
+*.cproject
+*.classpath
+*.loadpath
+*.project
+*.metadata
+
+nb-configuration.xml
+**/.checkstyle
