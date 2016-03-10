@@ -12,14 +12,14 @@ Run jars-installation.sh to install the coverage-0.9 jar, org.eclipse.uml2.commo
 
 ## Usage
 
-### Compile the whole project
+### Compile The Project
 mvn clean compile
 
 ### Check Checkstyle Report
 mvn site
 
-## Run unit tests
-mvn clean test
+## Run Integration Tests
+mvn clean integration-test
 
 ## Generate source and JavaDoc Jars
 mvn package
