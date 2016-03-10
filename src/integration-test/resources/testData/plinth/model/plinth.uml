@@ -3,7 +3,7 @@
   <packagedElement xmi:type="uml:StateMachine" xmi:id="_VTE-0OYkEeWJrb50pZVG6Q" name="NewModel statemachine">
     <region xmi:id="_VTE-0eYkEeWJrb50pZVG6Q" name="Region1">
       <transition xmi:id="_wNHeMOY2EeWJrb50pZVG6Q" name="initialize" source="_gQBNgOYkEeWJrb50pZVG6Q" target="_h0tTYOYkEeWJrb50pZVG6Q"/>
-      <transition xmi:id="_-qppUOY3EeWJrb50pZVG6Q" name="finalize" source="_PPOZMObYEeWJrb50pZVG6Q" target="_-J8wAOY3EeWJrb50pZVG6Q"/>
+      <transition xmi:id="_-qppUOY3EeWJrb50pZVG6Q" name="delete" source="_dSQqwecHEeWJrb50pZVG6Q" target="_-J8wAOY3EeWJrb50pZVG6Q"/>
       <subvertex xmi:type="uml:Pseudostate" xmi:id="_gQBNgOYkEeWJrb50pZVG6Q" name="Initial1"/>
       <subvertex xmi:type="uml:State" xmi:id="_h0tTYOYkEeWJrb50pZVG6Q" name="ClientDivisions" submachine="_h0ssUOYkEeWJrb50pZVG6Q">
         <region xmi:id="_sRwu0OYpEeWJrb50pZVG6Q" name="Region1">
@@ -51,9 +51,52 @@
           <transition xmi:id="_XBP5IObaEeWJrb50pZVG6Q" name="active" source="_i5b6AObYEeWJrb50pZVG6Q" target="_iYLnEObYEeWJrb50pZVG6Q"/>
           <transition xmi:id="_YNUDoObaEeWJrb50pZVG6Q" name="deactivate" source="_iYLnEObYEeWJrb50pZVG6Q" target="_i5b6AObYEeWJrb50pZVG6Q"/>
           <transition xmi:id="_c-bpQObaEeWJrb50pZVG6Q" name="self" source="_i5b6AObYEeWJrb50pZVG6Q" target="_i5b6AObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_mhilIOcEEeWJrb50pZVG6Q" name="study_environments" source="_iYLnEObYEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_nFr0AOcEEeWJrb50pZVG6Q" name="study_environments" source="_i5b6AObYEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_ntmvoOcEEeWJrb50pZVG6Q" name="study_environments" source="_jLwZEObYEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
           <subvertex xmi:type="uml:State" xmi:id="_iYLnEObYEeWJrb50pZVG6Q" name="Active"/>
           <subvertex xmi:type="uml:State" xmi:id="_i5b6AObYEeWJrb50pZVG6Q" name="Inactive"/>
           <subvertex xmi:type="uml:State" xmi:id="_jLwZEObYEeWJrb50pZVG6Q" name="Locked"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_aCwJMOcEEeWJrb50pZVG6Q" name="StudyEnvironments" submachine="_aCviIOcEEeWJrb50pZVG6Q">
+        <region xmi:id="_agB7EOcEEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_7r8GUOcEEeWJrb50pZVG6Q" name="self-prev-next" source="_g6n_8OcEEeWJrb50pZVG6Q" target="_g6n_8OcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="__2qaUOcEEeWJrb50pZVG6Q" name="self-prev-next" source="_hVcTsOcEEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_C1h_MOcFEeWJrb50pZVG6Q" name="fliter_by_study" source="_g6n_8OcEEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_DprY8OcFEeWJrb50pZVG6Q" name="list" source="_hVcTsOcEEeWJrb50pZVG6Q" target="_g6n_8OcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_pLi30OcFEeWJrb50pZVG6Q" name="create" source="_hVcTsOcEEeWJrb50pZVG6Q" target="_bUWegOcFEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_g6n_8OcEEeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_hVcTsOcEEeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_Urt9oOcFEeWJrb50pZVG6Q" name="StudyEnvironment" submachine="_UrtWkOcFEeWJrb50pZVG6Q">
+        <region xmi:id="_YoDQUOcFEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_hmgZEOcFEeWJrb50pZVG6Q" name="self" source="_bUWegOcFEeWJrb50pZVG6Q" target="_bUWegOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_k4rUcOcFEeWJrb50pZVG6Q" name="self" source="_bpzxIOcFEeWJrb50pZVG6Q" target="_bpzxIOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_riFRYOcFEeWJrb50pZVG6Q" name="update" source="_bpzxIOcFEeWJrb50pZVG6Q" target="_bUWegOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_sJxjgOcFEeWJrb50pZVG6Q" name="update" source="_bUWegOcFEeWJrb50pZVG6Q" target="_bpzxIOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_y0xmcOcGEeWJrb50pZVG6Q" name="study_environment_sites" source="_bpzxIOcFEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_0VNecOcGEeWJrb50pZVG6Q" name="study_environment_sites" source="_bUWegOcFEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_bUWegOcFEeWJrb50pZVG6Q" name="active"/>
+          <subvertex xmi:type="uml:State" xmi:id="_bpzxIOcFEeWJrb50pZVG6Q" name="inactive"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_Tt_7sOcGEeWJrb50pZVG6Q" name="StudyEnvironmentSites" submachine="_Tt_UoOcGEeWJrb50pZVG6Q">
+        <region xmi:id="_eHJg0OcGEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="__B7f0OcGEeWJrb50pZVG6Q" name="self-prev-next" source="_gDoboOcGEeWJrb50pZVG6Q" target="_gDoboOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_CSgfwOcHEeWJrb50pZVG6Q" name="self-prev-next" source="_h2PBsOcGEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_M8OQcOcHEeWJrb50pZVG6Q" name="list" source="_h2PBsOcGEeWJrb50pZVG6Q" target="_gDoboOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_PNmdMOcHEeWJrb50pZVG6Q" name="filter_by_study_environment-filter_by_client_division_site" source="_gDoboOcGEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_sxoi0OcHEeWJrb50pZVG6Q" name="create-cascaded_create" source="_h2PBsOcGEeWJrb50pZVG6Q" target="_iJLWYOcHEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_gDoboOcGEeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_h2PBsOcGEeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_dSQqwecHEeWJrb50pZVG6Q" name="StudyEnvironmentSite" submachine="_dSQqwOcHEeWJrb50pZVG6Q">
+        <region xmi:id="_gdkwMOcHEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_kqQMAOcHEeWJrb50pZVG6Q" name="self-update" source="_iJLWYOcHEeWJrb50pZVG6Q" target="_iJLWYOcHEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_iJLWYOcHEeWJrb50pZVG6Q" name="SES"/>
         </region>
       </subvertex>
     </region>
@@ -66,4 +109,8 @@
   <packagedElement xmi:type="uml:StateMachine" xmi:id="_PPNyIObYEeWJrb50pZVG6Q" name="StateMachine5" submachineState="_PPOZMObYEeWJrb50pZVG6Q">
     <region xmi:id="_RE0B0ObYEeWJrb50pZVG6Q" name="Region1"/>
   </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_aCviIOcEEeWJrb50pZVG6Q" name="StateMachine6" submachineState="_aCwJMOcEEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_UrtWkOcFEeWJrb50pZVG6Q" name="StateMachine7" submachineState="_Urt9oOcFEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_Tt_UoOcGEeWJrb50pZVG6Q" name="StateMachine8" submachineState="_Tt_7sOcGEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_dSQqwOcHEeWJrb50pZVG6Q" name="StateMachine9" submachineState="_dSQqwecHEeWJrb50pZVG6Q"/>
 </uml:Model>
