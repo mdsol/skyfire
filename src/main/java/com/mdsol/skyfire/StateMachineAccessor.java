@@ -191,7 +191,7 @@ public class StateMachineAccessor extends ModelAccessor {
      */
     private void createEdges(final Region region) {
         final EList<Transition> firstLevelTransitions = region.getTransitions();
-        final List<Transition> transCompoState = new ArrayList<Transition>();
+        final List<Transition> compoStateTrans = new ArrayList<Transition>();
 
         for (final Transition transition : firstLevelTransitions) {
             // transitions may not have a source or target because some of them
@@ -199,8 +199,8 @@ public class StateMachineAccessor extends ModelAccessor {
             // they do not appear in the UML diagram but they do exist in the
             // UML model
             if (transition.getSource() != null && transition.getTarget() != null) {
-                // System.out.println(transition.getSource().getName() + "; " +
-                // transition.getTarget().getName());
+                // System.out.println(
+                // transition.getSource().getName() + "; " + transition.getTarget().getName());
 
                 if (transition.getSource() instanceof Pseudostate
                         || transition.getSource() instanceof FinalState
@@ -219,7 +219,7 @@ public class StateMachineAccessor extends ModelAccessor {
                             && ((State) transition.getSource()).isComposite())
                             || (transition.getTarget() instanceof State
                                     && ((State) transition.getTarget()).isComposite())) {
-                        transCompoState.add(transition);
+                        compoStateTrans.add(transition);
                     }
                 }
             }
@@ -227,17 +227,18 @@ public class StateMachineAccessor extends ModelAccessor {
 
         // mark composite states whose sub-states have been added to the list
         // transCompoState
-        final List<Vertex> compositeStates = new ArrayList<Vertex>();
+        final HashMap<Vertex, Boolean> compositeStates = new HashMap<Vertex, Boolean>();
         final List<Transition> simpleTrans = new ArrayList<Transition>();
-        if (transCompoState.size() > 0) {
+        if (compoStateTrans.size() > 0) {
             do {
-                final Transition t = transCompoState.get(0);
+                // handle the first transition in every iteration
+                final Transition t = compoStateTrans.get(0);
 
                 if (t.getSource() instanceof State && ((State) t.getSource()).isComposite()) {
 
                     final List<Vertex> sourceVertices = ((State) t.getSource()).getRegions().get(0)
                             .getSubvertices();
-                    // initial states, final states, and regular states
+                    // initialize initial states, final states, and regular states in the source
                     final List<Pseudostate> sourceInitialStates = new ArrayList<Pseudostate>();
                     final List<FinalState> sourceFinalStates = new ArrayList<FinalState>();
                     final List<State> sourceStates = new ArrayList<State>();
@@ -263,7 +264,7 @@ public class StateMachineAccessor extends ModelAccessor {
                             tempTran.setSource(finalState);
                             tempTran.setTarget(t.getTarget());
 
-                            transCompoState.add(tempTran);
+                            compoStateTrans.add(tempTran);
                         }
                     } else if (sourceStates.size() > 0) {
                         for (final State state : sourceStates) {
@@ -272,7 +273,7 @@ public class StateMachineAccessor extends ModelAccessor {
                             tempTran.setSource(state);
                             tempTran.setTarget(t.getTarget());
 
-                            transCompoState.add(tempTran);
+                            compoStateTrans.add(tempTran);
                         }
 
                         /*
@@ -289,20 +290,21 @@ public class StateMachineAccessor extends ModelAccessor {
 
                     // if the sub-states of this composite state have been added
                     // to the list, add them
-                    if (!compositeStates.contains(t.getSource())) {
+                    if (!compositeStates.containsKey((t.getSource()))) {
                         for (final Transition transition : ((State) t.getSource()).getRegions()
                                 .get(0).getTransitions()) {
-                            transCompoState.add(transition);
+                            compoStateTrans.add(transition);
                         }
-                        compositeStates.add(t.getSource());
+                        compositeStates.put(t.getSource(), true);
                     }
 
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                 } else if (t.getTarget() instanceof State
                         && ((State) t.getTarget()).isComposite()) {
                     final List<Vertex> targetVertices = ((State) t.getTarget()).getRegions().get(0)
                             .getSubvertices();
-                    // initial states, final states, and regular states
+                    // initialize initial states, final states, and regular states in the target
+                    // composite state
                     final List<Pseudostate> targetInitialStates = new ArrayList<Pseudostate>();
                     final List<FinalState> targetFinalStates = new ArrayList<FinalState>();
                     final List<State> targetStates = new ArrayList<State>();
@@ -325,7 +327,7 @@ public class StateMachineAccessor extends ModelAccessor {
                             tempTran.setSource(t.getSource());
                             tempTran.setTarget(initialState);
 
-                            transCompoState.add(tempTran);
+                            compoStateTrans.add(tempTran);
                         }
                     } else if (targetStates.size() > 0) {
                         for (final State state : targetStates) {
@@ -334,7 +336,7 @@ public class StateMachineAccessor extends ModelAccessor {
                             tempTran.setSource(t.getSource());
                             tempTran.setTarget(state);
 
-                            transCompoState.add(tempTran);
+                            compoStateTrans.add(tempTran);
                         }
                         /*
                          * final states of a composite state is not connected to the coming
@@ -347,51 +349,68 @@ public class StateMachineAccessor extends ModelAccessor {
                          */
                     }
 
-                    if (!compositeStates.contains(t.getTarget())) {
+                    if (!compositeStates.containsKey(t.getTarget())) {
                         for (final Transition transition : ((State) t.getTarget()).getRegions()
                                 .get(0).getTransitions()) {
-                            transCompoState.add(transition);
+                            compoStateTrans.add(transition);
                         }
-                        compositeStates.add(t.getTarget());
+                        compositeStates.put(t.getTarget(), true);
                     }
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                 } else if ((t.getSource() instanceof State && ((State) t.getSource()).isSimple())
                         && (t.getTarget() instanceof State && ((State) t.getTarget()).isSimple())) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
+
+                    // add a potential composite state
+                    // this address a case in which a transition directly connects from a composite
+                    // state to a simple state
+                    // in another composite state, which has not been considered.
+                    if (((State) t.getTarget()).getContainer() != null
+                            && ((State) t.getTarget()).getContainer().getState() != null
+                            && !compositeStates.containsKey(
+                                    ((State) t.getTarget()).getContainer().getState())) {
+
+                        for (final Transition transition : ((State) t.getTarget()).getContainer()
+                                .getTransitions()) {
+                            compoStateTrans.add(transition);
+                        }
+                        compositeStates.put(((State) t.getTarget()).getContainer().getState(),
+                                true);
+                    }
                 } else if ((t.getSource() instanceof Pseudostate && ((Pseudostate) t.getSource())
                         .getKind() == PseudostateKind.INITIAL_LITERAL)
                         && (t.getTarget() instanceof State && ((State) t.getTarget()).isSimple())) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
                 } else if ((t.getTarget() instanceof Pseudostate && ((Pseudostate) t.getTarget())
                         .getKind() == PseudostateKind.INITIAL_LITERAL)
                         && (t.getSource() instanceof State && ((State) t.getSource()).isSimple())) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
                 } else if ((t.getSource() instanceof State && ((State) t.getSource()).isSimple())
                         && (t.getTarget() instanceof FinalState)) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
                 } else if ((t.getTarget() instanceof State && ((State) t.getTarget()).isSimple())
                         && (t.getSource() instanceof FinalState)) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
                 } else if ((t.getSource() instanceof FinalState)
                         && (t.getTarget() instanceof FinalState)) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
                 } else if ((t.getSource() instanceof Pseudostate && ((Pseudostate) t.getSource())
                         .getKind() == PseudostateKind.INITIAL_LITERAL)
@@ -399,7 +418,7 @@ public class StateMachineAccessor extends ModelAccessor {
                                 .getKind() == PseudostateKind.INITIAL_LITERAL)) {
                     simpleTrans.add(t);
                     getTransitions().add(t);
-                    transCompoState.remove(0);
+                    compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
                 }
                 /*
@@ -412,7 +431,7 @@ public class StateMachineAccessor extends ModelAccessor {
                  * ((State)t2.getSource()).isSimple()) + (t2.getTarget() instanceof State &&
                  * ((State)t2.getTarget()).isSimple())); }
                  */
-            } while (transCompoState.size() > 0);
+            } while (compoStateTrans.size() > 0);
         }
         /*
          * System.out.println(getTransitions().size()); for(Transition t3 : getTransitions()){

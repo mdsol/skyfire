@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_TIOQ0OYkEeWJrb50pZVG6Q" name="NewModel">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_VTE-0OYkEeWJrb50pZVG6Q" name="NewModel statemachine">
+    <region xmi:id="_VTE-0eYkEeWJrb50pZVG6Q" name="Region1">
+      <transition xmi:id="_wNHeMOY2EeWJrb50pZVG6Q" source="_gQBNgOYkEeWJrb50pZVG6Q" target="_h0tTYOYkEeWJrb50pZVG6Q"/>
+      <transition xmi:id="_-qppUOY3EeWJrb50pZVG6Q" source="_fj0AEOYqEeWJrb50pZVG6Q" target="_-J8wAOY3EeWJrb50pZVG6Q"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_gQBNgOYkEeWJrb50pZVG6Q" name="Initial1"/>
+      <subvertex xmi:type="uml:State" xmi:id="_h0tTYOYkEeWJrb50pZVG6Q" name="ClientDivisions" submachine="_h0ssUOYkEeWJrb50pZVG6Q">
+        <region xmi:id="_sRwu0OYpEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_XbkGkOYqEeWJrb50pZVG6Q" source="_tPxPMOYpEeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_EHI8oOY3EeWJrb50pZVG6Q" source="_vFPjEOYpEeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_HGqBwOY3EeWJrb50pZVG6Q" source="_6KftUOY2EeWJrb50pZVG6Q" target="_6KftUOY2EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_J8aG4OY3EeWJrb50pZVG6Q" name="filter_by_name" source="_vFPjEOYpEeWJrb50pZVG6Q" target="_6KftUOY2EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_KqvzkOY3EeWJrb50pZVG6Q" name="list" source="_6KftUOY2EeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_zz6wUOY3EeWJrb50pZVG6Q" name="create" source="_6KftUOY2EeWJrb50pZVG6Q" target="_-uS4YOYlEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_tPxPMOYpEeWJrb50pZVG6Q" name="Initial2"/>
+          <subvertex xmi:type="uml:State" xmi:id="_vFPjEOYpEeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_6KftUOY2EeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_fj0AEOYqEeWJrb50pZVG6Q" name="ClientDivision" submachine="_fjzZAOYqEeWJrb50pZVG6Q">
+        <region xmi:id="_erMxgOY0EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_pJM6EOY3EeWJrb50pZVG6Q" source="_-uS4YOYlEeWJrb50pZVG6Q" target="_-uS4YOYlEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_Kr9fEOY4EeWJrb50pZVG6Q" name="create" source="_-uS4YOYlEeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_-uS4YOYlEeWJrb50pZVG6Q" name="CD"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_-J8wAOY3EeWJrb50pZVG6Q" name="Final1"/>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_h0ssUOYkEeWJrb50pZVG6Q" name="StateMachine2" submachineState="_h0tTYOYkEeWJrb50pZVG6Q">
+    <region xmi:id="_TsDrwOYmEeWJrb50pZVG6Q" name="Region1"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_fjzZAOYqEeWJrb50pZVG6Q" name="StateMachine3" submachineState="_fj0AEOYqEeWJrb50pZVG6Q"/>
+</uml:Model>
