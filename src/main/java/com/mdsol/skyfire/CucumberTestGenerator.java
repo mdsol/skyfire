@@ -151,9 +151,12 @@ public class CucumberTestGenerator {
      *            the description of the feature file
      * @param tests
      *            a list of tests
+     * @param useQualifiedName
+     *            specify whether to use qualified name
+     * @return a {@code StringBuffer} object that includes the Cucumber scenarios
      */
     private static final StringBuffer generateScenarios(final String featureDescription,
-            final List<? extends Test> tests) {
+            final List<? extends Test> tests, final boolean useQualifiedName) {
         StringBuffer sb = new StringBuffer();
         sb.append("Feature: ");
         sb.append(featureDescription + "\n");
@@ -161,16 +164,22 @@ public class CucumberTestGenerator {
 
         for (final Test test : tests) {
             if (test instanceof FsmTest) {
-                sb.append("Scenario: " + test.getTestComment() + "\n");
+                sb.append("Scenario: " + test.getTestComment() + "\n\n");
                 boolean firstWhen = true;
                 if (((FsmTest) test).getPath() != null) {
                     for (final Transition transition : ((FsmTest) test).getPath()) {
                         if (transition != null && transition.getName() != null
                                 && transition.getName().indexOf("initialize") >= 0) {
-                            sb.append("Given " + transition.getName() + "\n");
+                            if (!useQualifiedName)
+                                sb.append("Given " + transition.getName() + "\n");
+                            else
+                                sb.append("Given " + getQualifiedName(transition) + "\n");
                         } else if (transition != null && transition.getName() != null
                                 && firstWhen) {
-                            sb.append("When " + transition.getName() + "\n");
+                            if (!useQualifiedName)
+                                sb.append("When " + transition.getName() + "\n");
+                            else
+                                sb.append("When " + getQualifiedName(transition) + "\n");
                             sb = addConstriants(sb, transition);
 
                             if (transition.getTarget() instanceof State
@@ -180,7 +189,10 @@ public class CucumberTestGenerator {
                                 firstWhen = false;
                         } else if (transition != null && transition.getName() != null
                                 && !firstWhen) {
-                            sb.append("And " + transition.getName() + "\n");
+                            if (!useQualifiedName)
+                                sb.append("And " + transition.getName() + "\n");
+                            else
+                                sb.append("And " + getQualifiedName(transition) + "\n");
                             sb = addConstriants(sb, transition);
 
                             if (transition.getTarget() instanceof State
@@ -198,6 +210,21 @@ public class CucumberTestGenerator {
         }
 
         return sb;
+    }
+
+    /**
+     * Gets the qualified name of a {@code org.eclipse.uml.uml2.Transition} object
+     *
+     * @param transition
+     *            the specified {@code org.eclipse.uml.uml2.Transition} object
+     * @return the qualified name of the specified transition
+     */
+    public static String getQualifiedName(final Transition transition) {
+        String qualifiedName = null;
+        if (transition != null) {
+            qualifiedName = transition.getSource().getQualifiedName() + "." + transition.getName();
+        }
+        return qualifiedName;
     }
 
     /**
@@ -285,7 +312,86 @@ public class CucumberTestGenerator {
         logger.info("Generate abstract tests");
 
         // write the scenarios into the feature file
-        final StringBuffer sb = generateScenarios(featureDescription, tests);
+        final StringBuffer sb = generateScenarios(featureDescription, tests, false);
+
+        try {
+            writeFeatureFile(sb, featureFilePath.toString());
+        } catch (final IOException e) {
+            logger.debug("Cannot write scenarios into the feature file");
+            e.printStackTrace();
+        }
+        logger.info(
+                "Create Cucumber feature file which is located at " + featureFilePath.toString());
+
+        return isGenerated;
+    }
+
+    /**
+     * Generates the Cucumber feature file from a UML behavioral model with qualified names because
+     * many transition names are the same in different states.
+     *
+     * @param umlPath
+     *            the path of the UML model
+     * @param coverage
+     *            the graph coverage that the tests are going to satisfy
+     * @param featureDescription
+     *            the description of the feature file to be generated
+     * @param featureFilePath
+     *            the path of the feature file
+     * @return true if the feature file is successfully generated; otherwise return false
+     * @throws IOException
+     */
+    public static final boolean generateCucumberScenarioWithQualifiedName(final Path umlPath,
+            final TestCoverageCriteria coverage, final String featureDescription,
+            final Path featureFilePath) {
+        final boolean isGenerated = true;
+
+        // read the UML model
+        EObject object = null;
+        try {
+            object = StateMachineAccessor.getModelObject(umlPath.toString());
+        } catch (final IOException e) {
+            logger.debug("Have difficulty in finding the specified UML model");
+            e.printStackTrace();
+        }
+        final List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
+        final List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
+        final StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
+        logger.info("Read the specified UML model from " + umlPath.toString());
+
+        // generate the abstract test paths on the flattened graph
+        List<coverage.graph.Path> paths = null;
+        try {
+            paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
+                    stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
+        } catch (InvalidInputException | InvalidGraphException e) {
+            logger.debug("The flattened graph is not valid");
+            e.printStackTrace();
+        }
+        logger.info("Generate abstract test paths on the flattened graph");
+
+        // find the matched transitions on the original UML model and construct
+        // tests
+        final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
+
+        for (int i = 0; i < paths.size(); i++) {
+            System.out.println("path: " + paths.get(i));
+            final List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
+                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
+
+            String pathName = "";
+            for (final Transition transition : transitions) {
+                pathName += (transition.getName() != null ? transition.getName() : "") + " ";
+            }
+            final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(String.valueOf(i),
+                    pathName, transitions);
+            tests.add(test);
+            // System.out.println(test.getTestComment());
+        }
+        logger.info("Generate abstract tests");
+
+        // write the scenarios into the feature file
+        final StringBuffer sb = generateScenarios(featureDescription, tests, true);
 
         try {
             writeFeatureFile(sb, featureFilePath.toString());

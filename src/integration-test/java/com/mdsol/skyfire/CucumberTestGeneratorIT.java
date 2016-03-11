@@ -41,6 +41,8 @@ public class CucumberTestGeneratorIT {
     private String testResourceDir;
     private String rocPath;
     private String rocDirectory;
+    private String plinthPath;
+    private String plinthDirectory;
 
     /**
      * @throws java.lang.Exception
@@ -50,9 +52,11 @@ public class CucumberTestGeneratorIT {
         tests = new ArrayList<com.mdsol.skyfire.Test>();
         generator = new CucumberTestGenerator(tests);
 
-        testResourceDir = System.getProperty("user.dir") + "/src/test/resources/";
+        testResourceDir = System.getProperty("user.dir") + "/src/integration-test/resources/";
         rocPath = testResourceDir + "testData/roc/model/rocBasicModel.uml";
         rocDirectory = testResourceDir + "testData/roc/";
+        plinthPath = testResourceDir + "testData/plinth/model/plinth.uml";
+        plinthDirectory = testResourceDir + "testData/plinth/";
     }
 
     /**
@@ -140,6 +144,44 @@ public class CucumberTestGeneratorIT {
                 Paths.get(rocDirectory + "Roc.feature"));
         assertTrue(generated);
         File file = new File(rocDirectory + "Roc.feature");
+        assertTrue(file.exists());
+    }
+
+    /**
+     * This tests show how a user should use skyfire to generate Cucumber features
+     *
+     * @throws IOException
+     *             when the model does not exist
+     */
+    @Test
+    public void testGenerateScenariosPlinth() throws IOException {
+        String featureDescription = "Plinth feature file generated from a state machine diagram";
+        boolean generated = CucumberTestGenerator.generateCucumberScenarioWithQualifiedName(
+                Paths.get(plinthPath), TestCoverageCriteria.NODECOVERAGE, featureDescription,
+                Paths.get(plinthDirectory + "PlinthNodeCoverage.feature"));
+        assertTrue(generated);
+        File file = new File(plinthDirectory + "PlinthNodeCoverage.feature");
+        assertTrue(file.exists());
+
+        generated = CucumberTestGenerator.generateCucumberScenarioWithQualifiedName(
+                Paths.get(plinthPath), TestCoverageCriteria.EDGECOVERAGE, featureDescription,
+                Paths.get(plinthDirectory + "PlinthEdgeCoverage.feature"));
+        assertTrue(generated);
+        file = new File(plinthDirectory + "PlinthEdgeCoverage.feature");
+        assertTrue(file.exists());
+
+        generated = CucumberTestGenerator.generateCucumberScenarioWithQualifiedName(
+                Paths.get(plinthPath), TestCoverageCriteria.EDGEPAIRCOVERAGE, featureDescription,
+                Paths.get(plinthDirectory + "PlinthEdgePairCoverage.feature"));
+        assertTrue(generated);
+        file = new File(plinthDirectory + "PlinthEdgePairCoverage.feature");
+        assertTrue(file.exists());
+
+        generated = CucumberTestGenerator.generateCucumberScenarioWithQualifiedName(
+                Paths.get(plinthPath), TestCoverageCriteria.PRIMEPATHCOVERAGE, featureDescription,
+                Paths.get(plinthDirectory + "PlinthPrimeCoverage.feature"));
+        assertTrue(generated);
+        file = new File(plinthDirectory + "PlinthPrimeCoverage.feature");
         assertTrue(file.exists());
     }
 }
