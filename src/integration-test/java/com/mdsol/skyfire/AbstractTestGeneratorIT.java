@@ -12,8 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.uml2.uml.FinalState;
+import org.eclipse.uml2.uml.Pseudostate;
+import org.eclipse.uml2.uml.PseudostateKind;
 import org.eclipse.uml2.uml.Region;
+import org.eclipse.uml2.uml.State;
 import org.eclipse.uml2.uml.StateMachine;
+import org.eclipse.uml2.uml.Transition;
+import org.eclipse.uml2.uml.Vertex;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -174,12 +180,25 @@ public class AbstractTestGeneratorIT {
         System.out.println(stateMachine.getInitialStates());
         System.out.println(stateMachine.getFinalStates());
         System.out.println(stateMachine.getEdges());
-        // for (Transition t : stateMachine.getTransitions()) {
-        // System.out.println(
-        // t.getSource().getQualifiedName() + " " + t.getTarget().getQualifiedName());
-        // }
 
-        System.out.println(stateMachine.getStateMappings());
+        for (Transition t : stateMachine.getTransitions()) {
+            System.out.println(t.getQualifiedName());
+            System.out.println(stateMachine.getStateMappings().get(t.getSource()) + " "
+                    + stateMachine.getStateMappings().get(t.getTarget()));
+        }
+
+        for (Vertex v : stateMachine.getStateMappings().keySet()) {
+            if (v instanceof State) {
+                System.out.println(((State) v).getQualifiedName() + " "
+                        + stateMachine.getStateMappings().get(v));
+            } else if (v instanceof FinalState) {
+                System.out.println(((FinalState) v).getQualifiedName() + " "
+                        + stateMachine.getStateMappings().get(v));
+            } else if (((Pseudostate) v).getKind() == PseudostateKind.INITIAL_LITERAL) {
+                System.out.println(((Pseudostate) v).getQualifiedName() + " "
+                        + stateMachine.getStateMappings().get(v));
+            }
+        }
 
         // final String[] edges = stateMachine.getEdges().split("\n");
         // for (String edge : edges) {
@@ -194,6 +213,7 @@ public class AbstractTestGeneratorIT {
                 TestCoverageCriteria.NODECOVERAGE);
 
         assertNotNull(paths);
+        System.out.println("\n\n\n");
         System.out.println(paths);
 
         paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
@@ -201,21 +221,23 @@ public class AbstractTestGeneratorIT {
                 TestCoverageCriteria.EDGECOVERAGE);
 
         assertNotNull(paths);
+        System.out.println("\n\n\n");
         System.out.println(paths);
 
         paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                 stateMachine.getInitialStates(), stateMachine.getFinalStates(),
                 TestCoverageCriteria.EDGEPAIRCOVERAGE);
 
+        System.out.println("\n\n\n");
         assertNotNull(paths);
         System.out.println(paths);
-        // for (Path path : paths) {
-        // final Iterator<Node> nodes = path.getNodeIterator();
-        // while (nodes.hasNext()) {
-        // final String node = nodes.next().toString();
-        // System.out.println(stateMachine.getReversedStateMappings().get(node).getName());
-        // }
-        // System.out.println("\n");
-        // }
+
+        paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
+                stateMachine.getInitialStates(), stateMachine.getFinalStates(),
+                TestCoverageCriteria.PRIMEPATHCOVERAGE);
+
+        System.out.println("\n\n\n");
+        assertNotNull(paths);
+        System.out.println(paths);
     }
 }

@@ -78,7 +78,7 @@ public class AbstractTestGenerator {
      */
     public static List<Path> getTestPaths(final String edges, final String initialNodes,
             final String finalNodes, final TestCoverageCriteria criterion)
-                    throws InvalidInputException, InvalidGraphException {
+            throws InvalidInputException, InvalidGraphException {
         logger.info("Generate abstract test paths from a flat graph");
 
         final Graph g = GraphUtil.readGraph(edges, initialNodes, finalNodes);
@@ -88,39 +88,60 @@ public class AbstractTestGenerator {
         try {
             g.validate();
         } catch (final InvalidGraphException e) {
-            logger.debug("The flat graph is invalid");
+            logger.debug("The flattened generic graph is invalid");
             e.printStackTrace();
         }
 
         if (criterion == TestCoverageCriteria.NODECOVERAGE) {
-            return g.findNodeCoverage();
+            logger.info(
+                    "Node coverage is used. The number of total nodes is " + g.findNodes().size());
+            System.out.println(g.findNodes());
+            List<Path> testPaths = g.findNodeCoverage();
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy node coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         } else if (criterion == TestCoverageCriteria.EDGECOVERAGE) {
-            final List<Path> edgeCoverage = g.findEdges();
-            final Graph prefix = GraphUtil.getPrefixGraph(edgeCoverage);
+            final List<Path> edgeTRs = g.findEdges();
+            logger.info("Edge coverage is used. The number of total edges is " + edgeTRs.size());
+            System.out.println(edgeTRs);
+            final Graph prefix = GraphUtil.getPrefixGraph(edgeTRs);
             final Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            final List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite
-                    .findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgeCoverage).get(0),
+            final List<Path> testPaths = g.splittedPathsFromSuperString(
+                    bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgeTRs).get(0),
                     g.findTestPath());
-
-            return splittedPaths;
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy edge coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         } else if (criterion == TestCoverageCriteria.EDGEPAIRCOVERAGE) {
             final List<Path> edgePairs = g.findEdgePairs();
+            logger.info("Edge-pair coverage is used. The number of total edge-pairs is "
+                    + edgePairs.size());
+            System.out.println(edgePairs);
             final Graph prefix = GraphUtil.getPrefixGraph(edgePairs);
             final Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            final List<Path> splittedPaths = g.splittedPathsFromSuperString(
+            final List<Path> testPaths = g.splittedPathsFromSuperString(
                     bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgePairs).get(0),
                     g.findTestPath());
-            return splittedPaths;
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy edge-pair coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         } else {
             final List<Path> primePaths = g.findPrimePaths();
             final Graph prefix = GraphUtil.getPrefixGraph(primePaths);
             final Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            final List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite
+            final List<Path> testPaths = g.splittedPathsFromSuperString(bipartite
                     .findMinimumPrimePathCoverageViaPrefixGraphOptimized(g.findPrimePaths()).get(0),
                     g.findTestPath());
-            // System.out.println(edges);
-            // System.out.println("splitted paths: " + splittedPaths.size());
-            return splittedPaths;
+            logger.info("Prime path coverage is used. The number of total prime paths is "
+                    + primePaths.size());
+            System.out.println(primePaths);
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy prime coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         }
     }
 
@@ -360,6 +381,26 @@ public class AbstractTestGenerator {
         }
 
         return mappings;
+    }
+
+    /**
+     * Calculates the total number of nodes in all the test paths
+     *
+     * @param testPaths
+     *            a list of {@link coverage.graph.Path} objects
+     * @return the total number of nodes in the specified test paths
+     */
+    public static int getTotalNodes(final List<Path> testPaths) {
+        int totalNumber = 0;
+        if (testPaths == null) {
+            return totalNumber;
+        } else {
+            for (Path p : testPaths) {
+                totalNumber += p.size();
+            }
+        }
+
+        return totalNumber;
     }
 
     /**
