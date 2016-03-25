@@ -228,5 +228,4 @@ public class Mapping {
     public final void setReturnObjects(final List<String> returnObjects) {
         this.returnObjects = returnObjects;
     }
-
 }

@@ -1,6 +1,7 @@
 Feature: Roc feature file generated from a state machine diagram
 
 Scenario: initializeWithValidKeys  startEmr addValidSteps addInvalidSteps checkUntilGettingErrors  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -11,6 +12,7 @@ Then invalidStepErrorOccur
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning addValidSteps checkStepsUntilComplete addValidSteps checkUntilRunning runUntilWaiting addInvalidSteps checkUntilGettingErrors  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -30,6 +32,7 @@ Then invalidStepErrorOccur
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning addInvalidSteps checkUntilGettingErrors  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -41,6 +44,7 @@ Then invalidStepErrorOccur
 
 
 Scenario: initializeWithValidKeys  startEmr checkInvalidStepId terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -51,12 +55,14 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithInvalidKeys startEmrWithErrorStatus  
+
 Given initializeWithInvalidKeys
 When startEmrWithErrorStatus
 Then invalidKeyErrorOccur
 
 
 Scenario: initializeWithValidKeys  startEmr addInvalidSteps addValidSteps checkUntilGettingErrors  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -67,6 +73,7 @@ Then invalidStepErrorOccur
 
 
 Scenario: initializeWithValidKeys  startEmr terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -75,6 +82,7 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -85,6 +93,7 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning runUntilWaiting terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -97,6 +106,7 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr addValidSteps terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -106,6 +116,7 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning checkInvalidStepId terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -118,6 +129,7 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr startUntilRunning runUntilWaiting checkInvalidStepId terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
@@ -132,6 +144,7 @@ Then terminationIsSuccess
 
 
 Scenario: initializeWithValidKeys  startEmr addValidSteps checkInvalidStepId terminate  
+
 Given initializeWithValidKeys
 When startEmr
 Then emrCreationIsSuccess
