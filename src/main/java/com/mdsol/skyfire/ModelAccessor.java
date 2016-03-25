@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.acceleo.common.IAcceleoConstants;
 import org.eclipse.acceleo.common.internal.utils.AcceleoPackageRegistry;
 import org.eclipse.acceleo.common.internal.utils.workspace.AcceleoWorkspaceUtil;
@@ -45,16 +47,10 @@ import org.eclipse.uml2.uml.StateMachine;
  *
  * @author Nan Li
  * @version 1.0 Nov 14, 2012
- * @version 2015.1.0
  */
 public class ModelAccessor {
 
-    /**
-     * Default Constructor
-     */
-    public ModelAccessor() {
-
-    }
+    private static Logger logger = LogManager.getLogger("ModelAccessor");
 
     /**
      * Gets the {@link org.eclipse.emf.ecore.EObject} object of a UML model specified by path
@@ -102,11 +98,10 @@ public class ModelAccessor {
      */
     public static List<StateMachine> getStateMachines(final EObject model) {
 
-        final List<StateMachine> result = new ArrayList<StateMachine>();
+        final List<StateMachine> result = new ArrayList<>();
         final EList<Element> elements = ((Model) model).getOwnedElements();
 
         for (final Element elementObject : elements) {
-            // System.out.println(elementObject.toString());
             if (elementObject instanceof StateMachine) {
                 result.add((StateMachine) elementObject);
             }
@@ -227,6 +222,7 @@ public class ModelAccessor {
             } catch (final IOException e) {
                 // Swallow this, we'll try and locate the module through the
                 // class loader
+                logger.error(e);
             }
         }
         if (moduleURL == null) {
