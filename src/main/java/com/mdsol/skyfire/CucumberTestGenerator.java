@@ -308,8 +308,7 @@ public class CucumberTestGenerator {
             for (int i = 0; i < paths.size(); i++) {
                 final List<Transition> transitions = AbstractTestGenerator
                         .convertVerticesToTransitions(
-                                AbstractTestGenerator.getPathByState(paths.get(i), stateMachine),
-                                stateMachine);
+                                AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
 
                 String pathName = "";
                 for (final Transition transition : transitions) {
@@ -399,7 +398,7 @@ public class CucumberTestGenerator {
         for (int i = 0; i < paths.size(); i++) {
             System.out.println("path: " + paths.get(i));
             final List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
-                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
+                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
 
             String pathName = "";
             for (final Transition transition : transitions) {

@@ -120,8 +120,7 @@ public class CucumberTestGeneratorIT {
             for (int i = 0; i < paths.size(); i++) {
                 logger.info("No. " + i + " path: " + paths.get(i));
                 List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
-                        AbstractTestGenerator.getPathByState(paths.get(i), stateMachine),
-                        stateMachine);
+                        AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
 
                 String pathName = "";
                 for (Transition transition : transitions) {
