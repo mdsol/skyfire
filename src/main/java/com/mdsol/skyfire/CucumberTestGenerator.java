@@ -261,10 +261,16 @@ public class CucumberTestGenerator {
      *            the path of the feature file
      * @return true if the feature file is successfully generated; otherwise return false
      * @throws IOException
+     *             when specified UML model is not found or the feature file is not found
+     * @throws InvalidInputException
+     *             when the flattened graph is not valid
+     * @throws InvalidGraphException
+     *             when the flattened graph is not valid
      */
     public static final boolean generateCucumberScenario(final Path umlPath,
             final TestCoverageCriteria coverage, final String featureDescription,
-            final Path featureFilePath) {
+            final Path featureFilePath)
+            throws IOException, InvalidInputException, InvalidGraphException {
         final boolean isGenerated = true;
 
         // read the UML model
@@ -272,8 +278,8 @@ public class CucumberTestGenerator {
         try {
             object = StateMachineAccessor.getModelObject(umlPath.toString());
         } catch (final IOException e) {
-            logger.debug("Have difficulty in finding the specified UML model");
-            e.printStackTrace();
+            logger.debug("Cannot find the specified UML model");
+            throw new IOException(e);
         }
         final List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
         final List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
@@ -285,9 +291,12 @@ public class CucumberTestGenerator {
         try {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
-        } catch (InvalidInputException | InvalidGraphException e) {
+        } catch (InvalidInputException e) {
             logger.debug("The flattened graph is not valid");
-            e.printStackTrace();
+            throw new InvalidInputException(e);
+        } catch (InvalidGraphException e) {
+            logger.debug("The flattened graph is not valid");
+            throw new InvalidGraphException(e);
         }
         logger.info("Generate abstract test paths on the flattened graph");
 
@@ -295,21 +304,25 @@ public class CucumberTestGenerator {
         // tests
         final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
 
-        for (int i = 0; i < paths.size(); i++) {
-            System.out.println("path: " + paths.get(i));
-            final List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
-                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine), stateMachine);
+        if (paths != null && !paths.isEmpty()) {
+            for (int i = 0; i < paths.size(); i++) {
+                final List<Transition> transitions = AbstractTestGenerator
+                        .convertVerticesToTransitions(
+                                AbstractTestGenerator.getPathByState(paths.get(i), stateMachine),
+                                stateMachine);
 
-            String pathName = "";
-            for (final Transition transition : transitions) {
-                pathName += (transition.getName() != null ? transition.getName() : "") + " ";
+                String pathName = "";
+                for (final Transition transition : transitions) {
+                    pathName += (transition.getName() != null ? transition.getName() : "") + " ";
+                }
+                final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(
+                        String.valueOf(i), pathName, transitions);
+                tests.add(test);
             }
-            final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(String.valueOf(i),
-                    pathName, transitions);
-            tests.add(test);
-            System.out.println(test.getTestComment());
+            logger.info("Generate abstract tests");
+        } else {
+            logger.error("No test paths generated");
         }
-        logger.info("Generate abstract tests");
 
         // write the scenarios into the feature file
         final StringBuffer sb = generateScenarios(featureDescription, tests, false);
@@ -318,7 +331,7 @@ public class CucumberTestGenerator {
             writeFeatureFile(sb, featureFilePath.toString());
         } catch (final IOException e) {
             logger.debug("Cannot write scenarios into the feature file");
-            e.printStackTrace();
+            throw new IOException(e);
         }
         logger.info(
                 "Create Cucumber feature file which is located at " + featureFilePath.toString());
@@ -340,10 +353,16 @@ public class CucumberTestGenerator {
      *            the path of the feature file
      * @return true if the feature file is successfully generated; otherwise return false
      * @throws IOException
+     *             when the specified model or the feature file to write is not found
+     * @throws InvalidInputException
+     *             when the flattened graph is not valid
+     * @throws InvalidGraphException
+     *             when the flattened graph is not valid
      */
     public static final boolean generateCucumberScenarioWithQualifiedName(final Path umlPath,
             final TestCoverageCriteria coverage, final String featureDescription,
-            final Path featureFilePath) {
+            final Path featureFilePath)
+            throws IOException, InvalidInputException, InvalidGraphException {
         final boolean isGenerated = true;
 
         // read the UML model
@@ -351,8 +370,8 @@ public class CucumberTestGenerator {
         try {
             object = StateMachineAccessor.getModelObject(umlPath.toString());
         } catch (final IOException e) {
-            logger.debug("Have difficulty in finding the specified UML model");
-            e.printStackTrace();
+            logger.debug("Cannot find the specified UML model");
+            throw new IOException(e);
         }
         final List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
         final List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
@@ -364,9 +383,12 @@ public class CucumberTestGenerator {
         try {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
-        } catch (InvalidInputException | InvalidGraphException e) {
+        } catch (InvalidInputException e) {
             logger.debug("The flattened graph is not valid");
-            e.printStackTrace();
+            throw new InvalidInputException(e);
+        } catch (InvalidGraphException e) {
+            logger.debug("The flattened graph is not valid");
+            throw new InvalidGraphException(e);
         }
         logger.info("Generate abstract test paths on the flattened graph");
 
@@ -397,7 +419,7 @@ public class CucumberTestGenerator {
             writeFeatureFile(sb, featureFilePath.toString());
         } catch (final IOException e) {
             logger.debug("Cannot write scenarios into the feature file");
-            e.printStackTrace();
+            throw new IOException(e);
         }
         logger.info(
                 "Create Cucumber feature file which is located at " + featureFilePath.toString());

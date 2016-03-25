@@ -151,9 +151,14 @@ public class CucumberTestGeneratorIT {
      *
      * @throws IOException
      *             when the model does not exist
+     * @throws InvalidGraphException
+     *             when the converted flatten graph is not valid
+     * @throws InvalidInputException
+     *             when the converted flatten graph is not valid
      */
     @Test
-    public void testGenerateScenariosRocUsingExternalAPI() throws IOException {
+    public void testGenerateScenariosRocUsingExternalAPI()
+            throws IOException, InvalidInputException, InvalidGraphException {
         String featureDescription = "Roc feature file generated from a state machine diagram";
         boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath),
                 TestCoverageCriteria.EDGECOVERAGE, featureDescription,
@@ -167,10 +172,15 @@ public class CucumberTestGeneratorIT {
      * This tests show how a user should use skyfire to generate Cucumber features
      *
      * @throws IOException
-     *             when the model does not exist
+     *             when the specified model or the feature file to write is not found
+     * @throws InvalidGraphException
+     *             when the converted flattened graph is valid
+     * @throws InvalidInputException
+     *             when the converted flattened graph is valid
      */
     @Test
-    public void testGenerateScenariosPlinth() throws IOException {
+    public void testGenerateScenariosPlinth()
+            throws IOException, InvalidInputException, InvalidGraphException {
         String featureDescription = "Plinth feature file generated from a state machine diagram";
         boolean generated = CucumberTestGenerator.generateCucumberScenarioWithQualifiedName(
                 Paths.get(plinthPath), TestCoverageCriteria.NODECOVERAGE, featureDescription,
