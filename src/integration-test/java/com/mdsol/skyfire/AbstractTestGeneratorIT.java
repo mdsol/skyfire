@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.FinalState;
 import org.eclipse.uml2.uml.Pseudostate;
@@ -40,30 +42,25 @@ public class AbstractTestGeneratorIT {
 
     private String testResourceDir;
     private String vendingMachinePath;
-    private String vendingMachineXmlPath;
     private String rocPath;
     private String plinthPath;
+    private static Logger logger = LogManager.getLogger("AbstractTestGeneratorIT");
 
-    /**
-     * @throws java.lang.Exception
-     *             when exceptions happen
-     */
     @Before
-    public final void setUp() throws Exception {
+    public final void setUp() {
         testResourceDir = System.getProperty("user.dir")
                 + "/src/integration-test/resources/testData/";
         vendingMachinePath = testResourceDir + "VendingMachine/model/VendingMachineFSM.uml";
-        vendingMachineXmlPath = testResourceDir + "VendingMachine/xml/vendingMachineMappings.xml";
         rocPath = testResourceDir + "roc/model/rocBasicModel.uml";
         plinthPath = testResourceDir + "plinth/model/plinth.uml";
     }
 
-    /**
-     * @throws java.lang.Exception
-     *             when exceptions happen
-     */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
+        testResourceDir = null;
+        vendingMachinePath = null;
+        rocPath = null;
+        plinthPath = null;
     }
 
     /**
@@ -89,7 +86,6 @@ public class AbstractTestGeneratorIT {
                 TestCoverageCriteria.PRIMEPATHCOVERAGE);
 
         assertNotNull(paths);
-        System.out.println(paths);
     }
 
     /**
@@ -110,20 +106,19 @@ public class AbstractTestGeneratorIT {
         final List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
         final StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
 
-        System.out.println(statemachines.get(0));
-        System.out.println(regions.get(0));
-        System.out.println(stateMachine.getInitialStates());
-        System.out.println(stateMachine.getFinalStates());
-        System.out.println(stateMachine.getEdges());
+        logger.info(statemachines.get(0));
+        logger.info(regions.get(0));
+        logger.info(stateMachine.getInitialStates());
+        logger.info(stateMachine.getFinalStates());
+        logger.info(stateMachine.getEdges());
 
-        System.out.println(stateMachine.getStateMappings());
+        logger.info(stateMachine.getStateMappings());
 
         final String[] edges = stateMachine.getEdges().split("\n");
         for (String edge : edges) {
             final String[] vertices = edge.split(" ");
-            // System.out.println(vertices[0]+ " :: " + vertices[1]);
-            System.out.println(stateMachine.getReversedStateMappings().get(vertices[0]).getName()
-                    + " :: " + stateMachine.getReversedStateMappings().get(vertices[1]).getName());
+            logger.info(stateMachine.getReversedStateMappings().get(vertices[0]).getName() + " :: "
+                    + stateMachine.getReversedStateMappings().get(vertices[1]).getName());
         }
 
         List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
@@ -131,14 +126,14 @@ public class AbstractTestGeneratorIT {
                 TestCoverageCriteria.NODECOVERAGE);
 
         assertNotNull(paths);
-        System.out.println(paths);
+        logger.info(paths);
+
         for (Path path : paths) {
             final Iterator<Node> nodes = path.getNodeIterator();
             while (nodes.hasNext()) {
                 final String node = nodes.next().toString();
-                System.out.println(stateMachine.getReversedStateMappings().get(node).getName());
+                logger.info(stateMachine.getReversedStateMappings().get(node).getName());
             }
-            System.out.println("\n");
         }
 
         paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
@@ -146,14 +141,13 @@ public class AbstractTestGeneratorIT {
                 TestCoverageCriteria.EDGECOVERAGE);
 
         assertNotNull(paths);
-        System.out.println(paths);
+        logger.info(paths);
         for (Path path : paths) {
             final Iterator<Node> nodes = path.getNodeIterator();
             while (nodes.hasNext()) {
                 final String node = nodes.next().toString();
-                System.out.println(stateMachine.getReversedStateMappings().get(node).getName());
+                logger.info(stateMachine.getReversedStateMappings().get(node).getName());
             }
-            System.out.println("\n");
         }
     }
 
@@ -175,69 +169,57 @@ public class AbstractTestGeneratorIT {
         final List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
         final StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
 
-        System.out.println(statemachines.get(0));
-        System.out.println(regions.get(0));
-        System.out.println(stateMachine.getInitialStates());
-        System.out.println(stateMachine.getFinalStates());
-        System.out.println(stateMachine.getEdges());
+        logger.info(statemachines.get(0));
+        logger.info(regions.get(0));
+        logger.info(stateMachine.getInitialStates());
+        logger.info(stateMachine.getFinalStates());
+        logger.info(stateMachine.getEdges());
 
         for (Transition t : stateMachine.getTransitions()) {
-            System.out.println(t.getQualifiedName());
-            System.out.println(stateMachine.getStateMappings().get(t.getSource()) + " "
+            logger.info(t.getQualifiedName());
+            logger.info(stateMachine.getStateMappings().get(t.getSource()) + " "
                     + stateMachine.getStateMappings().get(t.getTarget()));
         }
 
         for (Vertex v : stateMachine.getStateMappings().keySet()) {
             if (v instanceof State) {
-                System.out.println(((State) v).getQualifiedName() + " "
+                logger.info(((State) v).getQualifiedName() + " "
                         + stateMachine.getStateMappings().get(v));
             } else if (v instanceof FinalState) {
-                System.out.println(((FinalState) v).getQualifiedName() + " "
+                logger.info(((FinalState) v).getQualifiedName() + " "
                         + stateMachine.getStateMappings().get(v));
             } else if (((Pseudostate) v).getKind() == PseudostateKind.INITIAL_LITERAL) {
-                System.out.println(((Pseudostate) v).getQualifiedName() + " "
+                logger.info(((Pseudostate) v).getQualifiedName() + " "
                         + stateMachine.getStateMappings().get(v));
             }
         }
-
-        // final String[] edges = stateMachine.getEdges().split("\n");
-        // for (String edge : edges) {
-        // final String[] vertices = edge.split(" ");
-        // // System.out.println(vertices[0]+ " :: " + vertices[1]);
-        // System.out.println(stateMachine.getReversedStateMappings().get(vertices[0]).getName()
-        // + " :: " + stateMachine.getReversedStateMappings().get(vertices[1]).getName());
-        // }
 
         List<Path> paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                 stateMachine.getInitialStates(), stateMachine.getFinalStates(),
                 TestCoverageCriteria.NODECOVERAGE);
 
         assertNotNull(paths);
-        System.out.println("\n\n\n");
-        System.out.println(paths);
+        logger.info(paths);
 
         paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                 stateMachine.getInitialStates(), stateMachine.getFinalStates(),
                 TestCoverageCriteria.EDGECOVERAGE);
 
         assertNotNull(paths);
-        System.out.println("\n\n\n");
-        System.out.println(paths);
+        logger.info(paths);
 
         paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                 stateMachine.getInitialStates(), stateMachine.getFinalStates(),
                 TestCoverageCriteria.EDGEPAIRCOVERAGE);
 
-        System.out.println("\n\n\n");
         assertNotNull(paths);
-        System.out.println(paths);
+        logger.info(paths);
 
         paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                 stateMachine.getInitialStates(), stateMachine.getFinalStates(),
                 TestCoverageCriteria.PRIMEPATHCOVERAGE);
 
-        System.out.println("\n\n\n");
         assertNotNull(paths);
-        System.out.println(paths);
+        logger.info(paths);
     }
 }
