@@ -12,7 +12,6 @@ import java.util.List;
  *
  * @author Nan Li
  * @version 1.0 Nov 12, 2012
- * @version 2015.1.0
  *
  */
 public class Mapping {

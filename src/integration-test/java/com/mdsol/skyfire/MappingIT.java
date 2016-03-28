@@ -10,8 +10,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -23,28 +21,14 @@ import org.junit.Test;
  */
 public class MappingIT {
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testConstructorAndGettersAndSetters() {
         String mappingName = "vMachineInit";
         String identifiedElementName = "vm";
         IdentifiableElementType type = IdentifiableElementType.CLASS;
         String testCode = "vendingMachine vm = new vendingMachine();";
-        List<String> mappings = new ArrayList<String>();
-        List<String> parameters = new ArrayList<String>();
+        List<String> mappings = new ArrayList<>();
+        List<String> parameters = new ArrayList<>();
 
         Mapping mapping = new Mapping(mappingName, type, identifiedElementName, testCode, mappings,
                 parameters, null, null);
