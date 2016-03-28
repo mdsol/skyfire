@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.uml2.uml.FinalState;
 import org.eclipse.uml2.uml.Pseudostate;
@@ -19,8 +21,6 @@ import org.eclipse.uml2.uml.Region;
 import org.eclipse.uml2.uml.State;
 import org.eclipse.uml2.uml.StateMachine;
 import org.eclipse.uml2.uml.Vertex;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -34,20 +34,7 @@ public class StateMachineAccessorIT {
 
     private final String vendingMachineXmlPath = System.getProperty("user.dir")
             + "/src/test/resources/testData/VendingMachine/model/VendingMachineFSM.uml";
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
+    private static Logger logger = LogManager.getLogger("StateMachineAccessorIT");
 
     @Test
     public void testGetStateMachines() throws IOException {
@@ -99,13 +86,13 @@ public class StateMachineAccessorIT {
         StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
         HashMap<Vertex, String> stateMappings = stateMachine.getStateMappings();
         HashMap<String, Vertex> reversedStateMappings = stateMachine.getReversedStateMappings();
+
         assertNotNull(stateMappings);
         assertEquals(11, stateMappings.size());
         assertEquals(11, reversedStateMappings.size());
-        // System.out.println(reversedStateMappings);
         assertNotNull(stateMachine.getInitialStates());
         assertNotNull(stateMachine.getFinalStates());
         assertNotNull(stateMachine.getEdges());
-        System.out.println(stateMachine.getEdges());
+        logger.info(stateMachine.getEdges());
     }
 }
