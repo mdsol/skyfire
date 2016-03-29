@@ -81,38 +81,7 @@ public class CucumberTestGenerator {
         for (final Test test : tests) {
             if (test instanceof FsmTest) {
                 sb.append("Scenario: " + test.getTestComment() + "\n");
-                boolean firstWhen = true;
-                if (((FsmTest) test).getPath() != null) {
-                    for (final Transition transition : ((FsmTest) test).getPath()) {
-                        if (transition != null && transition.getName() != null
-                                && transition.getName().indexOf("initialize") >= 0) {
-                            sb.append("Given " + transition.getName() + "\n");
-                        } else if (transition != null && transition.getName() != null
-                                && firstWhen) {
-                            sb.append("When " + transition.getName() + "\n");
-                            sb = addConstriants(sb, transition);
-
-                            if (transition.getTarget() instanceof State
-                                    && ((State) transition.getTarget()).getStateInvariant() != null)
-                                firstWhen = true;
-                            else
-                                firstWhen = false;
-
-                        } else if (transition != null && transition.getName() != null
-                                && !firstWhen) {
-                            sb.append("And " + transition.getName() + "\n");
-                            sb = addConstriants(sb, transition);
-
-                            if (transition.getTarget() instanceof State
-                                    && ((State) transition.getTarget()).getStateInvariant() != null)
-                                firstWhen = true;
-                        } else {
-                            continue;
-                        }
-                    }
-                } else {
-                    logger.debug(test.getTestName() + " does not have paths");
-                }
+                sb = addTest(test, sb);
                 sb.append("\n\n");
             }
         }
@@ -152,7 +121,8 @@ public class CucumberTestGenerator {
      * @param tests
      *            a list of tests
      * @param useQualifiedName
-     *            specify whether to use qualified name
+     *            specify whether to use qualified name to distinguish transitions that have the
+     *            same name
      * @return a {@code StringBuilder} object that includes the Cucumber scenarios
      */
     private static final StringBuilder generateScenarios(final String featureDescription,
@@ -165,51 +135,181 @@ public class CucumberTestGenerator {
         for (final Test test : tests) {
             if (test instanceof FsmTest) {
                 sb.append("Scenario: " + test.getTestComment() + "\n\n");
-                boolean firstWhen = true;
-                if (((FsmTest) test).getPath() != null) {
-                    for (final Transition transition : ((FsmTest) test).getPath()) {
-                        if (transition != null && transition.getName() != null
-                                && transition.getName().indexOf("initialize") >= 0) {
-                            if (!useQualifiedName)
-                                sb.append("Given " + transition.getName() + "\n");
-                            else
-                                sb.append("Given " + getQualifiedName(transition) + "\n");
-                        } else if (transition != null && transition.getName() != null
-                                && firstWhen) {
-                            if (!useQualifiedName)
-                                sb.append("When " + transition.getName() + "\n");
-                            else
-                                sb.append("When " + getQualifiedName(transition) + "\n");
-                            sb = addConstriants(sb, transition);
-
-                            if (transition.getTarget() instanceof State
-                                    && ((State) transition.getTarget()).getStateInvariant() != null)
-                                firstWhen = true;
-                            else
-                                firstWhen = false;
-                        } else if (transition != null && transition.getName() != null
-                                && !firstWhen) {
-                            if (!useQualifiedName)
-                                sb.append("And " + transition.getName() + "\n");
-                            else
-                                sb.append("And " + getQualifiedName(transition) + "\n");
-                            sb = addConstriants(sb, transition);
-
-                            if (transition.getTarget() instanceof State
-                                    && ((State) transition.getTarget()).getStateInvariant() != null)
-                                firstWhen = true;
-                        } else {
-                            continue;
-                        }
-                    }
-                } else {
-                    logger.debug(test.getTestName() + " does not have paths");
-                }
+                sb = addTest(test, sb, useQualifiedName);
                 sb.append("\n\n");
             }
         }
 
         return sb;
+    }
+
+    /**
+     * Convert a test into the Cucumber format and add it to the StringBuilder object
+     *
+     * @param test
+     *            the test to add
+     * @param sb
+     *            a StringBuidler object to keep all tests
+     * @return the StringBuilder object that has added tests
+     */
+    private static StringBuilder addTest(final Test test, final StringBuilder sb) {
+        StringBuilder newSb = sb;
+
+        if (((FsmTest) test).getPath() == null || ((FsmTest) test).getPath().isEmpty()) {
+            logger.debug(test.getTestName() + " does not have paths");
+            return newSb;
+        }
+
+        boolean firstWhen = true;
+        for (final Transition transition : ((FsmTest) test).getPath()) {
+            if (transition == null || transition.getName() == null)
+                continue;
+
+            if (transition.getName().indexOf("initialize") >= 0) {
+                newSb.append("Given " + transition.getName() + "\n");
+            } else {
+                if (firstWhen) {
+                    newSb.append("When " + transition.getName() + "\n");
+                    newSb = addConstriants(newSb, transition);
+                    firstWhen = setWhetherFirstWhenAfterFirstWhen(transition);
+                } else {
+                    newSb.append("And " + transition.getName() + "\n");
+                    newSb = addConstriants(newSb, transition);
+                    firstWhen = setWhetherFirstWhenAfterAndStep(transition);
+                }
+            }
+        }
+
+        return newSb;
+    }
+
+    /**
+     * Convert a test into the Cucumber format and add it to the StringBuilder object
+     *
+     * @param test
+     *            the test to add
+     * @param sb
+     *            a StringBuidler object to keep all tests
+     * @param useQualifiedName
+     *            specify whether to use qualified names
+     * @return the StringBuilder object that has added tests
+     */
+    private static StringBuilder addTest(final Test test, final StringBuilder sb,
+            final boolean useQualifiedName) {
+        StringBuilder newSb = sb;
+
+        if (((FsmTest) test).getPath() == null || ((FsmTest) test).getPath().isEmpty()) {
+            logger.debug(test.getTestName() + " does not have paths");
+            return newSb;
+        }
+
+        boolean firstWhen = true;
+        for (final Transition transition : ((FsmTest) test).getPath()) {
+            if (transition == null || transition.getName() == null)
+                continue;
+
+            if (transition.getName().indexOf("initialize") >= 0) {
+                newSb = addressGivenStep(newSb, transition, useQualifiedName);
+            } else {
+                if (firstWhen) {
+                    newSb = addressWhenStep(newSb, transition, useQualifiedName);
+                    firstWhen = setWhetherFirstWhenAfterFirstWhen(transition);
+                } else {
+                    newSb = addressAndStep(newSb, transition, useQualifiedName);
+                    firstWhen = setWhetherFirstWhenAfterAndStep(transition);
+                }
+            }
+        }
+
+        return sb;
+    }
+
+    /**
+     * Sets the firstWhen flag after executing the first when step
+     *
+     * @param transition
+     *            the transition that represents the first when step
+     * @return true if there is no more when step; otherwise, return false
+     */
+    private static boolean setWhetherFirstWhenAfterFirstWhen(final Transition transition) {
+        return transition.getTarget() instanceof State
+                && ((State) transition.getTarget()).getStateInvariant() != null;
+    }
+
+    /**
+     * Sets the firstWhen flag after executing an And step
+     *
+     * @param transition
+     *            the transition that represents the and step
+     * @return true if there is no more when step; otherwise, return false
+     */
+    private static boolean setWhetherFirstWhenAfterAndStep(final Transition transition) {
+        if (transition.getTarget() instanceof State
+                && ((State) transition.getTarget()).getStateInvariant() != null)
+            return true;
+        return false;
+    }
+
+    /**
+     * Convert a transition into the Cucumber given step and add it to the StringBuilder object
+     *
+     * @param sb
+     *            a StringBuilder object to keep steps
+     * @param useQualifiedName
+     *            specify whether to use qualified names
+     * @return the StringBuilder object that has added steps
+     */
+    private static StringBuilder addressGivenStep(final StringBuilder sb,
+            final Transition transition, final boolean useQualifiedName) {
+        StringBuilder newSb = sb;
+        if (!useQualifiedName)
+            newSb.append("Given " + transition.getName() + "\n");
+        else
+            newSb.append("Given " + getQualifiedName(transition) + "\n");
+
+        return newSb;
+    }
+
+    /**
+     * Convert a transition into the Cucumber when step and add it to the StringBuilder object
+     *
+     * @param sb
+     *            a StringBuilder object to keep steps
+     * @param useQualifiedName
+     *            specify whether to use qualified names
+     * @return the StringBuilder object that has added steps
+     */
+    private static StringBuilder addressWhenStep(final StringBuilder sb,
+            final Transition transition, final boolean useQualifiedName) {
+        StringBuilder newSb = sb;
+        if (!useQualifiedName)
+            newSb.append("When " + transition.getName() + "\n");
+        else
+            newSb.append("When " + getQualifiedName(transition) + "\n");
+        newSb = addConstriants(newSb, transition);
+
+        return newSb;
+    }
+
+    /**
+     * Convert a transition into the Cucumber and step and add it to the StringBuilder object
+     *
+     * @param sb
+     *            a StringBuilder object to keep steps
+     * @param useQualifiedName
+     *            specify whether to use qualified names
+     * @return the StringBuilder object that has added steps
+     */
+    private static StringBuilder addressAndStep(final StringBuilder sb, final Transition transition,
+            final boolean useQualifiedName) {
+        StringBuilder newSb = sb;
+        if (!useQualifiedName)
+            newSb.append("And " + transition.getName() + "\n");
+        else
+            newSb.append("And " + getQualifiedName(transition) + "\n");
+        newSb = addConstriants(newSb, transition);
+
+        return newSb;
     }
 
     /**
@@ -302,26 +402,7 @@ public class CucumberTestGenerator {
 
         // find the matched transitions on the original UML model and construct
         // tests
-        final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<>();
-
-        if (paths != null && !paths.isEmpty()) {
-            for (int i = 0; i < paths.size(); i++) {
-                final List<Transition> transitions = AbstractTestGenerator
-                        .convertVerticesToTransitions(
-                                AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
-
-                String pathName = "";
-                for (final Transition transition : transitions) {
-                    pathName += (transition.getName() != null ? transition.getName() : "") + " ";
-                }
-                final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(
-                        String.valueOf(i), pathName, transitions);
-                tests.add(test);
-            }
-            logger.info("Generate abstract tests");
-        } else {
-            logger.error("No test paths generated");
-        }
+        List<? extends Test> tests = generateTests(paths, stateMachine);
 
         // write the scenarios into the feature file
         final StringBuilder sb = generateScenarios(featureDescription, tests, false);
@@ -391,24 +472,7 @@ public class CucumberTestGenerator {
         }
         logger.info("Generate abstract test paths on the flattened graph");
 
-        // find the matched transitions on the original UML model and construct
-        // tests
-        final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
-
-        for (int i = 0; i < paths.size(); i++) {
-            final List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
-                    AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
-
-            String pathName = "";
-            for (final Transition transition : transitions) {
-                pathName += (transition.getName() != null ? transition.getName() : "") + " ";
-            }
-            final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(String.valueOf(i),
-                    pathName, transitions);
-            tests.add(test);
-        }
-        logger.info("Generate abstract tests");
-
+        List<? extends Test> tests = generateTests(paths, stateMachine);
         // write the scenarios into the feature file
         final StringBuilder sb = generateScenarios(featureDescription, tests, true);
 
@@ -422,5 +486,42 @@ public class CucumberTestGenerator {
                 "Create Cucumber feature file which is located at " + featureFilePath.toString());
 
         return isGenerated;
+    }
+
+    /**
+     * Generates abstract tests
+     *
+     * @param paths
+     *            a list of {@code edu.gmu.coverage.graph.Path} objects
+     * @param stateMachine
+     *            the {@code com.mdsol.skyfire.StateMachineAccessor} object
+     * @return a list of Tests
+     */
+    private static List<? extends Test> generateTests(final List<coverage.graph.Path> paths,
+            final StateMachineAccessor stateMachine) {
+        // find the matched transitions on the original UML model and construct
+        // tests
+        final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<>();
+
+        if (paths != null && !paths.isEmpty()) {
+            for (int i = 0; i < paths.size(); i++) {
+                final List<Transition> transitions = AbstractTestGenerator
+                        .convertVerticesToTransitions(
+                                AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
+
+                String pathName = "";
+                for (final Transition transition : transitions) {
+                    pathName += (transition.getName() != null ? transition.getName() : "") + " ";
+                }
+                final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(
+                        String.valueOf(i), pathName, transitions);
+                tests.add(test);
+            }
+            logger.info("Generate abstract tests");
+        } else {
+            logger.error("No test paths generated");
+        }
+
+        return tests;
     }
 }
