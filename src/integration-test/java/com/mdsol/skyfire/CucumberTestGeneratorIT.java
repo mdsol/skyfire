@@ -90,7 +90,7 @@ public class CucumberTestGeneratorIT {
         tests.add(test);
         String featureDescription = "first feature";
 
-        StringBuffer sb = generator.generateScenarios(featureDescription);
+        StringBuilder sb = generator.generateScenarios(featureDescription);
         assertNotNull(sb);
     }
 
@@ -137,7 +137,7 @@ public class CucumberTestGeneratorIT {
 
         String featureDescription = "Roc feature file generated from a state machine diagram";
 
-        StringBuffer sb = generator.generateScenarios(featureDescription);
+        StringBuilder sb = generator.generateScenarios(featureDescription);
         assertNotNull(sb);
 
         CucumberTestGenerator.writeFeatureFile(sb, rocDirectory + rocFeatureFileName);

@@ -30,7 +30,6 @@ import coverage.web.InvalidInputException;
  *
  * @author Nan Li
  * @version 1.0 Nov 19, 2015
- * @version 2015.1.0
  */
 public class CucumberTestGenerator {
 
@@ -71,10 +70,10 @@ public class CucumberTestGenerator {
      *
      * @param featureDescription
      *            the description of a feature
-     * @return a StringBuffer object that represents the feature scenarios
+     * @return a StringBuilder object that represents the feature scenarios
      */
-    final StringBuffer generateScenarios(final String featureDescription) {
-        StringBuffer sb = new StringBuffer();
+    final StringBuilder generateScenarios(final String featureDescription) {
+        StringBuilder sb = new StringBuilder();
         sb.append("Feature: ");
         sb.append(featureDescription + "\n");
         sb.append("\n");
@@ -125,13 +124,14 @@ public class CucumberTestGenerator {
      * Analyze the constraints and convert them into Cucumber steps with Then
      *
      * @param sb
-     *            a StringBuffer object
+     *            a StringBuilder object
      * @param transition
      *            a transition from a path
-     * @return a new StringBuffer object that has constraints
+     * @return a new StringBuilder object that has constraints
      */
-    private static StringBuffer addConstriants(final StringBuffer sb, final Transition transition) {
-        StringBuffer newStrBuf = sb;
+    private static StringBuilder addConstriants(final StringBuilder sb,
+            final Transition transition) {
+        StringBuilder newStrBuf = sb;
 
         if (transition.getTarget() instanceof State) {
             Constraint invariant = ((State) transition.getTarget()).getStateInvariant();
@@ -153,11 +153,11 @@ public class CucumberTestGenerator {
      *            a list of tests
      * @param useQualifiedName
      *            specify whether to use qualified name
-     * @return a {@code StringBuffer} object that includes the Cucumber scenarios
+     * @return a {@code StringBuilder} object that includes the Cucumber scenarios
      */
-    private static final StringBuffer generateScenarios(final String featureDescription,
+    private static final StringBuilder generateScenarios(final String featureDescription,
             final List<? extends Test> tests, final boolean useQualifiedName) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("Feature: ");
         sb.append(featureDescription + "\n");
         sb.append("\n");
@@ -238,7 +238,7 @@ public class CucumberTestGenerator {
      *             throws an IOException when the specified path to the file is not found
      *
      */
-    public static final void writeFeatureFile(final StringBuffer sb, final String path)
+    public static final void writeFeatureFile(final StringBuilder sb, final String path)
             throws IOException {
         final String result = sb.toString();
 
@@ -302,7 +302,7 @@ public class CucumberTestGenerator {
 
         // find the matched transitions on the original UML model and construct
         // tests
-        final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
+        final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<>();
 
         if (paths != null && !paths.isEmpty()) {
             for (int i = 0; i < paths.size(); i++) {
@@ -324,7 +324,7 @@ public class CucumberTestGenerator {
         }
 
         // write the scenarios into the feature file
-        final StringBuffer sb = generateScenarios(featureDescription, tests, false);
+        final StringBuilder sb = generateScenarios(featureDescription, tests, false);
 
         try {
             writeFeatureFile(sb, featureFilePath.toString());
@@ -396,7 +396,6 @@ public class CucumberTestGenerator {
         final List<com.mdsol.skyfire.FsmTest> tests = new ArrayList<com.mdsol.skyfire.FsmTest>();
 
         for (int i = 0; i < paths.size(); i++) {
-            System.out.println("path: " + paths.get(i));
             final List<Transition> transitions = AbstractTestGenerator.convertVerticesToTransitions(
                     AbstractTestGenerator.getPathByState(paths.get(i), stateMachine));
 
@@ -407,12 +406,11 @@ public class CucumberTestGenerator {
             final com.mdsol.skyfire.FsmTest test = new com.mdsol.skyfire.FsmTest(String.valueOf(i),
                     pathName, transitions);
             tests.add(test);
-            // System.out.println(test.getTestComment());
         }
         logger.info("Generate abstract tests");
 
         // write the scenarios into the feature file
-        final StringBuffer sb = generateScenarios(featureDescription, tests, true);
+        final StringBuilder sb = generateScenarios(featureDescription, tests, true);
 
         try {
             writeFeatureFile(sb, featureFilePath.toString());
