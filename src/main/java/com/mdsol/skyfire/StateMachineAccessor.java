@@ -198,7 +198,7 @@ public class StateMachineAccessor extends ModelAccessor {
             // initials states in composite states are not
             // considered as initials in the whole graph
             if (aVertex.getOwner() == region) {
-                setInitialStates(getInitialStates() + Integer.toString(stateNumber));
+                addExtraInitialNodes(stateNumber);
             }
             return true;
         }
@@ -225,7 +225,7 @@ public class StateMachineAccessor extends ModelAccessor {
         // final states in composite states are not considered as
         // finals in the whole graph
         if (aVertex.getOwner() == region) {
-            setFinalStates(getFinalStates() + Integer.toString(stateNumber));
+            addExtraFinalNodes(stateNumber);
         }
         return true;
     }
@@ -252,6 +252,34 @@ public class StateMachineAccessor extends ModelAccessor {
             newCompositeStates.addAll(localVertices);
         }
         return newCompositeStates;
+    }
+
+    /**
+     * Adds extra initial nodes
+     *
+     * @param stateNumber
+     *            the state number to assign
+     */
+    private void addExtraInitialNodes(final int stateNumber) {
+        if ("".equals(getInitialStates().trim())) {
+            setInitialStates(Integer.toString(stateNumber));
+        } else {
+            setInitialStates(getInitialStates() + ", " + Integer.toString(stateNumber));
+        }
+    }
+
+    /**
+     * Adds extra final nodes
+     *
+     * @param stateNumber
+     *            the state number to assign
+     */
+    private void addExtraFinalNodes(final int stateNumber) {
+        if ("".equals(getFinalStates().trim())) {
+            setFinalStates(Integer.toString(stateNumber));
+        } else {
+            setFinalStates(getFinalStates() + ", " + Integer.toString(stateNumber));
+        }
     }
 
     /**
