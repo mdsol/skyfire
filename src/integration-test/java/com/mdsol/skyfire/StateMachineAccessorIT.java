@@ -9,8 +9,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,8 +84,8 @@ public class StateMachineAccessorIT {
         List<StateMachine> statemachines = StateMachineAccessor.getStateMachines(object);
         List<Region> regions = StateMachineAccessor.getRegions(statemachines.get(0));
         StateMachineAccessor stateMachine = new StateMachineAccessor(regions.get(0));
-        HashMap<Vertex, String> stateMappings = stateMachine.getStateMappings();
-        HashMap<String, Vertex> reversedStateMappings = stateMachine.getReversedStateMappings();
+        Map<Vertex, String> stateMappings = stateMachine.getStateMappings();
+        Map<String, Vertex> reversedStateMappings = stateMachine.getReversedStateMappings();
 
         assertNotNull(stateMappings);
         assertEquals(11, stateMappings.size());
