@@ -28,7 +28,6 @@ import org.eclipse.uml2.uml.Vertex;
  *
  * @author Nan Li
  * @version 1.0 Nov 28, 2012
- * @version 2015.1.0
  */
 
 public class StateMachineAccessor extends ModelAccessor {
@@ -36,17 +35,17 @@ public class StateMachineAccessor extends ModelAccessor {
     /**
      * the key is a state; the value is an integer number used in {@link coverage.web.Path}
      */
-    private HashMap<Vertex, String> stateMappings = new HashMap<Vertex, String>();
+    private HashMap<Vertex, String> stateMappings = new HashMap<>();
 
     /**
      * the key is an integer number used in {@link coverage.web.Path}; the value is a state
      */
-    private HashMap<String, Vertex> reversedStateMappings = new HashMap<String, Vertex>();
+    private HashMap<String, Vertex> reversedStateMappings = new HashMap<>();
 
     /**
      * transitions in the region of this state machine
      */
-    private List<Transition> transitions = new ArrayList<Transition>();
+    private List<Transition> transitions = new ArrayList<>();
 
     /**
      * the region of the state machine; this region is different from the region0 of the state
@@ -83,102 +82,175 @@ public class StateMachineAccessor extends ModelAccessor {
      *            a {@link org.eclipse.uml2.uml.Region} Region object
      */
     private void createStateMappings(final Region region) {
-        int stateNumber = 1;
+
         final EList<Vertex> vertices = region.getSubvertices();
 
         // check if all states are simple
         boolean isSimple = true;
         for (final Vertex vertex : vertices) {
-            if (vertex instanceof State) {
-                if (((State) vertex).isComposite()) {
-                    isSimple = false;
-                }
-            } else if (vertex instanceof FinalState) {
-                if (((FinalState) vertex).isComposite()) {
-                    isSimple = false;
-                }
+            if ((vertex instanceof State && ((State) vertex).isComposite())
+                    || (vertex instanceof FinalState && ((FinalState) vertex).isComposite())) {
+                isSimple = false;
             }
         }
+
         // if all states are simple, execute the if block; otherwise, do the
         // else block
         if (isSimple) {
+            int stateNumber = 1;
             for (final Vertex vertex : vertices) {
-                if (vertex instanceof Pseudostate
-                        && ((Pseudostate) vertex).getKind() == PseudostateKind.INITIAL_LITERAL) {
-                    final EList<Transition> outgoings = vertex.getOutgoings();
-                    if (outgoings.size() > 0) {
-                        getStateMappings().put(vertex, new Integer(stateNumber).toString());
-                        getReversedStateMappings().put(new Integer(stateNumber).toString(), vertex);
-                        setInitialStates(getInitialStates() + new Integer(stateNumber).toString());
-                    }
-                } else if (vertex instanceof FinalState) {
-                    getStateMappings().put(vertex, new Integer(stateNumber).toString());
-                    getReversedStateMappings().put(new Integer(stateNumber).toString(), vertex);
-                    setFinalStates(getFinalStates() + new Integer(stateNumber).toString());
-                } else {
-                    getStateMappings().put(vertex, new Integer(stateNumber).toString());
-                    getReversedStateMappings().put(new Integer(stateNumber).toString(), vertex);
-                }
+                processSimpleState(vertex, stateNumber);
                 stateNumber++;
             }
         } else {
-            final List<Vertex> compositeStates = new ArrayList<Vertex>();
-            compositeStates.addAll(vertices);
-            // System.out.println(compositeStates.size());
-            // System.out.println(compositeStates);
-            do {
-                final Vertex aVertex = compositeStates.get(0);
-                // System.out.println(aVertex.toString());
-                if (aVertex instanceof Pseudostate
-                        && ((Pseudostate) aVertex).getKind() == PseudostateKind.INITIAL_LITERAL) {
-                    final EList<Transition> outgoings = aVertex.getOutgoings();
-                    if (outgoings.size() > 0) {
-                        getStateMappings().put(aVertex, new Integer(stateNumber).toString());
-                        getReversedStateMappings().put(new Integer(stateNumber).toString(),
-                                aVertex);
-                        // set the initial if this initial is at the top level
-                        // of the region
-                        // initials states in composite states are not
-                        // considered as initials in the whole graph
-                        if (aVertex.getOwner() == region) {
-                            setInitialStates(
-                                    getInitialStates() + new Integer(stateNumber).toString());
-                        }
-                        compositeStates.remove(0);
-                    }
-                } else if (aVertex instanceof FinalState) {
-                    getStateMappings().put(aVertex, new Integer(stateNumber).toString());
-                    getReversedStateMappings().put(new Integer(stateNumber).toString(), aVertex);
-                    // set the final if this final is at the top level of the
-                    // region
-                    // final states in composite states are not considered as
-                    // finals in the whole graph
-                    if (aVertex.getOwner() == region) {
-                        setFinalStates(getFinalStates() + new Integer(stateNumber).toString());
-                    }
-                    compositeStates.remove(0);
-                } else if (((State) aVertex).isSimple()) {
-                    getStateMappings().put(aVertex, new Integer(stateNumber).toString());
-                    getReversedStateMappings().put(new Integer(stateNumber).toString(), aVertex);
-                    compositeStates.remove(0);
-                } else if (((State) aVertex).isComposite()) {
-                    final List<Vertex> localVertices = getStates((State) aVertex);
-                    // this composite state does not have any sub-vertices when
-                    // the size is 0
-                    if (localVertices.size() == 0) {
-                        getStateMappings().put(aVertex, new Integer(stateNumber).toString());
-                        getReversedStateMappings().put(new Integer(stateNumber).toString(),
-                                aVertex);
-                    } else if (localVertices.size() > 0) {
-                        compositeStates.addAll(localVertices);
-                    }
-                    compositeStates.remove(0);
-                }
-                stateNumber++;
-
-            } while (compositeStates.size() > 0);
+            processCompositeStates(vertices, region);
         }
 
+    }
+
+    /**
+     * Processes a simple state by adding it to state mappings
+     *
+     * @param vertex
+     *            a state vertex
+     * @param stateNumber
+     *            the specified number assigned to the state
+     */
+    private void processSimpleState(final Vertex vertex, final int stateNumber) {
+        if (vertex instanceof Pseudostate
+                && ((Pseudostate) vertex).getKind() == PseudostateKind.INITIAL_LITERAL) {
+            final EList<Transition> outgoings = vertex.getOutgoings();
+            if (outgoings.size() > 0) {
+                getStateMappings().put(vertex, Integer.toString(stateNumber));
+                getReversedStateMappings().put(Integer.toString(stateNumber), vertex);
+                setInitialStates(getInitialStates() + Integer.toString(stateNumber));
+            }
+        } else if (vertex instanceof FinalState) {
+            getStateMappings().put(vertex, Integer.toString(stateNumber));
+            getReversedStateMappings().put(Integer.toString(stateNumber), vertex);
+            setFinalStates(getFinalStates() + Integer.toString(stateNumber));
+        } else {
+            getStateMappings().put(vertex, Integer.toString(stateNumber));
+            getReversedStateMappings().put(Integer.toString(stateNumber), vertex);
+        }
+    }
+
+    /**
+     * Process all states if one of them is a composite state
+     *
+     * @param vertices
+     *            all vertices that represent states
+     * @param region
+     *            the region that has all states
+     */
+    private void processCompositeStates(final EList<Vertex> vertices, final Region region) {
+        List<Vertex> compositeStates = new ArrayList<>();
+        compositeStates.addAll(vertices);
+        int stateNumber = 1;
+
+        do {
+            final Vertex aVertex = compositeStates.get(0);
+            boolean toRemoveFirstVertex = false;
+
+            if (aVertex instanceof Pseudostate
+                    && ((Pseudostate) aVertex).getKind() == PseudostateKind.INITIAL_LITERAL) {
+                toRemoveFirstVertex = processInitialNode(aVertex, stateNumber, region);
+            } else if (aVertex instanceof FinalState) {
+                toRemoveFirstVertex = processFinalNode(aVertex, stateNumber, region);
+            } else if (((State) aVertex).isSimple()) {
+                getStateMappings().put(aVertex, Integer.toString(stateNumber));
+                getReversedStateMappings().put(Integer.toString(stateNumber), aVertex);
+                toRemoveFirstVertex = true;
+            } else if (((State) aVertex).isComposite()) {
+                compositeStates = processCompositeState(aVertex, stateNumber, compositeStates);
+                toRemoveFirstVertex = true;
+            }
+
+            if (toRemoveFirstVertex) {
+                compositeStates.remove(0);
+            }
+            stateNumber++;
+
+        } while (!compositeStates.isEmpty());
+
+    }
+
+    /**
+     * Processes an initial state if there is at least one composite state
+     *
+     * @param aVertex
+     *            a State vertex
+     * @param stateNumber
+     *            the specified state number
+     * @param region
+     *            the region that has all vertices
+     * @return true if this initial node is valid and properly processed; otherwise, return false
+     */
+    private boolean processInitialNode(final Vertex aVertex, final int stateNumber,
+            final Region region) {
+        final EList<Transition> outgoings = aVertex.getOutgoings();
+        if (outgoings.size() > 0) {
+            getStateMappings().put(aVertex, Integer.toString(stateNumber));
+            getReversedStateMappings().put(Integer.toString(stateNumber), aVertex);
+            // set the initial if this initial is at the top level
+            // of the region
+            // initials states in composite states are not
+            // considered as initials in the whole graph
+            if (aVertex.getOwner() == region) {
+                setInitialStates(getInitialStates() + Integer.toString(stateNumber));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Processes a final state if there is at least one composite state
+     *
+     * @param aVertex
+     *            a State vertex
+     * @param stateNumber
+     *            the specified state number
+     * @param region
+     *            the region that has all vertices
+     * @return true if this final node is valid and properly processed; otherwise, return false
+     */
+    private boolean processFinalNode(final Vertex aVertex, final int stateNumber,
+            final Region region) {
+        getStateMappings().put(aVertex, Integer.toString(stateNumber));
+        getReversedStateMappings().put(Integer.toString(stateNumber), aVertex);
+        // set the final if this final is at the top level of the
+        // region
+        // final states in composite states are not considered as
+        // finals in the whole graph
+        if (aVertex.getOwner() == region) {
+            setFinalStates(getFinalStates() + Integer.toString(stateNumber));
+        }
+        return true;
+    }
+
+    /**
+     * Processes a composite state
+     *
+     * @param aVertex
+     *            a State vertex
+     * @param stateNumber
+     *            the specified state number
+     * @return true if this composite node is valid and properly processed; otherwise, return false
+     */
+    private List<Vertex> processCompositeState(final Vertex aVertex, final int stateNumber,
+            final List<Vertex> compositeStates) {
+        List<Vertex> newCompositeStates = compositeStates;
+        final List<Vertex> localVertices = getStates((State) aVertex);
+        // this composite state does not have any sub-vertices when
+        // the size is 0
+        if (localVertices.isEmpty()) {
+            getStateMappings().put(aVertex, Integer.toString(stateNumber));
+            getReversedStateMappings().put(Integer.toString(stateNumber), aVertex);
+        } else {
+            newCompositeStates.addAll(localVertices);
+        }
+        return newCompositeStates;
     }
 
     /**
