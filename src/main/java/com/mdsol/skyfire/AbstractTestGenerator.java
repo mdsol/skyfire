@@ -33,8 +33,8 @@ import coverage.web.InvalidInputException;
  */
 public class AbstractTestGenerator {
     private String globalDirectory = System.getProperty("user.dir");
-    private final String tempTestDirectory = "testData/test/temp/";
-    private final String tempTestName = "tempTest";
+    private static final String TEMPTESTDIR = "testData/test/temp/";
+    private static final String TEMPTESTNAME = "tempTest";
     private static Logger logger = LogManager.getLogger("AbstractTestGenerator");
 
     // Maps a transition to the mappings
@@ -175,23 +175,25 @@ public class AbstractTestGenerator {
     public static final List<Transition> convertVerticesToTransitions(final List<Vertex> vertices) {
         final List<Transition> transitions = new ArrayList<>();
 
-        for (int i = 0; i < vertices.size();) {
-            final Vertex source = vertices.get(i);
+        for (int i = 0; i < vertices.size(); i++) {
+            int sourceIndex = i;
+            final Vertex sourceVertex = vertices.get(sourceIndex);
+
             if (i == vertices.size() - 1) {
                 break;
-            } else {
-                i++;
             }
 
-            final Vertex destination = vertices.get(i);
-            for (final Transition transition : source.getOutgoings()) {
+            int targetIndex = sourceIndex + 1;
+
+            final Vertex targetVertex = vertices.get(targetIndex);
+            for (final Transition transition : sourceVertex.getOutgoings()) {
                 if (transition.getTarget() == null) {
                     logger.error(transition.getName() + " has no target state");
                 }
                 // Now the first right transition is used
                 // but there may be more than one transition between two vertices
                 // this issue will be taken care of later
-                if (transition.getTarget().getName().equals(destination.getName())) {
+                if (transition.getTarget().getName().equals(targetVertex.getName())) {
                     transitions.add(transition);
                     // a bug is fixed; without break statement, extra transitions may be added
                     break;
@@ -243,19 +245,20 @@ public class AbstractTestGenerator {
      */
     public final List<Mapping> addPreconditionStateInvariantMappings(final Element element,
             final List<Mapping> finalMappings, final List<Mapping> constraints) {
+        List<Mapping> mappings = finalMappings;
 
         if (element instanceof Vertex) {
             for (final Mapping precondition : constraints) {
                 if (precondition.getIdentifiableElementName().equals(((Vertex) element).getName())
                         && precondition.getType() == IdentifiableElementType.PRECONDITION) {
-                    finalMappings.add(precondition);
+                    mappings.add(precondition);
                 }
             }
 
             for (final Mapping stateinvariant : constraints) {
                 if (stateinvariant.getIdentifiableElementName().equals(((Vertex) element).getName())
                         && stateinvariant.getType() == IdentifiableElementType.STATEINVARIANT) {
-                    finalMappings.add(stateinvariant);
+                    mappings.add(stateinvariant);
                 }
             }
         }
@@ -265,7 +268,7 @@ public class AbstractTestGenerator {
                 if (precondition.getIdentifiableElementName()
                         .equals(((Transition) element).getName())
                         && precondition.getType() == IdentifiableElementType.PRECONDITION) {
-                    finalMappings.add(precondition);
+                    mappings.add(precondition);
                 }
             }
 
@@ -273,11 +276,11 @@ public class AbstractTestGenerator {
                 if (stateinvariant.getIdentifiableElementName()
                         .equals(((Transition) element).getName())
                         && stateinvariant.getType() == IdentifiableElementType.STATEINVARIANT) {
-                    finalMappings.add(stateinvariant);
+                    mappings.add(stateinvariant);
                 }
             }
         }
-        return finalMappings;
+        return mappings;
     }
 
     /**
@@ -324,50 +327,99 @@ public class AbstractTestGenerator {
      */
     public static final List<Mapping> getConstraints(final List<ConstraintMapping> constraints) {
         // a list of mappings to be returned: precondition, stateinvariant, postcondition mappings
-        final List<Mapping> mappings = new ArrayList<>();
+        List<Mapping> mappings = new ArrayList<>();
 
-        if (constraints != null) {
-            for (final ConstraintMapping constraint : constraints) {
-                // add precondition mappings
-                if (constraint.getPreconditions() != null
-                        && constraint.getPreconditions().size() > 0) {
+        if (constraints == null)
+            return mappings;
 
-                    for (final String precondition : constraint.getPreconditions()) {
-                        mappings.add(new Mapping(constraint.getName(),
-                                IdentifiableElementType.PRECONDITION, precondition,
-                                constraint.getTestCode(), constraint.getRequiredMappings(),
-                                constraint.getParameters(), constraint.getCallers(),
-                                constraint.getReturnObjects()));
-                    }
-
-                }
-                // add state invariant mappings
-                if (constraint.getStateinvariants() != null
-                        && constraint.getStateinvariants().size() > 0) {
-
-                    for (final String stateinvariant : constraint.getStateinvariants()) {
-                        mappings.add(new Mapping(constraint.getName(),
-                                IdentifiableElementType.STATEINVARIANT, stateinvariant,
-                                constraint.getTestCode(), constraint.getRequiredMappings(),
-                                constraint.getParameters(), constraint.getCallers(),
-                                constraint.getReturnObjects()));
-                    }
-                }
-                // add postcondition mappings
-                if (constraint.getPostconditions() != null
-                        && constraint.getPostconditions().size() > 0) {
-                    for (final String postcondition : constraint.getPostconditions()) {
-                        mappings.add(new Mapping(constraint.getName(),
-                                IdentifiableElementType.POSTCONDITION, postcondition,
-                                constraint.getTestCode(), constraint.getRequiredMappings(),
-                                constraint.getParameters(), constraint.getCallers(),
-                                constraint.getReturnObjects()));
-                    }
-                }
+        for (final ConstraintMapping constraint : constraints) {
+            // add precondition mappings
+            if (constraint.getPreconditions() != null && constraint.getPreconditions().size() > 0) {
+                mappings = addPreconditions(mappings, constraint);
+            }
+            // add state invariant mappings
+            if (constraint.getStateinvariants() != null
+                    && constraint.getStateinvariants().size() > 0) {
+                mappings = addStateInvariants(mappings, constraint);
+            }
+            // add postcondition mappings
+            if (constraint.getPostconditions() != null
+                    && constraint.getPostconditions().size() > 0) {
+                mappings = addPostconditions(mappings, constraint);
             }
         }
 
         return mappings;
+    }
+
+    /**
+     * Adds pre-conditions to the mappings
+     *
+     * @param mappings
+     *            the specified mappings that do not have pre-conditions
+     * @param constraint
+     *            the constraint mapping
+     * @return a list of Mapping objects that have pre-conditions
+     */
+    private static List<Mapping> addPreconditions(final List<Mapping> mappings,
+            final ConstraintMapping constraint) {
+        List<Mapping> newMappings = mappings;
+
+        for (final String precondition : constraint.getPreconditions()) {
+            newMappings.add(new Mapping(constraint.getName(), IdentifiableElementType.PRECONDITION,
+                    precondition, constraint.getTestCode(), constraint.getRequiredMappings(),
+                    constraint.getParameters(), constraint.getCallers(),
+                    constraint.getReturnObjects()));
+        }
+
+        return newMappings;
+    }
+
+    /**
+     * Adds state invariants to the mappings
+     *
+     * @param mappings
+     *            the specified mappings that do not have state invariants
+     * @param constraint
+     *            the constraint mapping
+     * @return a list of Mapping objects that have state invariants
+     */
+    private static List<Mapping> addStateInvariants(final List<Mapping> mappings,
+            final ConstraintMapping constraint) {
+        List<Mapping> newMappings = mappings;
+
+        for (final String stateinvariant : constraint.getStateinvariants()) {
+            newMappings
+                    .add(new Mapping(constraint.getName(), IdentifiableElementType.STATEINVARIANT,
+                            stateinvariant, constraint.getTestCode(),
+                            constraint.getRequiredMappings(), constraint.getParameters(),
+                            constraint.getCallers(), constraint.getReturnObjects()));
+        }
+
+        return newMappings;
+    }
+
+    /**
+     * Adds post-conditions to the mappings
+     *
+     * @param mappings
+     *            the specified mappings that do not have post-conditions
+     * @param constraint
+     *            the constraint mapping
+     * @return a list of Mapping objects that have post-conditions
+     */
+    private static List<Mapping> addPostconditions(final List<Mapping> mappings,
+            final ConstraintMapping constraint) {
+        List<Mapping> newMappings = mappings;
+
+        for (final String postcondition : constraint.getPostconditions()) {
+            newMappings.add(new Mapping(constraint.getName(), IdentifiableElementType.POSTCONDITION,
+                    postcondition, constraint.getTestCode(), constraint.getRequiredMappings(),
+                    constraint.getParameters(), constraint.getCallers(),
+                    constraint.getReturnObjects()));
+        }
+
+        return newMappings;
     }
 
     /**
@@ -411,14 +463,14 @@ public class AbstractTestGenerator {
      * @return the tempTestDirectory
      */
     public final String getTempTestDirectory() {
-        return tempTestDirectory;
+        return TEMPTESTDIR;
     }
 
     /**
      * @return the tempTestName
      */
     public final String getTempTestName() {
-        return tempTestName;
+        return TEMPTESTNAME;
     }
 
     /**
