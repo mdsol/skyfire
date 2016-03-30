@@ -100,7 +100,7 @@ public class AccessingModelsIT {
                 for (Region region : regions) {
 
                     EList<Transition> transitions = region.getTransitions();
-                    EList<Vertex> vertexes = region.getSubvertices();
+                    EList<Vertex> vertices = region.getSubvertices();
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("State1", "1");
@@ -113,16 +113,7 @@ public class AccessingModelsIT {
                     map.put("State8", "8");
                     map.put("State9", "9");
 
-                    for (Vertex vertex : vertexes) {
-                        logger.info(vertex.getName());
-
-                        if (vertex instanceof FinalState)
-                            map.put(vertex.getName(), "10");
-                        if (vertex instanceof Pseudostate) {
-                            map.put(vertex.getName(), "0");
-                            printOutgoingEdges(vertex);
-                        }
-                    }
+                    processVertices(vertices, map);
 
                     String sourceNumber = "0";
                     String targetNumber = "10";
@@ -130,6 +121,19 @@ public class AccessingModelsIT {
                     logger.info(edges);
                     logger.info(getTestPaths(edges, sourceNumber, targetNumber));
                 }
+            }
+        }
+    }
+
+    private void processVertices(final EList<Vertex> vertices, final HashMap<String, String> map) {
+        for (Vertex vertex : vertices) {
+            logger.info(vertex.getName());
+
+            if (vertex instanceof FinalState)
+                map.put(vertex.getName(), "10");
+            if (vertex instanceof Pseudostate) {
+                map.put(vertex.getName(), "0");
+                printOutgoingEdges(vertex);
             }
         }
     }

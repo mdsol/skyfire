@@ -70,13 +70,6 @@ public class Mapping {
     }
 
     /**
-     * Constructs a Mapping object with no parameters
-     */
-    public Mapping() {
-
-    }
-
-    /**
      * Gets the mapping name
      *
      * @return the mapping name

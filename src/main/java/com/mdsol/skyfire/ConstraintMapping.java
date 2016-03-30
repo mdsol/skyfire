@@ -68,13 +68,6 @@ public class ConstraintMapping extends Mapping {
     }
 
     /**
-     *
-     */
-    public ConstraintMapping() {
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
      * Gets the names of mappings that used to solve the constraints.
      *
      * @return a list of names of the mappings in a String format
