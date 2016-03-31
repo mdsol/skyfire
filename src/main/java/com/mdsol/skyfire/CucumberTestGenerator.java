@@ -35,6 +35,11 @@ public class CucumberTestGenerator {
 
     private List<? extends Test> tests;
     private static Logger logger = LogManager.getLogger("CucumberTestGenerator");
+    private static final String GIVEN = "Given ";
+    private static final String WHEN = "When ";
+    private static final String AND = "And ";
+    private static final String THEN = "Then ";
+    private static final String INVALIDGRAPH_MESSAGE = "The flattened graph is not valid";
 
     /**
      * Constructs a test with no parameters
@@ -105,7 +110,7 @@ public class CucumberTestGenerator {
         if (transition.getTarget() instanceof State) {
             Constraint invariant = ((State) transition.getTarget()).getStateInvariant();
             if (invariant != null) {
-                sb.append("Then ");
+                sb.append(THEN);
                 sb.append(invariant.getName() + "\n");
             }
         }
@@ -166,14 +171,14 @@ public class CucumberTestGenerator {
                 continue;
 
             if (transition.getName().indexOf("initialize") >= 0) {
-                newSb.append("Given " + transition.getName() + "\n");
+                newSb.append(GIVEN + transition.getName() + "\n");
             } else {
                 if (firstWhen) {
-                    newSb.append("When " + transition.getName() + "\n");
+                    newSb.append(WHEN + transition.getName() + "\n");
                     newSb = addConstriants(newSb, transition);
                     firstWhen = setWhetherFirstWhenAfterFirstWhen(transition);
                 } else {
-                    newSb.append("And " + transition.getName() + "\n");
+                    newSb.append(AND + transition.getName() + "\n");
                     newSb = addConstriants(newSb, transition);
                     firstWhen = setWhetherFirstWhenAfterAndStep(transition);
                 }
@@ -263,9 +268,9 @@ public class CucumberTestGenerator {
             final Transition transition, final boolean useQualifiedName) {
         StringBuilder newSb = sb;
         if (!useQualifiedName)
-            newSb.append("Given " + transition.getName() + "\n");
+            newSb.append(GIVEN + transition.getName() + "\n");
         else
-            newSb.append("Given " + getQualifiedName(transition) + "\n");
+            newSb.append(GIVEN + getQualifiedName(transition) + "\n");
 
         return newSb;
     }
@@ -283,9 +288,9 @@ public class CucumberTestGenerator {
             final Transition transition, final boolean useQualifiedName) {
         StringBuilder newSb = sb;
         if (!useQualifiedName)
-            newSb.append("When " + transition.getName() + "\n");
+            newSb.append(WHEN + transition.getName() + "\n");
         else
-            newSb.append("When " + getQualifiedName(transition) + "\n");
+            newSb.append(WHEN + getQualifiedName(transition) + "\n");
         newSb = addConstriants(newSb, transition);
 
         return newSb;
@@ -304,9 +309,9 @@ public class CucumberTestGenerator {
             final boolean useQualifiedName) {
         StringBuilder newSb = sb;
         if (!useQualifiedName)
-            newSb.append("And " + transition.getName() + "\n");
+            newSb.append(AND + transition.getName() + "\n");
         else
-            newSb.append("And " + getQualifiedName(transition) + "\n");
+            newSb.append(AND + getQualifiedName(transition) + "\n");
         newSb = addConstriants(newSb, transition);
 
         return newSb;
@@ -392,10 +397,10 @@ public class CucumberTestGenerator {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
         } catch (InvalidInputException e) {
-            logger.debug("The flattened graph is not valid");
+            logger.debug(INVALIDGRAPH_MESSAGE);
             throw new InvalidInputException(e);
         } catch (InvalidGraphException e) {
-            logger.debug("The flattened graph is not valid");
+            logger.debug(INVALIDGRAPH_MESSAGE);
             throw new InvalidGraphException(e);
         }
         logger.info("Generate abstract test paths on the flattened graph");
@@ -464,10 +469,10 @@ public class CucumberTestGenerator {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
         } catch (InvalidInputException e) {
-            logger.debug("The flattened graph is not valid");
+            logger.debug(INVALIDGRAPH_MESSAGE);
             throw new InvalidInputException(e);
         } catch (InvalidGraphException e) {
-            logger.debug("The flattened graph is not valid");
+            logger.debug(INVALIDGRAPH_MESSAGE);
             throw new InvalidGraphException(e);
         }
         logger.info("Generate abstract test paths on the flattened graph");

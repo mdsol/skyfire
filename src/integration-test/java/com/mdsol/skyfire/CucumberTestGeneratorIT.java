@@ -43,8 +43,8 @@ public class CucumberTestGeneratorIT {
     private String testResourceDir;
     private String rocPath;
     private String rocDirectory;
-    private static final String rocFeatureFileName = "roc.feature";
-    private static final String firstTestName = "first test";
+    private static final String ROCFEATUREFILENAME = "roc.feature";
+    private static final String FIRSTTESTNAME = "first test";
     private String plinthPath;
     private String plinthDirectory;
 
@@ -77,16 +77,16 @@ public class CucumberTestGeneratorIT {
     @Test
     public void testConstructorAndGettersAndSetters() {
         FsmTest test = new FsmTest();
-        test.setTestName(firstTestName);
+        test.setTestName(FIRSTTESTNAME);
         tests.add(test);
 
-        assertEquals(firstTestName, generator.getTests().get(0).getTestName());
+        assertEquals(FIRSTTESTNAME, generator.getTests().get(0).getTestName());
     }
 
     @Test
     public void testGenerateScenarios() {
         FsmTest test = new FsmTest();
-        test.setTestName(firstTestName);
+        test.setTestName(FIRSTTESTNAME);
         tests.add(test);
         String featureDescription = "first feature";
 
@@ -140,8 +140,8 @@ public class CucumberTestGeneratorIT {
         StringBuilder sb = generator.generateScenarios(featureDescription);
         assertNotNull(sb);
 
-        CucumberTestGenerator.writeFeatureFile(sb, rocDirectory + rocFeatureFileName);
-        File file = new File(rocDirectory + rocFeatureFileName);
+        CucumberTestGenerator.writeFeatureFile(sb, rocDirectory + ROCFEATUREFILENAME);
+        File file = new File(rocDirectory + ROCFEATUREFILENAME);
         assertTrue(file.exists());
     }
 
@@ -161,9 +161,9 @@ public class CucumberTestGeneratorIT {
         String featureDescription = "Roc feature file generated from a state machine diagram";
         boolean generated = CucumberTestGenerator.generateCucumberScenario(Paths.get(rocPath),
                 TestCoverageCriteria.EDGECOVERAGE, featureDescription,
-                Paths.get(rocDirectory + rocFeatureFileName));
+                Paths.get(rocDirectory + ROCFEATUREFILENAME));
         assertTrue(generated);
-        File file = new File(rocDirectory + rocFeatureFileName);
+        File file = new File(rocDirectory + ROCFEATUREFILENAME);
         assertTrue(file.exists());
     }
 
