@@ -291,41 +291,11 @@ public class StateMachineAccessor extends ModelAccessor {
      *            a {@link org.eclipse.uml2.uml.Region} Region object
      */
     private void createEdges(final Region region) {
-        final EList<Transition> firstLevelTransitions = region.getTransitions();
-        final List<Transition> compoStateTrans = new ArrayList<>();
-
-        for (final Transition transition : firstLevelTransitions) {
-            // transitions may not have a source or target because some of them
-            // are isolated because model editors might leave them accidentally
-            // they do not appear in the UML diagram but they do exist in the
-            // UML model
-            if (transition.getSource() != null && transition.getTarget() != null) {
-
-                if (transition.getSource() instanceof Pseudostate
-                        || transition.getSource() instanceof FinalState
-                        || transition.getSource() instanceof State
-                        || transition.getTarget() instanceof Pseudostate
-                        || transition.getTarget() instanceof FinalState
-                        || transition.getTarget() instanceof State) {
-                    if (!((transition.getSource() instanceof State
-                            && ((State) transition.getSource()).isComposite())
-                            || (transition.getTarget() instanceof State
-                                    && ((State) transition.getTarget()).isComposite()))) {
-                        edges = updateEdges(edges, transition);
-                        getTransitions().add(transition);
-                    } else if ((transition.getSource() instanceof State
-                            && ((State) transition.getSource()).isComposite())
-                            || (transition.getTarget() instanceof State
-                                    && ((State) transition.getTarget()).isComposite())) {
-                        compoStateTrans.add(transition);
-                    }
-                }
-            }
-        }
+        List<Transition> compoStateTrans = genCompoStateTrans(region);
 
         // mark composite states whose sub-states have been added to the list
         // transCompoState
-        final HashMap<Vertex, Boolean> compositeStates = new HashMap<>();
+        Map<Vertex, Boolean> compositeStates = new HashMap<>();
         final List<Transition> simpleTrans = new ArrayList<>();
         if (!compoStateTrans.isEmpty()) {
             do {
@@ -333,119 +303,17 @@ public class StateMachineAccessor extends ModelAccessor {
                 final Transition t = compoStateTrans.get(0);
 
                 if (t.getSource() instanceof State && ((State) t.getSource()).isComposite()) {
-
-                    final List<Vertex> sourceVertices = ((State) t.getSource()).getRegions().get(0)
-                            .getSubvertices();
-                    // initialize initial states, final states, and regular states in the source
-                    final List<Pseudostate> sourceInitialStates = new ArrayList<>();
-                    final List<FinalState> sourceFinalStates = new ArrayList<>();
-                    final List<State> sourceStates = new ArrayList<>();
-
-                    for (final Vertex vertex : sourceVertices) {
-                        if (vertex instanceof Pseudostate && ((Pseudostate) vertex)
-                                .getKind() == PseudostateKind.INITIAL_LITERAL) {
-                            sourceInitialStates.add((Pseudostate) vertex);
-                        } else if (vertex instanceof FinalState) {
-                            sourceFinalStates.add((FinalState) vertex);
-                        } else if (vertex instanceof State) {
-                            sourceStates.add((State) vertex);
-                        }
-                    }
-
-                    if (!sourceFinalStates.isEmpty()) {
-                        for (final FinalState finalState : sourceFinalStates) {
-                            // the transition creation supposes to be updated
-                            // for the cases that transitions have guards,
-                            // effects or others
-                            final Transition tempTran = region.createTransition(t.getName());
-
-                            tempTran.setSource(finalState);
-                            tempTran.setTarget(t.getTarget());
-
-                            compoStateTrans.add(tempTran);
-                        }
-                    } else if (!sourceStates.isEmpty()) {
-                        for (final State state : sourceStates) {
-
-                            final Transition tempTran = region.createTransition(t.getName());
-                            tempTran.setSource(state);
-                            tempTran.setTarget(t.getTarget());
-
-                            compoStateTrans.add(tempTran);
-                        }
-
-                        /*
-                         * I decide not to create a transition from an initial state of a composite
-                         * state to other states since the initial state is not a stable state
-                         * for(Pseudostate initialState : sourceInitialStates){
-                         *
-                         * Transition tempTran = region.createTransition(t.getName());
-                         * tempTran.setSource(initialState); tempTran.setTarget(t.getTarget());
-                         *
-                         * transCompoState.add(tempTran); }
-                         */
-                    }
-
-                    // if the sub-states of this composite state have been added
-                    // to the list, add them
-                    if (!compositeStates.containsKey((t.getSource()))) {
-                        for (final Transition transition : ((State) t.getSource()).getRegions()
-                                .get(0).getTransitions()) {
-                            compoStateTrans.add(transition);
-                        }
-                        compositeStates.put(t.getSource(), true);
-                    }
+                    compoStateTrans = processCompoStateSource(t, compoStateTrans, region);
+                    compoStateTrans = addNewTransitionsFromSrc(t, compositeStates, compoStateTrans);
+                    compositeStates = addNewStateFromSrc(t, compositeStates);
 
                     compoStateTrans.remove(0);
                 } else if (t.getTarget() instanceof State
                         && ((State) t.getTarget()).isComposite()) {
-                    final List<Vertex> targetVertices = ((State) t.getTarget()).getRegions().get(0)
-                            .getSubvertices();
-                    // initialize initial states, final states, and regular states in the target
-                    // composite state
-                    final List<Pseudostate> targetInitialStates = new ArrayList<>();
-                    final List<FinalState> targetFinalStates = new ArrayList<>();
-                    final List<State> targetStates = new ArrayList<>();
-
-                    for (final Vertex vertex : targetVertices) {
-                        if (vertex instanceof Pseudostate && ((Pseudostate) vertex)
-                                .getKind() == PseudostateKind.INITIAL_LITERAL) {
-                            targetInitialStates.add((Pseudostate) vertex);
-                        } else if (vertex instanceof FinalState) {
-                            targetFinalStates.add((FinalState) vertex);
-                        } else if (vertex instanceof State) {
-                            targetStates.add((State) vertex);
-                        }
-                    }
-
-                    if (!targetInitialStates.isEmpty()) {
-                        for (final Pseudostate initialState : targetInitialStates) {
-
-                            final Transition tempTran = region.createTransition(t.getName());
-                            tempTran.setSource(t.getSource());
-                            tempTran.setTarget(initialState);
-
-                            compoStateTrans.add(tempTran);
-                        }
-                    } else if (!targetStates.isEmpty()) {
-                        for (final State state : targetStates) {
-
-                            final Transition tempTran = region.createTransition(t.getName());
-                            tempTran.setSource(t.getSource());
-                            tempTran.setTarget(state);
-
-                            compoStateTrans.add(tempTran);
-                        }
-
-                    }
-
-                    if (!compositeStates.containsKey(t.getTarget())) {
-                        for (final Transition transition : ((State) t.getTarget()).getRegions()
-                                .get(0).getTransitions()) {
-                            compoStateTrans.add(transition);
-                        }
-                        compositeStates.put(t.getTarget(), true);
-                    }
+                    compoStateTrans = processCompoStateTarget(t, compoStateTrans, region);
+                    compoStateTrans = addNewTransitionsFromTarget(t, compositeStates,
+                            compoStateTrans);
+                    compositeStates = addNewStateFromTarget(t, compositeStates);
                     compoStateTrans.remove(0);
                 } else if ((t.getSource() instanceof State && ((State) t.getSource()).isSimple())
                         && (t.getTarget() instanceof State && ((State) t.getTarget()).isSimple())) {
@@ -454,22 +322,9 @@ public class StateMachineAccessor extends ModelAccessor {
                     compoStateTrans.remove(0);
                     edges = updateEdges(edges, t);
 
-                    // add a potential composite state
-                    // this address a case in which a transition directly connects from a composite
-                    // state to a simple state
-                    // in another composite state, which has not been considered.
-                    if (((State) t.getTarget()).getContainer() != null
-                            && ((State) t.getTarget()).getContainer().getState() != null
-                            && !compositeStates.containsKey(
-                                    ((State) t.getTarget()).getContainer().getState())) {
-
-                        for (final Transition transition : ((State) t.getTarget()).getContainer()
-                                .getTransitions()) {
-                            compoStateTrans.add(transition);
-                        }
-                        compositeStates.put(((State) t.getTarget()).getContainer().getState(),
-                                true);
-                    }
+                    compoStateTrans = addNewTransitionsFromSimpleTarget(t, compositeStates,
+                            compoStateTrans);
+                    compositeStates = addNewStateFromSimpleTarget(t, compositeStates);
                 } else if ((t.getSource() instanceof Pseudostate && ((Pseudostate) t.getSource())
                         .getKind() == PseudostateKind.INITIAL_LITERAL)
                         && (t.getTarget() instanceof State && ((State) t.getTarget()).isSimple())) {
@@ -515,6 +370,321 @@ public class StateMachineAccessor extends ModelAccessor {
             } while (!compoStateTrans.isEmpty());
         }
 
+    }
+
+    /**
+     * Processes the states in a composite state, which is the source state of the specified
+     * transition, and creates associated transitions
+     *
+     * @param t
+     *            a transition to process
+     * @param compoStateTrans
+     *            the transitions among the composite states
+     * @param region
+     *            the region that has all states and transitions
+     * @return a list of Transition objects
+     */
+    private List<Transition> processCompoStateSource(final Transition t,
+            final List<Transition> compoStateTrans, final Region region) {
+        List<Transition> newCompoStateTrans = compoStateTrans;
+
+        final List<Vertex> sourceVertices = ((State) t.getSource()).getRegions().get(0)
+                .getSubvertices();
+        // initialize initial states, final states, and regular states in the source
+        final List<Pseudostate> sourceInitialStates = new ArrayList<>();
+        final List<FinalState> sourceFinalStates = new ArrayList<>();
+        final List<State> sourceStates = new ArrayList<>();
+
+        for (final Vertex vertex : sourceVertices) {
+            if (vertex instanceof Pseudostate
+                    && ((Pseudostate) vertex).getKind() == PseudostateKind.INITIAL_LITERAL) {
+                sourceInitialStates.add((Pseudostate) vertex);
+            } else if (vertex instanceof FinalState) {
+                sourceFinalStates.add((FinalState) vertex);
+            } else if (vertex instanceof State) {
+                sourceStates.add((State) vertex);
+            }
+        }
+
+        if (!sourceFinalStates.isEmpty()) {
+            for (final FinalState finalState : sourceFinalStates) {
+                // the transition creation supposes to be updated
+                // for the cases that transitions have guards,
+                // effects or others
+                final Transition tempTran = region.createTransition(t.getName());
+
+                tempTran.setSource(finalState);
+                tempTran.setTarget(t.getTarget());
+
+                newCompoStateTrans.add(tempTran);
+            }
+        } else if (!sourceStates.isEmpty()) {
+            for (final State state : sourceStates) {
+
+                final Transition tempTran = region.createTransition(t.getName());
+                tempTran.setSource(state);
+                tempTran.setTarget(t.getTarget());
+
+                newCompoStateTrans.add(tempTran);
+            }
+
+            /*
+             * I decide not to create a transition from an initial state of a composite state to
+             * other states since the initial state is not a stable state for(Pseudostate
+             * initialState : sourceInitialStates){
+             *
+             * Transition tempTran = region.createTransition(t.getName());
+             * tempTran.setSource(initialState); tempTran.setTarget(t.getTarget());
+             *
+             * transCompoState.add(tempTran); }
+             */
+        }
+        return newCompoStateTrans;
+    }
+
+    /**
+     * Adds transitions from the source of the specified transition
+     *
+     * @param t
+     *            the specified transition
+     * @param compositeStates
+     *            a map that records composite states
+     * @param compoStateTrans
+     *            a list of Transition objects
+     * @return a list of Transition objects with newly added transitions
+     */
+    private List<Transition> addNewTransitionsFromSrc(final Transition t,
+            final Map<Vertex, Boolean> compositeStates, final List<Transition> compoStateTrans) {
+        List<Transition> newCompoStateTrans = compoStateTrans;
+
+        if (!compositeStates.containsKey(t.getSource())) {
+            for (final Transition transition : ((State) t.getSource()).getRegions().get(0)
+                    .getTransitions()) {
+                newCompoStateTrans.add(transition);
+            }
+        }
+
+        return newCompoStateTrans;
+    }
+
+    /**
+     * Adds transitions from the target of the specified transition
+     *
+     * @param t
+     *            the specified transition
+     * @param compositeStates
+     *            a map that records composite states
+     * @param compoStateTrans
+     *            a list of Transition objects
+     * @return a list of Transition objects with newly added transitions
+     */
+    private List<Transition> addNewTransitionsFromTarget(final Transition t,
+            final Map<Vertex, Boolean> compositeStates, final List<Transition> compoStateTrans) {
+        List<Transition> newCompoStateTrans = compoStateTrans;
+
+        if (!compositeStates.containsKey(t.getTarget())) {
+            for (final Transition transition : ((State) t.getTarget()).getRegions().get(0)
+                    .getTransitions()) {
+                newCompoStateTrans.add(transition);
+            }
+        }
+
+        return newCompoStateTrans;
+    }
+
+    /**
+     * Adds transitions whose source and target are simple states
+     *
+     * @param t
+     *            the specified transition
+     * @param compositeStates
+     *            a map that records composite states
+     * @param compoStateTrans
+     *            a list of Transition objects
+     * @return a list of Transition objects with newly added transitions
+     */
+    private List<Transition> addNewTransitionsFromSimpleTarget(final Transition t,
+            final Map<Vertex, Boolean> compositeStates, final List<Transition> compoStateTrans) {
+        List<Transition> newCompoStateTrans = compoStateTrans;
+
+        // add a potential composite state
+        // this address a case in which a transition directly connects from a composite
+        // state to a simple state
+        // in another composite state, which has not been considered.
+        if (((State) t.getTarget()).getContainer() != null
+                && ((State) t.getTarget()).getContainer().getState() != null && !compositeStates
+                        .containsKey(((State) t.getTarget()).getContainer().getState())) {
+
+            for (final Transition transition : ((State) t.getTarget()).getContainer()
+                    .getTransitions()) {
+                newCompoStateTrans.add(transition);
+            }
+        }
+
+        return newCompoStateTrans;
+    }
+
+    /**
+     * Adds new state from the source of the specified transition
+     *
+     * @param t
+     *            the specified transition
+     * @param compositeStates
+     *            a map that records the composite states
+     * @return a map that includes the newly added state
+     */
+    private Map<Vertex, Boolean> addNewStateFromSrc(final Transition t,
+            final Map<Vertex, Boolean> compositeStates) {
+        Map<Vertex, Boolean> newCompositeStates = compositeStates;
+        if (!compositeStates.containsKey(t.getSource())) {
+            compositeStates.put(t.getSource(), true);
+        }
+        return newCompositeStates;
+    }
+
+    /**
+     * Adds new state from the target of the specified transition
+     *
+     * @param t
+     *            the specified transition
+     * @param compositeStates
+     *            a map that records the composite states
+     * @return a map that includes the newly added state
+     */
+    private Map<Vertex, Boolean> addNewStateFromTarget(final Transition t,
+            final Map<Vertex, Boolean> compositeStates) {
+        Map<Vertex, Boolean> newCompositeStates = compositeStates;
+        if (!compositeStates.containsKey(t.getTarget())) {
+            compositeStates.put(t.getTarget(), true);
+        }
+        return newCompositeStates;
+    }
+
+    /**
+     * Adds new simple state, which is the target of the specified transition
+     *
+     * @param t
+     *            the specified transition
+     * @param compositeStates
+     *            a map that records the composite states
+     * @return a map that includes the newly added state
+     */
+    private Map<Vertex, Boolean> addNewStateFromSimpleTarget(final Transition t,
+            final Map<Vertex, Boolean> compositeStates) {
+        Map<Vertex, Boolean> newCompositeStates = compositeStates;
+        // add a potential composite state
+        // this address a case in which a transition directly connects from a composite
+        // state to a simple state
+        // in another composite state, which has not been considered.
+        if (((State) t.getTarget()).getContainer() != null
+                && ((State) t.getTarget()).getContainer().getState() != null && !newCompositeStates
+                        .containsKey(((State) t.getTarget()).getContainer().getState())) {
+            newCompositeStates.put(((State) t.getTarget()).getContainer().getState(), true);
+        }
+        return newCompositeStates;
+    }
+
+    /**
+     * Processes the states in a composite state, which is the target state of the specified
+     * transition, and creates associated transitions
+     *
+     * @param t
+     *            a transition to process
+     * @param compoStateTrans
+     *            the transitions among the composite states
+     * @param region
+     *            the region that has all states and transitions
+     * @return a list of Transition objects
+     */
+    private List<Transition> processCompoStateTarget(final Transition t,
+            final List<Transition> compoStateTrans, final Region region) {
+        List<Transition> newCompoStateTrans = compoStateTrans;
+
+        final List<Vertex> targetVertices = ((State) t.getTarget()).getRegions().get(0)
+                .getSubvertices();
+        // initialize initial states, final states, and regular states in the target
+        // composite state
+        final List<Pseudostate> targetInitialStates = new ArrayList<>();
+        final List<FinalState> targetFinalStates = new ArrayList<>();
+        final List<State> targetStates = new ArrayList<>();
+
+        for (final Vertex vertex : targetVertices) {
+            if (vertex instanceof Pseudostate
+                    && ((Pseudostate) vertex).getKind() == PseudostateKind.INITIAL_LITERAL) {
+                targetInitialStates.add((Pseudostate) vertex);
+            } else if (vertex instanceof FinalState) {
+                targetFinalStates.add((FinalState) vertex);
+            } else if (vertex instanceof State) {
+                targetStates.add((State) vertex);
+            }
+        }
+
+        if (!targetInitialStates.isEmpty()) {
+            for (final Pseudostate initialState : targetInitialStates) {
+
+                final Transition tempTran = region.createTransition(t.getName());
+                tempTran.setSource(t.getSource());
+                tempTran.setTarget(initialState);
+
+                newCompoStateTrans.add(tempTran);
+            }
+        } else if (!targetStates.isEmpty()) {
+            for (final State state : targetStates) {
+
+                final Transition tempTran = region.createTransition(t.getName());
+                tempTran.setSource(t.getSource());
+                tempTran.setTarget(state);
+
+                newCompoStateTrans.add(tempTran);
+            }
+
+        }
+        return newCompoStateTrans;
+    }
+
+    /**
+     * Generates transitions among composite states in a region
+     *
+     * @param region
+     *            the specified region
+     * @return a list of Transition objects
+     */
+    private List<Transition> genCompoStateTrans(final Region region) {
+        final EList<Transition> firstLevelTransitions = region.getTransitions();
+        final List<Transition> compoStateTrans = new ArrayList<>();
+
+        for (final Transition transition : firstLevelTransitions) {
+            // transitions may not have a source or target because some of them
+            // are isolated because model editors might leave them accidentally
+            // they do not appear in the UML diagram but they do exist in the
+            // UML model
+            if (transition.getSource() == null || transition.getTarget() == null) {
+                continue;
+            }
+
+            if (transition.getSource() instanceof Pseudostate
+                    || transition.getSource() instanceof FinalState
+                    || transition.getSource() instanceof State
+                    || transition.getTarget() instanceof Pseudostate
+                    || transition.getTarget() instanceof FinalState
+                    || transition.getTarget() instanceof State) {
+                if (!((transition.getSource() instanceof State
+                        && ((State) transition.getSource()).isComposite())
+                        || (transition.getTarget() instanceof State
+                                && ((State) transition.getTarget()).isComposite()))) {
+                    edges = updateEdges(edges, transition);
+                    getTransitions().add(transition);
+                } else if ((transition.getSource() instanceof State
+                        && ((State) transition.getSource()).isComposite())
+                        || (transition.getTarget() instanceof State
+                                && ((State) transition.getTarget()).isComposite())) {
+                    compoStateTrans.add(transition);
+                }
+            }
+
+        }
+
+        return compoStateTrans;
     }
 
     /**
