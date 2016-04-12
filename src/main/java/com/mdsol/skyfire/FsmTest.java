@@ -24,6 +24,7 @@ public class FsmTest extends Test {
      * Default Constructor
      */
     public FsmTest() {
+        // do nothing for a quick initialization
         super();
     }
 

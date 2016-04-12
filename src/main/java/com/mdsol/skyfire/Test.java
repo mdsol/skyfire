@@ -25,7 +25,7 @@ public class Test {
      * Constructs a test with no parameters
      */
     public Test() {
-
+        // do nothing for a quick initialization
     }
 
     /**

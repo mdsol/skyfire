@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.acceleo.common.IAcceleoConstants;
 import org.eclipse.acceleo.common.internal.utils.AcceleoPackageRegistry;
 import org.eclipse.acceleo.common.internal.utils.workspace.AcceleoWorkspaceUtil;
@@ -44,8 +46,6 @@ import org.eclipse.uml2.uml.Region;
 import org.eclipse.uml2.uml.StateMachine;
 import org.eclipse.uml2.uml.Transition;
 import org.eclipse.uml2.uml.Vertex;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import coverage.graph.Graph;
@@ -56,24 +56,16 @@ import coverage.web.InvalidInputException;
 
 public class AccessingModelsIT {
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
+    private static Logger logger = LogManager.getLogger("ModelAccessorIT");
 
     @Test
     public void accessingModelstest()
             throws IOException, InvalidInputException, InvalidGraphException {
-        // String path = "E:\\EclipseDataModeling\\VendingMachine";
         String path = System.getProperty("user.dir")
                 + "/src/test/resources/testData/VendingMachine/model";
         String umlPath = path + "/VendingMachineFSM.uml";
 
         URI modelURI = URI.createFileURI(umlPath);
-        // GenerateFSM generator = new GenerateFSM(modelURI, targetFolder, new ArrayList<Object>());
 
         URIConverter uriConverter = createURIConverter();
 
@@ -94,27 +86,23 @@ public class AccessingModelsIT {
 
         URI newModelURI = URI.createURI(modelURI.toString(), true);
         EObject model = ModelUtils.load(newModelURI, modelResourceSet);
-        System.out.println(newModelURI + "....." + model);
-        System.out.println((model instanceof Model) + ((Model) model).getName());
 
         EList<Package> packages = ((Model) model).getNestedPackages();
         for (Package packageObject : packages) {
-            System.out.println(packageObject.getName());
+            logger.info(packageObject.getName());
         }
 
         EList<Element> elements = ((Model) model).getOwnedElements();
 
         for (Element elementObject : elements) {
-            System.out.println(elementObject.toString());
             if (elementObject instanceof StateMachine) {
                 EList<Region> regions = ((StateMachine) elementObject).getRegions();
                 for (Region region : regions) {
-                    System.out.println(region.getName());
 
                     EList<Transition> transitions = region.getTransitions();
-                    EList<Vertex> vertexes = region.getSubvertices();
-                    String edges = "";
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    EList<Vertex> vertices = region.getSubvertices();
+
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("State1", "1");
                     map.put("State2", "2");
                     map.put("State3", "3");
@@ -124,69 +112,84 @@ public class AccessingModelsIT {
                     map.put("State7", "7");
                     map.put("State8", "8");
                     map.put("State9", "9");
-                    // map.put("FinalState1", "10");
-                    for (Vertex vertex : vertexes) {
-                        System.out.println(vertex.getName());
-                        if (vertex instanceof FinalState)
-                            map.put(vertex.getName(), "10");
-                        if (vertex instanceof Pseudostate) {
-                            map.put(vertex.getName(), "0");
-                            System.out.println(vertex.getOutgoings().size());
-                            EList<Transition> outgoings = vertex.getOutgoings();
-                            for (Transition t : outgoings) {
-                                System.out.println("transiiton: " + t.getName());
-                            }
-                        }
-                    }
+
+                    processVertices(vertices, map);
+
                     String sourceNumber = "0";
                     String targetNumber = "10";
-                    for (Transition transition : transitions) {
-                        // transitions may not have a source or target because some of them are
-                        // leftover
-                        // they do not appear in the UML diagram but they do exist in the UML model
-                        if (transition.getSource() != null && transition.getTarget() != null) {
-                            System.out.println(transition.getSource().getName() + "; "
-                                    + transition.getTarget().getName());
-
-                            if (transition.getSource().getName().indexOf("[0-10]") != -1) {
-                            }
-                            if (map.containsKey(transition.getSource().getName())) {
-                                edges = edges + map.get(transition.getSource().getName());
-                            }
-                            if (map.containsKey(transition.getTarget().getName())) {
-                                edges = edges + " " + map.get(transition.getTarget().getName());
-                            }
-                            edges = edges + "\n";
-                        }
-                    }
-                    System.out.println(map);
-                    System.out.println(edges);
-                    System.out.println(getTestPaths(edges, sourceNumber, targetNumber));
+                    String edges = processTransitions(transitions, map);
+                    logger.info(edges);
+                    logger.info(getTestPaths(edges, sourceNumber, targetNumber));
                 }
             }
         }
-        // Resource resource = modelResourceSet.getResource(newModelURI, true);
-        // resource.getContents();
-        /*
-         * final TreeIterator<EObject> targetElements = model.eAllContents(); while
-         * (targetElements.hasNext()) { final EObject potentialTarget = targetElements.next();
-         * System.out.println(potentialTarget.toString());
-         *
-         * }
-         */
+    }
 
+    private void processVertices(final EList<Vertex> vertices, final HashMap<String, String> map) {
+        for (Vertex vertex : vertices) {
+            logger.info(vertex.getName());
+
+            if (vertex instanceof FinalState)
+                map.put(vertex.getName(), "10");
+            if (vertex instanceof Pseudostate) {
+                map.put(vertex.getName(), "0");
+                printOutgoingEdges(vertex);
+            }
+        }
+    }
+
+    private void printOutgoingEdges(final Vertex vertex) {
+        EList<Transition> outgoings = vertex.getOutgoings();
+        for (Transition t : outgoings) {
+            logger.info(vertex.getName() + "'s transition: " + t.getName());
+        }
+    }
+
+    private String processTransitions(final List<Transition> transitions,
+            final HashMap<String, String> map) {
+        String edges = "";
+        for (Transition transition : transitions) {
+            // transitions may not have a source or target because some of them are
+            // leftover
+            // they do not appear in the UML diagram but they do exist in the UML model
+            if (transition.getSource() != null && transition.getTarget() != null) {
+                logger.info(
+                        transition.getSource().getName() + "; " + transition.getTarget().getName());
+
+                if (map.containsKey(transition.getSource().getName())) {
+                    edges = edges + map.get(transition.getSource().getName());
+                }
+                if (map.containsKey(transition.getTarget().getName())) {
+                    edges = edges + " " + map.get(transition.getTarget().getName());
+                }
+                edges = edges + "\n";
+            }
+        }
+
+        return edges;
     }
 
     public List<Path> getTestPaths(final String edges, final String initialNodes,
-            final String finalNodes) throws InvalidInputException, InvalidGraphException {
-        Graph g = GraphUtil.readGraph(edges, initialNodes, finalNodes);
+            final String finalNodes) throws InvalidGraphException {
+        Graph g = null;
         try {
-            g.validate();
-        } catch (InvalidGraphException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            g = GraphUtil.readGraph(edges, initialNodes, finalNodes);
+        } catch (InvalidInputException e) {
+            logger.error(e);
         }
-        return g.findEdgeCoverage();
+        try {
+            if (g != null) {
+                g.validate();
+            }
+        } catch (InvalidGraphException e) {
+            logger.error(e);
+        }
+        List<Path> edgeTRs = null;
+        if (g != null) {
+            edgeTRs = g.findEdgeCoverage();
+        }
+
+        return edgeTRs;
 
     }
 
@@ -298,6 +301,7 @@ public class AccessingModelsIT {
                 moduleURL = AcceleoWorkspaceUtil.getResourceURL(getClass(), moduleName);
             } catch (IOException e) {
                 // Swallow this, we'll try and locate the module through the class loader
+                logger.error(e);
             }
         }
         if (moduleURL == null) {
