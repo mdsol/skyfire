@@ -46,6 +46,10 @@ mvn clean compile
 ```
 mvn site
 ```
+## Run Unit Tests
+```
+mvn clean test
+```
 
 ## Run Integration Tests
 ```

@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class JavaSupporterIT {
+public class JavaSupporterTest {
 
     @Test
     public void testRemoveSemiColon() {

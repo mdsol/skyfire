@@ -3,7 +3,7 @@
  * and the accompanying materials are made under the terms of MIT license.
  * Author: Nan Li, nli@mdsol.com
  ******************************************************************************/
-package com.mdsol.skyfire;
+package com.mdsol.skyfire.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,6 +12,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.mdsol.skyfire.IdentifiableElementType;
+import com.mdsol.skyfire.Mapping;
+
 /**
  * A JUnit test case for class {@link Mapping}
  *
@@ -19,7 +22,7 @@ import org.junit.Test;
  * @version 1.0 Nov 12, 2012
  *
  */
-public class MappingIT {
+public class MappingTest {
 
     @Test
     public void testConstructorAndGettersAndSetters() {
