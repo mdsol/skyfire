@@ -105,7 +105,7 @@ public class CucumberTestGeneratorIT {
         try {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(),
-                    TestCoverageCriteria.EDGECOVERAGE);
+                    TestCoverageCriteria.PRIMEPATHCOVERAGE);
         } catch (InvalidGraphException e) {
             logger.error("An invalid graph");
             logger.error("The initial states are: " + stateMachine.getInitialStates());
