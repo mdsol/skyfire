@@ -40,6 +40,7 @@ public class CucumberTestGenerator {
     private static final String AND = "And ";
     private static final String THEN = "Then ";
     private static final String INVALIDGRAPH_MESSAGE = "The flattened graph is not valid";
+    private static final String INVALIDINPUT_MESSAGE = "The inputs to the graph is not valid";
 
     /**
      * Constructs a test with no parameters
@@ -367,15 +368,10 @@ public class CucumberTestGenerator {
      * @return true if the feature file is successfully generated; otherwise return false
      * @throws IOException
      *             when specified UML model is not found or the feature file is not found
-     * @throws InvalidInputException
-     *             when the flattened graph is not valid
-     * @throws InvalidGraphException
-     *             when the flattened graph is not valid
      */
     public static final boolean generateCucumberScenario(final Path umlPath,
             final TestCoverageCriteria coverage, final String featureDescription,
-            final Path featureFilePath)
-            throws IOException, InvalidInputException, InvalidGraphException {
+            final Path featureFilePath) throws IOException {
         final boolean isGenerated = true;
 
         // read the UML model
@@ -397,11 +393,11 @@ public class CucumberTestGenerator {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
         } catch (InvalidInputException e) {
-            logger.debug(INVALIDGRAPH_MESSAGE);
-            throw new InvalidInputException(e);
+            logger.debug(INVALIDINPUT_MESSAGE);
+            logger.error(e);
         } catch (InvalidGraphException e) {
             logger.debug(INVALIDGRAPH_MESSAGE);
-            throw new InvalidGraphException(e);
+            logger.error(e);
         }
         logger.info("Generate abstract test paths on the flattened graph");
 
@@ -439,15 +435,10 @@ public class CucumberTestGenerator {
      * @return true if the feature file is successfully generated; otherwise return false
      * @throws IOException
      *             when the specified model or the feature file to write is not found
-     * @throws InvalidInputException
-     *             when the flattened graph is not valid
-     * @throws InvalidGraphException
-     *             when the flattened graph is not valid
      */
     public static final boolean generateCucumberScenarioWithQualifiedName(final Path umlPath,
             final TestCoverageCriteria coverage, final String featureDescription,
-            final Path featureFilePath)
-            throws IOException, InvalidInputException, InvalidGraphException {
+            final Path featureFilePath) throws IOException {
         final boolean isGenerated = true;
 
         // read the UML model
@@ -469,11 +460,13 @@ public class CucumberTestGenerator {
             paths = AbstractTestGenerator.getTestPaths(stateMachine.getEdges(),
                     stateMachine.getInitialStates(), stateMachine.getFinalStates(), coverage);
         } catch (InvalidInputException e) {
-            logger.debug(INVALIDGRAPH_MESSAGE);
-            throw new InvalidInputException(e);
+            // log the InvalidInputException
+            // when edges, initialNodes, or finalNodes are in a wrong format
+            logger.debug(INVALIDINPUT_MESSAGE);
+            logger.error(e);
         } catch (InvalidGraphException e) {
             logger.debug(INVALIDGRAPH_MESSAGE);
-            throw new InvalidGraphException(e);
+            logger.error(e);
         }
         logger.info("Generate abstract test paths on the flattened graph");
 
