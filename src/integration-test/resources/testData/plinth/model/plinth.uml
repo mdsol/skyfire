@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_TIOQ0OYkEeWJrb50pZVG6Q" name="Plinth">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_VTE-0OYkEeWJrb50pZVG6Q" name="Plinth statemachine">
+    <region xmi:id="_VTE-0eYkEeWJrb50pZVG6Q" name="Region1">
+      <transition xmi:id="_wNHeMOY2EeWJrb50pZVG6Q" name="initialize" source="_gQBNgOYkEeWJrb50pZVG6Q" target="_h0tTYOYkEeWJrb50pZVG6Q"/>
+      <transition xmi:id="_-qppUOY3EeWJrb50pZVG6Q" name="delete" source="_dSQqwecHEeWJrb50pZVG6Q" target="_-J8wAOY3EeWJrb50pZVG6Q"/>
+      <transition xmi:id="_YbyGYOc7EeWJrb50pZVG6Q" name="initialize" source="_gQBNgOYkEeWJrb50pZVG6Q" target="_iB6voOc6EeWJrb50pZVG6Q"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_gQBNgOYkEeWJrb50pZVG6Q" name="Initial1"/>
+      <subvertex xmi:type="uml:State" xmi:id="_h0tTYOYkEeWJrb50pZVG6Q" name="ClientDivisions" submachine="_h0ssUOYkEeWJrb50pZVG6Q">
+        <region xmi:id="_sRwu0OYpEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_XbkGkOYqEeWJrb50pZVG6Q" name="initialize_client_divisions" source="_tPxPMOYpEeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_EHI8oOY3EeWJrb50pZVG6Q" name="self-prev-next-first" source="_vFPjEOYpEeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_HGqBwOY3EeWJrb50pZVG6Q" name="self-prev-next" source="_6KftUOY2EeWJrb50pZVG6Q" target="_6KftUOY2EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_J8aG4OY3EeWJrb50pZVG6Q" name="filter_by_name" source="_vFPjEOYpEeWJrb50pZVG6Q" target="_6KftUOY2EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_KqvzkOY3EeWJrb50pZVG6Q" name="list" source="_6KftUOY2EeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_zz6wUOY3EeWJrb50pZVG6Q" name="create" source="_6KftUOY2EeWJrb50pZVG6Q" target="_-uS4YOYlEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_AI7FcOb5EeWJrb50pZVG6Q" name="create" source="_vFPjEOYpEeWJrb50pZVG6Q" target="_-uS4YOYlEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_tPxPMOYpEeWJrb50pZVG6Q" name="Initial2"/>
+          <subvertex xmi:type="uml:State" xmi:id="_vFPjEOYpEeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_6KftUOY2EeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_fj0AEOYqEeWJrb50pZVG6Q" name="ClientDivision" submachine="_fjzZAOYqEeWJrb50pZVG6Q">
+        <region xmi:id="_erMxgOY0EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_pJM6EOY3EeWJrb50pZVG6Q" name="self-update" source="_-uS4YOYlEeWJrb50pZVG6Q" target="_-uS4YOYlEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_Kr9fEOY4EeWJrb50pZVG6Q" name="create" source="_-uS4YOYlEeWJrb50pZVG6Q" target="_vFPjEOYpEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_Q0S9AOY9EeWJrb50pZVG6Q" name="studies" source="_-uS4YOYlEeWJrb50pZVG6Q" target="_4xdPEOY8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_hiV64Oc-EeWJrb50pZVG6Q" name="client_division_sites" source="_-uS4YOYlEeWJrb50pZVG6Q" target="_-jOsoOc9EeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_-uS4YOYlEeWJrb50pZVG6Q" name="CD"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_-J8wAOY3EeWJrb50pZVG6Q" name="Final1"/>
+      <subvertex xmi:type="uml:State" xmi:id="_uLANweY8EeWJrb50pZVG6Q" name="Studies" submachine="_uLANwOY8EeWJrb50pZVG6Q">
+        <region xmi:id="_ySHNEOY8EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_69clgOY8EeWJrb50pZVG6Q" name="self-prev-next" source="_2_mP4OY8EeWJrb50pZVG6Q" target="_2_mP4OY8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_8WtegOY8EeWJrb50pZVG6Q" name="self-prev-next" source="_4xdPEOY8EeWJrb50pZVG6Q" target="_4xdPEOY8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_INyaMOY9EeWJrb50pZVG6Q" name="filter_by_parameters" source="_2_mP4OY8EeWJrb50pZVG6Q" target="_4xdPEOY8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_IsXMkOY9EeWJrb50pZVG6Q" name="list" source="_4xdPEOY8EeWJrb50pZVG6Q" target="_2_mP4OY8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_qS7QEObYEeWJrb50pZVG6Q" name="create" source="_2_mP4OY8EeWJrb50pZVG6Q" target="_iYLnEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_q4QxwObYEeWJrb50pZVG6Q" name="create" source="_4xdPEOY8EeWJrb50pZVG6Q" target="_iYLnEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_yT8qwObZEeWJrb50pZVG6Q" name="show" source="_4xdPEOY8EeWJrb50pZVG6Q" target="_i5b6AObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_0KMasObZEeWJrb50pZVG6Q" name="show" source="_4xdPEOY8EeWJrb50pZVG6Q" target="_jLwZEObYEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_2_mP4OY8EeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_4xdPEOY8EeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_PPOZMObYEeWJrb50pZVG6Q" name="Study" submachine="_PPNyIObYEeWJrb50pZVG6Q">
+        <region xmi:id="_TTBl0ObYEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_6YQU4ObYEeWJrb50pZVG6Q" name="self-update" source="_iYLnEObYEeWJrb50pZVG6Q" target="_iYLnEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_DaR5kObaEeWJrb50pZVG6Q" name="lock" source="_iYLnEObYEeWJrb50pZVG6Q" target="_jLwZEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_FojH8ObaEeWJrb50pZVG6Q" name="unlock" source="_jLwZEObYEeWJrb50pZVG6Q" target="_iYLnEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_K7XscObaEeWJrb50pZVG6Q" name="self" source="_jLwZEObYEeWJrb50pZVG6Q" target="_jLwZEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_XBP5IObaEeWJrb50pZVG6Q" name="active" source="_i5b6AObYEeWJrb50pZVG6Q" target="_iYLnEObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_YNUDoObaEeWJrb50pZVG6Q" name="deactivate" source="_iYLnEObYEeWJrb50pZVG6Q" target="_i5b6AObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_c-bpQObaEeWJrb50pZVG6Q" name="self" source="_i5b6AObYEeWJrb50pZVG6Q" target="_i5b6AObYEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_mhilIOcEEeWJrb50pZVG6Q" name="study_environments" source="_iYLnEObYEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_nFr0AOcEEeWJrb50pZVG6Q" name="study_environments" source="_i5b6AObYEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_ntmvoOcEEeWJrb50pZVG6Q" name="study_environments" source="_jLwZEObYEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_iYLnEObYEeWJrb50pZVG6Q" name="Active"/>
+          <subvertex xmi:type="uml:State" xmi:id="_i5b6AObYEeWJrb50pZVG6Q" name="Inactive"/>
+          <subvertex xmi:type="uml:State" xmi:id="_jLwZEObYEeWJrb50pZVG6Q" name="Locked"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_aCwJMOcEEeWJrb50pZVG6Q" name="StudyEnvironments" submachine="_aCviIOcEEeWJrb50pZVG6Q">
+        <region xmi:id="_agB7EOcEEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_7r8GUOcEEeWJrb50pZVG6Q" name="self-prev-next" source="_g6n_8OcEEeWJrb50pZVG6Q" target="_g6n_8OcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="__2qaUOcEEeWJrb50pZVG6Q" name="self-prev-next" source="_hVcTsOcEEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_C1h_MOcFEeWJrb50pZVG6Q" name="fliter_by_study" source="_g6n_8OcEEeWJrb50pZVG6Q" target="_hVcTsOcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_DprY8OcFEeWJrb50pZVG6Q" name="list" source="_hVcTsOcEEeWJrb50pZVG6Q" target="_g6n_8OcEEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_pLi30OcFEeWJrb50pZVG6Q" name="create" source="_hVcTsOcEEeWJrb50pZVG6Q" target="_bUWegOcFEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_g6n_8OcEEeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_hVcTsOcEEeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_Urt9oOcFEeWJrb50pZVG6Q" name="StudyEnvironment" submachine="_UrtWkOcFEeWJrb50pZVG6Q">
+        <region xmi:id="_YoDQUOcFEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_hmgZEOcFEeWJrb50pZVG6Q" name="self" source="_bUWegOcFEeWJrb50pZVG6Q" target="_bUWegOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_k4rUcOcFEeWJrb50pZVG6Q" name="self" source="_bpzxIOcFEeWJrb50pZVG6Q" target="_bpzxIOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_riFRYOcFEeWJrb50pZVG6Q" name="update" source="_bpzxIOcFEeWJrb50pZVG6Q" target="_bUWegOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_sJxjgOcFEeWJrb50pZVG6Q" name="update" source="_bUWegOcFEeWJrb50pZVG6Q" target="_bpzxIOcFEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_y0xmcOcGEeWJrb50pZVG6Q" name="study_environment_sites" source="_bpzxIOcFEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_0VNecOcGEeWJrb50pZVG6Q" name="study_environment_sites" source="_bUWegOcFEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_bUWegOcFEeWJrb50pZVG6Q" name="active"/>
+          <subvertex xmi:type="uml:State" xmi:id="_bpzxIOcFEeWJrb50pZVG6Q" name="inactive"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_Tt_7sOcGEeWJrb50pZVG6Q" name="StudyEnvironmentSites" submachine="_Tt_UoOcGEeWJrb50pZVG6Q">
+        <region xmi:id="_eHJg0OcGEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="__B7f0OcGEeWJrb50pZVG6Q" name="self-prev-next" source="_gDoboOcGEeWJrb50pZVG6Q" target="_gDoboOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_CSgfwOcHEeWJrb50pZVG6Q" name="self-prev-next" source="_h2PBsOcGEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_M8OQcOcHEeWJrb50pZVG6Q" name="list" source="_h2PBsOcGEeWJrb50pZVG6Q" target="_gDoboOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_PNmdMOcHEeWJrb50pZVG6Q" name="filter_by_study_environment-filter_by_client_division_site" source="_gDoboOcGEeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <transition xmi:id="_sxoi0OcHEeWJrb50pZVG6Q" name="create-cascaded_create" source="_h2PBsOcGEeWJrb50pZVG6Q" target="_iJLWYOcHEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_gDoboOcGEeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_h2PBsOcGEeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_dSQqwecHEeWJrb50pZVG6Q" name="StudyEnvironmentSite" submachine="_dSQqwOcHEeWJrb50pZVG6Q">
+        <region xmi:id="_gdkwMOcHEeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_kqQMAOcHEeWJrb50pZVG6Q" name="self-update" source="_iJLWYOcHEeWJrb50pZVG6Q" target="_iJLWYOcHEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_iJLWYOcHEeWJrb50pZVG6Q" name="SES"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_iB6voOc6EeWJrb50pZVG6Q" name="MedicalFacilities" submachine="_iB6IkOc6EeWJrb50pZVG6Q">
+        <region xmi:id="_mM138Oc6EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_73e_cOc6EeWJrb50pZVG6Q" name="initialize_medical_facilities" source="_5qwpMOc6EeWJrb50pZVG6Q" target="_uPLWsOc6EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_Hh4KAOc7EeWJrb50pZVG6Q" name="filter_by_curated" source="_uPLWsOc6EeWJrb50pZVG6Q" target="_DwotAOc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_KJPN0Oc7EeWJrb50pZVG6Q" name="list" source="_DwotAOc7EeWJrb50pZVG6Q" target="_uPLWsOc6EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_M6tP4Oc7EeWJrb50pZVG6Q" name="self-prev-next" source="_uPLWsOc6EeWJrb50pZVG6Q" target="_uPLWsOc6EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_QB1Y4Oc7EeWJrb50pZVG6Q" name="self-prev-next" source="_DwotAOc7EeWJrb50pZVG6Q" target="_DwotAOc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_8piSAOc7EeWJrb50pZVG6Q" name="create" source="_uPLWsOc6EeWJrb50pZVG6Q" target="_jKMJ0Oc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_-j2poOc7EeWJrb50pZVG6Q" name="create" source="_DwotAOc7EeWJrb50pZVG6Q" target="_jKMJ0Oc7EeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_uPLWsOc6EeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_5qwpMOc6EeWJrb50pZVG6Q" name="Initial3"/>
+          <subvertex xmi:type="uml:State" xmi:id="_DwotAOc7EeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_dZXasOc7EeWJrb50pZVG6Q" name="MedicalFacility" submachine="_dZWzoOc7EeWJrb50pZVG6Q">
+        <region xmi:id="_fjqIAOc7EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_w6FoUOc7EeWJrb50pZVG6Q" name="self-update" source="_jKMJ0Oc7EeWJrb50pZVG6Q" target="_jKMJ0Oc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_zphDAOc7EeWJrb50pZVG6Q" name="self-update" source="_tqKvsOc7EeWJrb50pZVG6Q" target="_tqKvsOc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_3eH9EOc7EeWJrb50pZVG6Q" name="reconcile" source="_jKMJ0Oc7EeWJrb50pZVG6Q" target="_tqKvsOc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_5bOi8Oc7EeWJrb50pZVG6Q" name="unreconcile" source="_tqKvsOc7EeWJrb50pZVG6Q" target="_jKMJ0Oc7EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_oIW6sOdAEeWJrb50pZVG6Q" name="sites" source="_jKMJ0Oc7EeWJrb50pZVG6Q" target="_gYtEMOc8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_pp_FgOdAEeWJrb50pZVG6Q" name="sites" source="_tqKvsOc7EeWJrb50pZVG6Q" target="_gYtEMOc8EeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_jKMJ0Oc7EeWJrb50pZVG6Q" name="uncurated"/>
+          <subvertex xmi:type="uml:State" xmi:id="_tqKvsOc7EeWJrb50pZVG6Q" name="curated"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_S7LIEec8EeWJrb50pZVG6Q" name="Sites" submachine="_S7LIEOc8EeWJrb50pZVG6Q">
+        <region xmi:id="_bzMRoOc8EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_i_4h0Oc8EeWJrb50pZVG6Q" name="self-prev-next" source="_eHcMMOc8EeWJrb50pZVG6Q" target="_eHcMMOc8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_lRKA4Oc8EeWJrb50pZVG6Q" name="self-prev-next" source="_gYtEMOc8EeWJrb50pZVG6Q" target="_gYtEMOc8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_oc0roOc8EeWJrb50pZVG6Q" name="list" source="_gYtEMOc8EeWJrb50pZVG6Q" target="_eHcMMOc8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_HYfSkOc9EeWJrb50pZVG6Q" name="filter_by_medical_facility-filter_by_principal_investigator" source="_eHcMMOc8EeWJrb50pZVG6Q" target="_gYtEMOc8EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_iRn4MOc9EeWJrb50pZVG6Q" name="create" source="_gYtEMOc8EeWJrb50pZVG6Q" target="_a9Hv0Oc9EeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_eHcMMOc8EeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_gYtEMOc8EeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_VVVA4ec9EeWJrb50pZVG6Q" name="Site" submachine="_VVVA4Oc9EeWJrb50pZVG6Q">
+        <region xmi:id="_X7hAAOc9EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_d6dDoOc9EeWJrb50pZVG6Q" name="self-update" source="_a9Hv0Oc9EeWJrb50pZVG6Q" target="_a9Hv0Oc9EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_NB-1MOc-EeWJrb50pZVG6Q" name="client_division_sites" source="_a9Hv0Oc9EeWJrb50pZVG6Q" target="_-jOsoOc9EeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_a9Hv0Oc9EeWJrb50pZVG6Q" name="site"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_28gL0Oc9EeWJrb50pZVG6Q" name="ClientDivisionSites" submachine="_28fkwOc9EeWJrb50pZVG6Q">
+        <region xmi:id="_5zgOIOc9EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_FJ10QOc-EeWJrb50pZVG6Q" name="self-prev-next" source="_9A9ooOc9EeWJrb50pZVG6Q" target="_9A9ooOc9EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_IP4_MOc-EeWJrb50pZVG6Q" name="self-prev-next" source="_-jOsoOc9EeWJrb50pZVG6Q" target="_-jOsoOc9EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_UWgywOc-EeWJrb50pZVG6Q" name="filter_by_client_division-filter_by_site" source="_9A9ooOc9EeWJrb50pZVG6Q" target="_-jOsoOc9EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_fjUCYOc-EeWJrb50pZVG6Q" name="list" source="_-jOsoOc9EeWJrb50pZVG6Q" target="_9A9ooOc9EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_1aslYOc-EeWJrb50pZVG6Q" name="create" source="_-jOsoOc9EeWJrb50pZVG6Q" target="_t1P28Oc-EeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_9A9ooOc9EeWJrb50pZVG6Q" name="Collection"/>
+          <subvertex xmi:type="uml:State" xmi:id="_-jOsoOc9EeWJrb50pZVG6Q" name="Navigation"/>
+        </region>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_m0E6Qec-EeWJrb50pZVG6Q" name="ClientDivisionSite" submachine="_m0E6QOc-EeWJrb50pZVG6Q">
+        <region xmi:id="_qPQAoOc-EeWJrb50pZVG6Q" name="Region1">
+          <transition xmi:id="_wDP_kOc-EeWJrb50pZVG6Q" name="self-update" source="_t1P28Oc-EeWJrb50pZVG6Q" target="_t1P28Oc-EeWJrb50pZVG6Q"/>
+          <transition xmi:id="_8rJUMOc-EeWJrb50pZVG6Q" name="study_environment_sites" source="_t1P28Oc-EeWJrb50pZVG6Q" target="_h2PBsOcGEeWJrb50pZVG6Q"/>
+          <subvertex xmi:type="uml:State" xmi:id="_t1P28Oc-EeWJrb50pZVG6Q" name="CDS"/>
+        </region>
+      </subvertex>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_h0ssUOYkEeWJrb50pZVG6Q" name="StateMachine2" submachineState="_h0tTYOYkEeWJrb50pZVG6Q">
+    <region xmi:id="_TsDrwOYmEeWJrb50pZVG6Q" name="Region1"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_fjzZAOYqEeWJrb50pZVG6Q" name="StateMachine3" submachineState="_fj0AEOYqEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_uLANwOY8EeWJrb50pZVG6Q" name="StateMachine4" submachineState="_uLANweY8EeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_PPNyIObYEeWJrb50pZVG6Q" name="StateMachine5" submachineState="_PPOZMObYEeWJrb50pZVG6Q">
+    <region xmi:id="_RE0B0ObYEeWJrb50pZVG6Q" name="Region1"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_aCviIOcEEeWJrb50pZVG6Q" name="StateMachine6" submachineState="_aCwJMOcEEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_UrtWkOcFEeWJrb50pZVG6Q" name="StateMachine7" submachineState="_Urt9oOcFEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_Tt_UoOcGEeWJrb50pZVG6Q" name="StateMachine8" submachineState="_Tt_7sOcGEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_dSQqwOcHEeWJrb50pZVG6Q" name="StateMachine9" submachineState="_dSQqwecHEeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_iB6IkOc6EeWJrb50pZVG6Q" name="StateMachine10" submachineState="_iB6voOc6EeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_dZWzoOc7EeWJrb50pZVG6Q" name="StateMachine11" submachineState="_dZXasOc7EeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_S7LIEOc8EeWJrb50pZVG6Q" name="StateMachine12" submachineState="_S7LIEec8EeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_VVVA4Oc9EeWJrb50pZVG6Q" name="StateMachine13" submachineState="_VVVA4ec9EeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_28fkwOc9EeWJrb50pZVG6Q" name="StateMachine14" submachineState="_28gL0Oc9EeWJrb50pZVG6Q"/>
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_m0E6QOc-EeWJrb50pZVG6Q" name="StateMachine15" submachineState="_m0E6Qec-EeWJrb50pZVG6Q"/>
+</uml:Model>

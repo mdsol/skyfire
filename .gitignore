@@ -27,6 +27,11 @@ log/
 logs/
 tmp/
 
+############
+# SonarQube
+############
+.sonar/
+
 *.launch
 *.tmp
 *.bak

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,14 +29,12 @@ import coverage.web.InvalidInputException;
  *
  * @author Nan Li
  * @version 1.0 Nov 28, 2012
- * @version 2015.1.0
  *
  */
 public class AbstractTestGenerator {
-    // String globalDirectory = "Users/nli/Documents/workspace/github/TestAutomationFramework/";
     private String globalDirectory = System.getProperty("user.dir");
-    private final String tempTestDirectory = "testData/test/temp/";
-    private final String tempTestName = "tempTest";
+    private static final String TEMPTESTDIR = "testData/test/temp/";
+    private static final String TEMPTESTNAME = "tempTest";
     private static Logger logger = LogManager.getLogger("AbstractTestGenerator");
 
     // Maps a transition to the mappings
@@ -45,7 +44,7 @@ public class AbstractTestGenerator {
      * Constructs an AbstractTestGenerator with no detailed directories
      */
     public AbstractTestGenerator() {
-        hashedTransitionMappings = new HashMap<Transition, List<Mapping>>();
+        hashedTransitionMappings = new HashMap<>();
     }
 
     /**
@@ -56,7 +55,7 @@ public class AbstractTestGenerator {
      */
     public AbstractTestGenerator(final String globalDirectory) {
         this.globalDirectory = globalDirectory;
-        hashedTransitionMappings = new HashMap<Transition, List<Mapping>>();
+        hashedTransitionMappings = new HashMap<>();
     }
 
     /**
@@ -78,49 +77,68 @@ public class AbstractTestGenerator {
      */
     public static List<Path> getTestPaths(final String edges, final String initialNodes,
             final String finalNodes, final TestCoverageCriteria criterion)
-                    throws InvalidInputException, InvalidGraphException {
+            throws InvalidInputException, InvalidGraphException {
         logger.info("Generate abstract test paths from a flat graph");
 
         final Graph g = GraphUtil.readGraph(edges, initialNodes, finalNodes);
-        // System.out.println(edges);
-        // System.out.println(initialNodes);
-        // System.out.println(finalNodes);
+
         try {
             g.validate();
         } catch (final InvalidGraphException e) {
-            logger.debug("The flat graph is invalid");
-            e.printStackTrace();
+            logger.debug("The flattened generic graph is invalid");
+            throw new InvalidGraphException(e);
         }
 
         if (criterion == TestCoverageCriteria.NODECOVERAGE) {
-            return g.findNodeCoverage();
+            logger.info(
+                    "Node coverage is used. The number of total nodes is " + g.findNodes().size());
+            logger.info("The test requirements of nodes are: " + g.findNodes());
+            List<Path> testPaths = g.findNodeCoverage();
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy node coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         } else if (criterion == TestCoverageCriteria.EDGECOVERAGE) {
-            final List<Path> edgeCoverage = g.findEdges();
-            final Graph prefix = GraphUtil.getPrefixGraph(edgeCoverage);
+            final List<Path> edgeTRs = g.findEdges();
+            logger.info("Edge coverage is used. The number of total edges is " + edgeTRs.size());
+            logger.info("The test requirements of edges are: " + edgeTRs);
+            final Graph prefix = GraphUtil.getPrefixGraph(edgeTRs);
             final Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            final List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite
-                    .findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgeCoverage).get(0),
+            final List<Path> testPaths = g.splittedPathsFromSuperString(
+                    bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgeTRs).get(0),
                     g.findTestPath());
-
-            return splittedPaths;
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy edge coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         } else if (criterion == TestCoverageCriteria.EDGEPAIRCOVERAGE) {
             final List<Path> edgePairs = g.findEdgePairs();
+            logger.info("Edge-pair coverage is used. The number of total edge-pairs is "
+                    + edgePairs.size());
+            logger.info("The test requriements of edge-pairs are: " + edgePairs);
             final Graph prefix = GraphUtil.getPrefixGraph(edgePairs);
             final Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            final List<Path> splittedPaths = g.splittedPathsFromSuperString(
+            final List<Path> testPaths = g.splittedPathsFromSuperString(
                     bipartite.findMinimumPrimePathCoverageViaPrefixGraphOptimized(edgePairs).get(0),
                     g.findTestPath());
-            return splittedPaths;
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy edge-pair coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         } else {
             final List<Path> primePaths = g.findPrimePaths();
             final Graph prefix = GraphUtil.getPrefixGraph(primePaths);
             final Graph bipartite = GraphUtil.getBipartiteGraph(prefix, initialNodes, finalNodes);
-            final List<Path> splittedPaths = g.splittedPathsFromSuperString(bipartite
+            final List<Path> testPaths = g.splittedPathsFromSuperString(bipartite
                     .findMinimumPrimePathCoverageViaPrefixGraphOptimized(g.findPrimePaths()).get(0),
                     g.findTestPath());
-            // System.out.println(edges);
-            // System.out.println("splitted paths: " + splittedPaths.size());
-            return splittedPaths;
+            logger.info("Prime path coverage is used. The number of total prime paths is "
+                    + primePaths.size());
+            logger.info("The test requirements of prime paths are: " + primePaths);
+            logger.info(testPaths.size()
+                    + " test paths are generated to satisfy prime coverage. The total nodes is "
+                    + getTotalNodes(testPaths));
+            return testPaths;
         }
     }
 
@@ -136,7 +154,7 @@ public class AbstractTestGenerator {
      */
     public static List<Vertex> getPathByState(final Path path,
             final StateMachineAccessor stateMachine) {
-        final List<Vertex> vertices = new ArrayList<Vertex>();
+        final List<Vertex> vertices = new ArrayList<>();
         final Iterator<Node> nodes = path.getNodeIterator();
 
         while (nodes.hasNext()) {
@@ -152,35 +170,30 @@ public class AbstractTestGenerator {
      *
      * @param vertices
      *            a list of {@link org.eclipse.uml2.uml.Vertex}
-     * @param stateMachine
-     *            a {@link StateMachineAccessor} object
      * @return a list of {@link org.eclipse.uml2.uml.Transition}s
      */
-    public static final List<Transition> convertVerticesToTransitions(final List<Vertex> vertices,
-            final StateMachineAccessor stateMachine) {
-        final List<Transition> transitions = new ArrayList<Transition>();
+    public static final List<Transition> convertVerticesToTransitions(final List<Vertex> vertices) {
+        final List<Transition> transitions = new ArrayList<>();
 
-        for (int i = 0; i < vertices.size();) {
-            final Vertex source = vertices.get(i);
+        for (int i = 0; i < vertices.size(); i++) {
+            int sourceIndex = i;
+            final Vertex sourceVertex = vertices.get(sourceIndex);
+
             if (i == vertices.size() - 1) {
                 break;
-            } else {
-                i++;
             }
 
-            final Vertex destination = vertices.get(i);
-            for (final Transition transition : source.getOutgoings()) {
+            int targetIndex = sourceIndex + 1;
+
+            final Vertex targetVertex = vertices.get(targetIndex);
+            for (final Transition transition : sourceVertex.getOutgoings()) {
                 if (transition.getTarget() == null) {
-                    try {
-                        throw new Exception(transition.getName() + " has no target state");
-                    } catch (final Exception e) {
-                        e.printStackTrace();
-                    }
+                    logger.error(transition.getName() + " has no target state");
                 }
                 // Now the first right transition is used
                 // but there may be more than one transition between two vertices
                 // this issue will be taken care of later
-                if (transition.getTarget().getName().equals(destination.getName())) {
+                if (transition.getTarget().getName().equals(targetVertex.getName())) {
                     transitions.add(transition);
                     // a bug is fixed; without break statement, extra transitions may be added
                     break;
@@ -201,15 +214,14 @@ public class AbstractTestGenerator {
      */
     public final List<Test> generateTests(final List<Path> paths,
             final ModelAccessor modelAccessor) {
-        final List<Test> tests = new ArrayList<Test>();
+        final List<Test> tests = new ArrayList<>();
 
         for (int i = 0; i < paths.size(); i++) {
             Test test = null;
 
             if (modelAccessor instanceof StateMachineAccessor) {
                 convertVerticesToTransitions(
-                        getPathByState(paths.get(i), (StateMachineAccessor) modelAccessor),
-                        (StateMachineAccessor) modelAccessor);
+                        getPathByState(paths.get(i), (StateMachineAccessor) modelAccessor));
                 final String testComment = "/** The test path is: " + paths.get(i).toString()
                         + "**/";
                 test = new Test("test" + i, testComment);
@@ -233,21 +245,20 @@ public class AbstractTestGenerator {
      */
     public final List<Mapping> addPreconditionStateInvariantMappings(final Element element,
             final List<Mapping> finalMappings, final List<Mapping> constraints) {
+        List<Mapping> mappings = finalMappings;
 
         if (element instanceof Vertex) {
             for (final Mapping precondition : constraints) {
                 if (precondition.getIdentifiableElementName().equals(((Vertex) element).getName())
                         && precondition.getType() == IdentifiableElementType.PRECONDITION) {
-                    finalMappings.add(precondition);
+                    mappings.add(precondition);
                 }
             }
 
             for (final Mapping stateinvariant : constraints) {
-                // System.out.println(((Vertex) element).getName() + " " +
-                // stateinvariant.getIdentifiableElementName());
                 if (stateinvariant.getIdentifiableElementName().equals(((Vertex) element).getName())
                         && stateinvariant.getType() == IdentifiableElementType.STATEINVARIANT) {
-                    finalMappings.add(stateinvariant);
+                    mappings.add(stateinvariant);
                 }
             }
         }
@@ -257,7 +268,7 @@ public class AbstractTestGenerator {
                 if (precondition.getIdentifiableElementName()
                         .equals(((Transition) element).getName())
                         && precondition.getType() == IdentifiableElementType.PRECONDITION) {
-                    finalMappings.add(precondition);
+                    mappings.add(precondition);
                 }
             }
 
@@ -265,11 +276,11 @@ public class AbstractTestGenerator {
                 if (stateinvariant.getIdentifiableElementName()
                         .equals(((Transition) element).getName())
                         && stateinvariant.getType() == IdentifiableElementType.STATEINVARIANT) {
-                    finalMappings.add(stateinvariant);
+                    mappings.add(stateinvariant);
                 }
             }
         }
-        return finalMappings;
+        return mappings;
     }
 
     /**
@@ -316,50 +327,119 @@ public class AbstractTestGenerator {
      */
     public static final List<Mapping> getConstraints(final List<ConstraintMapping> constraints) {
         // a list of mappings to be returned: precondition, stateinvariant, postcondition mappings
-        final List<Mapping> mappings = new ArrayList<Mapping>();
+        List<Mapping> mappings = new ArrayList<>();
 
-        if (constraints != null) {
-            for (final ConstraintMapping constraint : constraints) {
-                // add precondition mappings
-                if (constraint.getPreconditions() != null) {
-                    if (constraint.getPreconditions().size() > 0) {
-                        for (final String precondition : constraint.getPreconditions()) {
-                            mappings.add(new Mapping(constraint.getName(),
-                                    IdentifiableElementType.PRECONDITION, precondition,
-                                    constraint.getTestCode(), constraint.getRequiredMappings(),
-                                    constraint.getParameters(), constraint.getCallers(),
-                                    constraint.getReturnObjects()));
-                        }
-                    }
-                }
-                // add state invariant mappings
-                if (constraint.getStateinvariants() != null) {
-                    if (constraint.getStateinvariants().size() > 0) {
-                        for (final String stateinvariant : constraint.getStateinvariants()) {
-                            mappings.add(new Mapping(constraint.getName(),
-                                    IdentifiableElementType.STATEINVARIANT, stateinvariant,
-                                    constraint.getTestCode(), constraint.getRequiredMappings(),
-                                    constraint.getParameters(), constraint.getCallers(),
-                                    constraint.getReturnObjects()));
-                        }
-                    }
-                }
-                // add postcondition mappings
-                if (constraint.getPostconditions() != null) {
-                    if (constraint.getPostconditions().size() > 0) {
-                        for (final String postcondition : constraint.getPostconditions()) {
-                            mappings.add(new Mapping(constraint.getName(),
-                                    IdentifiableElementType.POSTCONDITION, postcondition,
-                                    constraint.getTestCode(), constraint.getRequiredMappings(),
-                                    constraint.getParameters(), constraint.getCallers(),
-                                    constraint.getReturnObjects()));
-                        }
-                    }
-                }
+        if (constraints == null)
+            return mappings;
+
+        for (final ConstraintMapping constraint : constraints) {
+            // add precondition mappings
+            if (constraint.getPreconditions() != null && constraint.getPreconditions().size() > 0) {
+                mappings = addPreconditions(mappings, constraint);
+            }
+            // add state invariant mappings
+            if (constraint.getStateinvariants() != null
+                    && constraint.getStateinvariants().size() > 0) {
+                mappings = addStateInvariants(mappings, constraint);
+            }
+            // add postcondition mappings
+            if (constraint.getPostconditions() != null
+                    && constraint.getPostconditions().size() > 0) {
+                mappings = addPostconditions(mappings, constraint);
             }
         }
 
         return mappings;
+    }
+
+    /**
+     * Adds pre-conditions to the mappings
+     *
+     * @param mappings
+     *            the specified mappings that do not have pre-conditions
+     * @param constraint
+     *            the constraint mapping
+     * @return a list of Mapping objects that have pre-conditions
+     */
+    private static List<Mapping> addPreconditions(final List<Mapping> mappings,
+            final ConstraintMapping constraint) {
+        List<Mapping> newMappings = mappings;
+
+        for (final String precondition : constraint.getPreconditions()) {
+            newMappings.add(new Mapping(constraint.getName(), IdentifiableElementType.PRECONDITION,
+                    precondition, constraint.getTestCode(), constraint.getRequiredMappings(),
+                    constraint.getParameters(), constraint.getCallers(),
+                    constraint.getReturnObjects()));
+        }
+
+        return newMappings;
+    }
+
+    /**
+     * Adds state invariants to the mappings
+     *
+     * @param mappings
+     *            the specified mappings that do not have state invariants
+     * @param constraint
+     *            the constraint mapping
+     * @return a list of Mapping objects that have state invariants
+     */
+    private static List<Mapping> addStateInvariants(final List<Mapping> mappings,
+            final ConstraintMapping constraint) {
+        List<Mapping> newMappings = mappings;
+
+        for (final String stateinvariant : constraint.getStateinvariants()) {
+            newMappings
+                    .add(new Mapping(constraint.getName(), IdentifiableElementType.STATEINVARIANT,
+                            stateinvariant, constraint.getTestCode(),
+                            constraint.getRequiredMappings(), constraint.getParameters(),
+                            constraint.getCallers(), constraint.getReturnObjects()));
+        }
+
+        return newMappings;
+    }
+
+    /**
+     * Adds post-conditions to the mappings
+     *
+     * @param mappings
+     *            the specified mappings that do not have post-conditions
+     * @param constraint
+     *            the constraint mapping
+     * @return a list of Mapping objects that have post-conditions
+     */
+    private static List<Mapping> addPostconditions(final List<Mapping> mappings,
+            final ConstraintMapping constraint) {
+        List<Mapping> newMappings = mappings;
+
+        for (final String postcondition : constraint.getPostconditions()) {
+            newMappings.add(new Mapping(constraint.getName(), IdentifiableElementType.POSTCONDITION,
+                    postcondition, constraint.getTestCode(), constraint.getRequiredMappings(),
+                    constraint.getParameters(), constraint.getCallers(),
+                    constraint.getReturnObjects()));
+        }
+
+        return newMappings;
+    }
+
+    /**
+     * Calculates the total number of nodes in all the test paths
+     *
+     * @param testPaths
+     *            a list of {@link coverage.graph.Path} objects
+     * @return the total number of nodes in the specified test paths
+     */
+    public static int getTotalNodes(final List<Path> testPaths) {
+        int totalNumber = 0;
+        if (testPaths == null) {
+            return totalNumber;
+        } else {
+            for (Path p : testPaths) {
+                totalNumber += p.size();
+            }
+        }
+
+        return totalNumber;
     }
 
     /**
@@ -383,20 +463,20 @@ public class AbstractTestGenerator {
      * @return the tempTestDirectory
      */
     public final String getTempTestDirectory() {
-        return tempTestDirectory;
+        return TEMPTESTDIR;
     }
 
     /**
      * @return the tempTestName
      */
     public final String getTempTestName() {
-        return tempTestName;
+        return TEMPTESTNAME;
     }
 
     /**
      * @return the hashedTransitionMappings
      */
-    public final HashMap<Transition, List<Mapping>> getHashedTransitionMappings() {
+    public final Map<Transition, List<Mapping>> getHashedTransitionMappings() {
         return hashedTransitionMappings;
     }
 

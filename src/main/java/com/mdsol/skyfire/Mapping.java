@@ -12,7 +12,6 @@ import java.util.List;
  *
  * @author Nan Li
  * @version 1.0 Nov 12, 2012
- * @version 2015.1.0
  *
  */
 public class Mapping {
@@ -68,13 +67,6 @@ public class Mapping {
         this.parameters = parameters;
         this.setCallers(callers);
         this.setReturnObjects(returnObjects);
-    }
-
-    /**
-     * Constructs a Mapping object with no parameters
-     */
-    public Mapping() {
-
     }
 
     /**
@@ -228,5 +220,4 @@ public class Mapping {
     public final void setReturnObjects(final List<String> returnObjects) {
         this.returnObjects = returnObjects;
     }
-
 }

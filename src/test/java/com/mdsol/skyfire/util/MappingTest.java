@@ -3,16 +3,17 @@
  * and the accompanying materials are made under the terms of MIT license.
  * Author: Nan Li, nli@mdsol.com
  ******************************************************************************/
-package com.mdsol.skyfire;
+package com.mdsol.skyfire.util;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
+import com.mdsol.skyfire.IdentifiableElementType;
+import com.mdsol.skyfire.Mapping;
 
 /**
  * A JUnit test case for class {@link Mapping}
@@ -21,21 +22,7 @@ import org.junit.Test;
  * @version 1.0 Nov 12, 2012
  *
  */
-public class MappingIT {
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
+public class MappingTest {
 
     @Test
     public void testConstructorAndGettersAndSetters() {
@@ -43,8 +30,8 @@ public class MappingIT {
         String identifiedElementName = "vm";
         IdentifiableElementType type = IdentifiableElementType.CLASS;
         String testCode = "vendingMachine vm = new vendingMachine();";
-        List<String> mappings = new ArrayList<String>();
-        List<String> parameters = new ArrayList<String>();
+        List<String> mappings = new ArrayList<>();
+        List<String> parameters = new ArrayList<>();
 
         Mapping mapping = new Mapping(mappingName, type, identifiedElementName, testCode, mappings,
                 parameters, null, null);

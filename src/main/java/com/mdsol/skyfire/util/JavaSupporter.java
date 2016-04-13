@@ -24,7 +24,6 @@ import com.mdsol.skyfire.Mapping;
  *
  * @author Nan Li
  * @version 1.0 Feb 8, 2013
- * @version 2015.1.0
  */
 
 public class JavaSupporter {
@@ -47,7 +46,7 @@ public class JavaSupporter {
 
         final File folder = new File(path);
         final File[] files = folder.listFiles();
-        final List<File> results = new ArrayList<File>();
+        final List<File> results = new ArrayList<>();
 
         for (final File file : files) {
             if (file.isFile() && file.getName().endsWith(".java")) {
@@ -69,7 +68,7 @@ public class JavaSupporter {
 
         final File folder = new File(path);
         final File[] files = folder.listFiles();
-        final List<File> results = new ArrayList<File>();
+        final List<File> results = new ArrayList<>();
 
         for (final File file : files) {
             if (file.isFile() && file.getName().endsWith(".jar")) {
@@ -139,7 +138,7 @@ public class JavaSupporter {
 
         final File folder = new File(path);
         final File[] files = folder.listFiles();
-        final List<File> results = new ArrayList<File>();
+        final List<File> results = new ArrayList<>();
 
         for (final File file : files) {
             if (file.isFile() && file.getName().endsWith(".uml")) {
@@ -161,15 +160,13 @@ public class JavaSupporter {
 
         final File folder = new File(path);
         final File[] files = folder.listFiles();
-        // System.out.println("file size: " + files.length);
-        final List<File> results = new ArrayList<File>();
+        final List<File> results = new ArrayList<>();
 
         for (final File file : files) {
             if (file.isDirectory()) {
                 results.add(file);
             }
         }
-        // System.out.println("result size: " + results.size());
         return results;
     }
 
@@ -181,7 +178,7 @@ public class JavaSupporter {
      * @return an array of names of File objects
      */
     public static final Object[] getFileNames(final List<File> files) {
-        final List<String> fileNames = new ArrayList<String>();
+        final List<String> fileNames = new ArrayList<>();
         for (final File file : files) {
             fileNames.add(file.getName());
         }
@@ -196,7 +193,7 @@ public class JavaSupporter {
      * @return an array of names of {@link org.eclipse.uml2.uml.NamedElement} objects
      */
     public static final Object[] getElementNames(final List<NamedElement> elements) {
-        final List<String> elementNames = new ArrayList<String>();
+        final List<String> elementNames = new ArrayList<>();
         for (final NamedElement element : elements) {
             elementNames.add(element.getName());
         }
@@ -211,7 +208,7 @@ public class JavaSupporter {
      * @return an array of names of {@link edu.gmu.swe.taf.Mapping} objects
      */
     public static final Object[] getMappingNames(final List<? extends Mapping> mappings) {
-        final List<String> mappingNames = new ArrayList<String>();
+        final List<String> mappingNames = new ArrayList<>();
         for (final Mapping mapping : mappings) {
             mappingNames.add(mapping.getName());
         }
@@ -227,22 +224,20 @@ public class JavaSupporter {
      * @return a path in a String format
      */
     public static final String returnPackages(final String packageName) {
-        if (packageName != null) {
-            if (packageName.trim().length() > 0) {
-                String name = packageName;
-                if (packageName.startsWith("package")) {
-                    name = name.substring(7, name.length()).trim();
-                }
-                if (name.endsWith(";")) {
-                    name = removeSemiColon(name);
-                }
-                final String[] levels = name.split("\\.");
-                String directories = "";
-                for (final String level : levels) {
-                    directories += level + "/";
-                }
-                return directories;
+        if (packageName != null && packageName.trim().length() > 0) {
+            String name = packageName;
+            if (packageName.startsWith("package")) {
+                name = name.substring(7, name.length()).trim();
             }
+            if (name.endsWith(";")) {
+                name = removeSemiColon(name);
+            }
+            final String[] levels = name.split("\\.");
+            String directories = "";
+            for (final String level : levels) {
+                directories += level + "/";
+            }
+            return directories;
         }
         return "";
     }
@@ -255,17 +250,15 @@ public class JavaSupporter {
      * @return the package name without "package" keyword and ";"
      */
     public static final String cleanUpPackageName(final String packageName) {
-        if (packageName != null) {
-            if (packageName.trim().length() > 0) {
-                String name = packageName;
-                if (packageName.startsWith("package")) {
-                    name = name.substring(7, name.length()).trim();
-                }
-                if (name.endsWith(";")) {
-                    name = removeSemiColon(name);
-                }
-                return name.trim();
+        if (packageName != null && packageName.trim().length() > 0) {
+            String name = packageName;
+            if (packageName.startsWith("package")) {
+                name = name.substring(7, name.length()).trim();
             }
+            if (name.endsWith(";")) {
+                name = removeSemiColon(name);
+            }
+            return name.trim();
         }
         return "";
     }
@@ -278,10 +271,9 @@ public class JavaSupporter {
      * @return the same String representation without brackets
      */
     public static final String removeBrackets(final String listString) {
-        String noBracketsString = null;
         if (listString.startsWith("[") && listString.endsWith("]")) {
-            noBracketsString = listString.substring(1, listString.length() - 1);
-            return noBracketsString;
+            // remove brackets
+            return listString.substring(1, listString.length() - 1);
         } else {
             return listString;
         }
