@@ -904,19 +904,20 @@ public class StateMachineAccessor extends ModelAccessor {
             }
         }
         // add transitions in the composite states
-        if (!compoStates.isEmpty()) {
-            do {
-                final Vertex compo = compoStates.get(0);
-                result.addAll(((State) compo).getRegions().get(0).getTransitions());
-                for (final Vertex vertex : ((State) compo).getRegions().get(0).getSubvertices()) {
-                    if (vertex instanceof State && ((State) vertex).isComposite()) {
-                        compoStates.add(vertex);
-                    }
-                }
-                compoStates.remove(0);
-
-            } while (!compoStates.isEmpty());
+        if (compoStates.isEmpty()) {
+            return result;
         }
+
+        do {
+            final Vertex compo = compoStates.get(0);
+            result.addAll(((State) compo).getRegions().get(0).getTransitions());
+            for (final Vertex vertex : ((State) compo).getRegions().get(0).getSubvertices()) {
+                if (vertex instanceof State && ((State) vertex).isComposite()) {
+                    compoStates.add(vertex);
+                }
+            }
+            compoStates.remove(0);
+        } while (!compoStates.isEmpty());
 
         return result;
     }
