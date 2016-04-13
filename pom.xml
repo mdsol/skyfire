@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mdsol</groupId>
 	<artifactId>skyfire</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>com.mdsol.skyfire</name>
 	<description>A application that generates Cucumber-compatible abstract tests from a UML behavioral model</description>
 	<url>https://github.com/mdsol/skyfire/</url>

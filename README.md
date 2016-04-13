@@ -23,7 +23,8 @@ For the motivation, algorithms, and more information, please read the [paper](ht
 ```
 * Call the API and specify the path to the UML diagram, a graph coverage criterion, a feature description, and the path to the Cucumber feature file to generate.
 Users can select node coverage, edge coverage, edge-pair coverage, or prime path coverage for the graph coverage criterion.
-The definitinos of these four coverage criteria are included in the paper above.
+The definitions of these four coverage criteria are included in the paper above.
+The feature description, pathToModel, and pathToFeatureFile are in the String format.
 
 ```
 CucumberTestGenerator.generateCucumberScenario (
@@ -33,7 +34,7 @@ CucumberTestGenerator.generateCucumberScenario (
 	Paths.get (pathToFeatureFile));
 );
 ```
-* When a UML diagram uses the same name for different behaviors, call another API to use qualified names of transitions to consist of Cucumber test scenarios.
+* When a UML diagram uses the same name for different behaviors in multiple composite states, call another API to use qualified names of transitions to distinct transitions that have the same names.
 The parameters used are the same as the one above.
 ```
 CucumberTestGenerator.generateCucumberScenarioWithQualifiedName (
