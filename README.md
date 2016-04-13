@@ -18,7 +18,7 @@ For the motivation, algorithms, and more information, please read the [paper](ht
 <dependency>
 	<groupId>com.mdsol</groupId>
 	<artifactId>skyfire</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 </dependency>
 ```
 * Call the API and specify the path to the UML diagram, a graph coverage criterion, a feature description, and the path to the Cucumber feature file to generate
