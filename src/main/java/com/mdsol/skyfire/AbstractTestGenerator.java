@@ -86,7 +86,7 @@ public class AbstractTestGenerator {
             g.validate();
         } catch (final InvalidGraphException e) {
             logger.debug("The flattened generic graph is invalid");
-            throw new InvalidGraphException(e);
+            logger.error(e);
         }
 
         if (criterion == TestCoverageCriteria.NODECOVERAGE) {
